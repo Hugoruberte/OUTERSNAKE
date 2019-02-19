@@ -1,0 +1,172 @@
+**index** 1		//The contact
+
+Hello World !
+...
+(First step, done ...)
+Hum, sorry, it was maybe a bit weird, but everybody says that it needs "Hello World !" to begin ...
+........
+Well ... Hello !
+It seems you are in a great shape today, aren't you ?
+Eating all these fruits, growing, dying, etc ...
+A lot of fun, indeed !
+................
+My name is "Bunney".
+"Bunney" the rabbit, indeed.
+I saw you in this 2D dimension of yours and I thought it could be a good idea to say hello.
+..Hu, the font of my voice sounds familiar to you ?
+Well, I don't know why, but all I can say to you is that I just finished a magnific game ...
+I would like to recommand it, but I think I am not allowed to say its name here ...
+Anyway it motivated me to going back to work !
+...
+Oh and I prefer to warn you that I am not an english native speaker ...
+Many mistakes will be maked.
+"All your base are belong to us !!"
+So excuse me in advance.
+I wasn't even supposed to be there to begin with !
+...
+Excuse me, I talked a lot, and I hide half of the screen ...
+I will let you alone now.
+
+
+
+
+**index** 2		//the boring
+
+Well I came back ...
+You know, just looking at you and doing nothing else is pretty boring !
+You are pretty boring !
+...
+I'll just play by myself ...
+This is already more entertaining than watching you !
+...
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+Hum, you know that nothing more interesting will ever happen ?
+Even if you manage to completely fill the screen ...
+You'll die and restart from scratch !
+...
+\(*´▽｀*)/ \(*^▽^*)/ \(´･ω･`)/ /(￣ー￣)\ -(Ｔ▽Ｔ)- m(_ _)m
+-.. .. -..  -.-- --- ..-  .-. . .- .-.. .-.. -.--  -.-. --- .--. -.--  - .... .- -  .. -. - ---  .-  - .-. .- -. ... .-.. .- - --- .-.  ..--..
+I have an idea ! Would you like to come with me in the third dimension ?
+I dunno what will happen but it surely will be interesting :)
+(press enter, control, or any key others than the arroys when you have chosen)
+
+
+
+
+**index** 3		//the choice yes
+
+Hehe I knew you couldn't ignore such a temptation ! I would love to leave this awful place now if you don't mind.
+...
+ADDING A Z-AXIS !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+**index** 4		//the choice no 1
+
+Okay, I will let you alone then ...
+Maybe you will change your mind later.
+
+
+
+
+**index** 5		//the choice no 2
+
+You sure have a lot of fun here ... That's not my case.
+
+
+
+
+**index** 6		//the choice no 3
+
+Wait, let me try something ...
+
+
+
+
+**index** 7		//the paradise
+
+...
+It worked ?
+...
+You're there ?
+...
+
+
+
+
+**index** 8		//the come back
+
+Oh ! You came back !
+Would that mean that you appreciate this gam- world ?
+...
+Well, y'know, if you choose not to skip the intro, I'll repeat exactly the same I said the last time ...
+Because, y'know, I have nothing else to say ...
+...
+Okay, what did I say last time ..?
+"Hello World", that's it ?
+Oh yeah, that was a pretty good catch-phrase ...
+It makes reference to the fact that it's my first gam- contact with you ...
+And it's litteraly the first thing I learned to do ...
+...
+I'll make it short !
+Ahem : It seems you are in a great shape today, aren't you ?
+Eating all these fruits, growing, dying, etc ...
+A lot of fun, indeed !
+My name is "Bunney".
+"Bunney" the rabbit !
+I saw you in this 2D dimension of yours and I thought it could be a cool idea to say hello.
+...
+Oh and I prefer to warn you that I am not an english native speaker ...
+Many mistakes will be made.
+"All your base belong to us !!"
+So excuse me in advance.
+I wasn't even supposed to be there to begin with !
+...
+Excuse me, I talked a lot, and I hide half of the screen ...
+I will let you alone now.
+
+
+
+
+
+**index** 9		//the waiting
+
+...
+Ahem ...
+Hello ..?
+You're there ?
+Because, y'know, I'm waiting you to make a choice ...
+We're in a serious gam- place here, so make it quick !
+
+
+
+
+
+**index** 10		//the waiting 2
+
+Would you take a ******* decision, wouldn't you ??
+
+
+
+
+
+**index** 11		//the waiting 3
+
+Anyway this is NOT the real deal here, I have made another incredible gam- world, so I'll make it easier, alright ?!
+... wait ...
+
+
+
+
+
+**index** 12		//It said yes !
+
+There.
+"Hehe I knew you couldn't ignore such a temptation !"
+You sure know how to make a difficult choice !
+Such determination !
+I would love to leave this awful place now if you don't mind.
+Aaaaaand you don't mind.
+...
+ADDING A Z-AXIS !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

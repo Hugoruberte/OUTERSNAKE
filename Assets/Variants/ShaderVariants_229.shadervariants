@@ -1,0 +1,654 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &20000000
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ShaderVariants_229
+  m_Shaders:
+  - first: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN VERTEXLIGHT_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: SPOT
+        passType: 5
+      - keywords: DIRECTIONAL
+        passType: 5
+      - keywords: POINT
+        passType: 5
+      - keywords: SHADOWS_CUBE
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_CUBE
+        passType: 8
+  - first: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL
+        passType: 5
+      - keywords: POINT
+        passType: 5
+  - first: {fileID: 101, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 10800, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL LIGHTPROBE_SH
+        passType: 4
+      - keywords: DIRECTIONAL PIXELSNAP_ON
+        passType: 4
+      - keywords: SPOT
+        passType: 5
+      - keywords: DIRECTIONAL
+        passType: 5
+      - keywords: POINT
+        passType: 5
+      - keywords: DIRECTIONAL PIXELSNAP_ON
+        passType: 5
+      - keywords: PIXELSNAP_ON POINT
+        passType: 5
+  - first: {fileID: 10703, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+  - first: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: UNITY_UI_ALPHACLIP
+        passType: 0
+  - first: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+      - keywords: SHADOWS_DEPTH _ALPHABLEND_ON
+        passType: 8
+  - first: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN
+        passType: 4
+      - keywords: DIRECTIONAL _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL DYNAMICLIGHTMAP_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL DYNAMICLIGHTMAP_ON LIGHTMAP_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL DYNAMICLIGHTMAP_ON LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING
+          _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL DYNAMICLIGHTMAP_ON LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING
+          SHADOWS_SCREEN _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL LIGHTPROBE_SH _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN VERTEXLIGHT_ON
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN VERTEXLIGHT_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _ALPHABLEND_ON
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _ALPHABLEND_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _ALPHABLEND_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _ALPHABLEND_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _ALPHABLEND_ON _EMISSION
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL LIGHTPROBE_SH _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN VERTEXLIGHT_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL VERTEXLIGHT_ON _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL SHADOWS_SCREEN VERTEXLIGHT_ON _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL DYNAMICLIGHTMAP_ON LIGHTMAP_ON _GLOSSYREFLECTIONS_OFF
+          _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL LIGHTPROBE_SH _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _EMISSION _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL LIGHTPROBE_SH _EMISSION _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _EMISSION _GLOSSYREFLECTIONS_OFF
+          _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHAPREMULTIPLY_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON _ALPHAPREMULTIPLY_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH _ALPHAPREMULTIPLY_ON
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHAPREMULTIPLY_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 4
+      - keywords: DIRECTIONAL _ALPHATEST_ON
+        passType: 4
+      - keywords: SPOT
+        passType: 5
+      - keywords: DIRECTIONAL
+        passType: 5
+      - keywords: POINT
+        passType: 5
+      - keywords: SHADOWS_DEPTH SPOT
+        passType: 5
+      - keywords: POINT SHADOWS_CUBE
+        passType: 5
+      - keywords: SPOT _ALPHABLEND_ON
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHABLEND_ON
+        passType: 5
+      - keywords: POINT _ALPHABLEND_ON
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: POINT _ALPHABLEND_ON _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: SPOT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: DIRECTIONAL _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: POINT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: SHADOWS_DEPTH SPOT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: POINT SHADOWS_CUBE _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: POINT _ALPHABLEND_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: SPOT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: DIRECTIONAL _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: POINT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: SHADOWS_DEPTH SPOT _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: POINT SHADOWS_CUBE _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHABLEND_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHAPREMULTIPLY_ON
+        passType: 5
+      - keywords: POINT _ALPHAPREMULTIPLY_ON
+        passType: 5
+      - keywords: SPOT _ALPHAPREMULTIPLY_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: POINT _ALPHAPREMULTIPLY_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 5
+      - keywords: DIRECTIONAL _ALPHATEST_ON
+        passType: 5
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+      - keywords: SHADOWS_CUBE
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_CUBE
+        passType: 8
+      - keywords: SHADOWS_DEPTH _ALPHABLEND_ON
+        passType: 8
+      - keywords: SHADOWS_CUBE _ALPHABLEND_ON
+        passType: 8
+      - keywords: SHADOWS_DEPTH _ALPHAPREMULTIPLY_ON
+        passType: 8
+      - keywords: SHADOWS_DEPTH _ALPHATEST_ON
+        passType: 8
+      - keywords: 
+        passType: 11
+      - keywords: _EMISSION
+        passType: 11
+      - keywords: _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+        passType: 11
+  - first: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: _SUNDISK_SIMPLE
+        passType: 0
+  - first: {fileID: 10755, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 627943dc7a9a74286b70a4f694a0acd5, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: e97c14fbb5ea04c3a902cc533d7fc5d1, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 874ceab4425f64bccb1d14032f4452b1, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 68a00c837b82e4c6d92e7da765dc5f1d, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: d3b1c8c1036784176946f5cfbfb7fe4c, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: f688f89ed5eb847c5b19c934a0f1e772, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: c547503fff0e8482ea5793727057041c, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: f9d5fa183cd6b45eeb1491f74863cd91, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 5d7f4c401ae8946bcb0d6ff68a9e7466, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 0e447868506ba49f0a73235b8a8b647a, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: acd613035ff3e455e8abf23fdc8c8c24, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 14768d3865b1342e3a861fbe19ba2db2, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 2b4f29398d9484ccfa9fd220449f5eee, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 01a668cc78047034a8a0c5ca2d24c6f7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 054a31a99d11e49d110086ba44295342, type: 3}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL
+        passType: 5
+  - first: {fileID: 4800000, guid: 3954501323f24464f9e4418c78d8e8ce, type: 3}
+    second:
+      variants:
+      - keywords: DIRECTIONAL
+        passType: 4
+      - keywords: DIRECTIONAL
+        passType: 5
+  - first: {fileID: 4800000, guid: c0ace1ca4bc0718448acf798c93d52d9, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: d84268709d11078d11005b9844295342, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
+  - first: {fileID: 4800000, guid: 621f08151a2255b478cca9a17f9312f9, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 66, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 64, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: SHADOWS_SPLIT_SPHERES
+        passType: 0
+      - keywords: SHADOWS_SINGLE_CASCADE SHADOWS_SPLIT_SPHERES
+        passType: 0
+  - first: {fileID: 62, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 75, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: 
+        passType: 12
+  - first: {fileID: 102, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 105, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9000, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9001, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9002, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9003, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: ETC1_EXTERNAL_ALPHA
+        passType: 0
+      - keywords: PIXELSNAP_ON
+        passType: 0
+      - keywords: ETC1_EXTERNAL_ALPHA PIXELSNAP_ON
+        passType: 0
+  - first: {fileID: 4800000, guid: 291f0d5b6045f4646847c59b4ce13ac5, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 7d89469544dfa214eabdbf37fca76f40, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 8ce0a6f4c8cae334d8a5617f302b6769, type: 3}
+    second:
+      variants:
+      - keywords: COLOR_GRADING
+        passType: 0
+      - keywords: COLOR_GRADING DEPTH_OF_FIELD
+        passType: 0
+      - keywords: COLOR_GRADING DEPTH_OF_FIELD UNITY_COLORSPACE_GAMMA
+        passType: 0
+  - first: {fileID: 4800000, guid: ac8ed710934a3564686a096bb351caee, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: d248d4d1588851f43a9fa18a4e6f0209, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: e881ae5627d1cc84395303acfbca6fb2, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: FOG_OFF
+        passType: 0
+  - first: {fileID: 4800000, guid: ec6c5af987867f54aa08fba81ee279bd, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 3342fac1a33afda41b53136bf40560ab, type: 3}
+    second:
+      variants:
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON INSTANCING_ON
+          LIGHTPROBE_SH
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          LIGHTPROBE_SH
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON
+          FL_VERTEX_COLOR
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON
+          FL_VERTEX_COLOR INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON
+          FL_VERTEX_COLOR INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SPOT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR POINT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SHADOWS_DEPTH
+          SPOT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR POINT SHADOWS_CUBE
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON SPOT
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON POINT
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON SHADOWS_DEPTH SPOT
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SPOT
+        passType: 5
+      - keywords: DIRECTIONAL FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR POINT
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SHADOWS_DEPTH
+          SPOT
+        passType: 5
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR POINT SHADOWS_CUBE
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          SPOT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          POINT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          SHADOWS_DEPTH SPOT
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          POINT SHADOWS_CUBE
+        passType: 5
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR INSTANCING_ON
+          SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_LOCAL FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR INSTANCING_ON
+          SHADOWS_CUBE
+        passType: 8
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR INSTANCING_ON
+          SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_WORLD FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR INSTANCING_ON
+          SHADOWS_CUBE
+        passType: 8
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
+      - keywords: FL_COLORS_LOCAL FL_MAIN_TEXTURE FL_SYMETRIC_COLORS_ON FL_VERTEX_COLOR
+          INSTANCING_ON SHADOWS_CUBE
+        passType: 8
+  - first: {fileID: 4800000, guid: d4bc2b13de7491f4c941f212df19aefc, type: 3}
+    second:
+      variants:
+      - keywords: DIRECTIONAL INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: SPOT
+        passType: 5
+      - keywords: POINT
+        passType: 5
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
+  - first: {fileID: 4800000, guid: 7a7f45c1e3d404644af5188d008103ce, type: 3}
+    second:
+      variants:
+      - keywords: DIRECTIONAL INSTANCING_ON
+        passType: 4
+      - keywords: DIRECTIONAL INSTANCING_ON LIGHTPROBE_SH
+        passType: 4
+      - keywords: SPOT
+        passType: 5
+      - keywords: POINT
+        passType: 5
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8

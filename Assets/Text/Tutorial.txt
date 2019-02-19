@@ -1,0 +1,201 @@
+**index** 1		//The beginning
+
+* Astounding!
+* I think this third dimension suits you perfectly!
+* Let's beginning!\n* I'll check whether you're able to <color=red>survive by your own or not.
+* Alright then...\n* You already know the Apples: they add <color=yellow>+1 to your beautiful body!
+* Lazers right there will <color=red>SHOOT you and reduce your life little by little, avoid them!
+* These Saws could easily cut you in half or <color=red>KILL you instantly, watch out!
+* And as our first play together, I settle this <color=yellow>RACE just for you...
+* READY?\n* STEADY?
+* 1...\n* 2...\n* 3...
+* GO!
+
+
+**index** 2		//The finish 1
+
+* Impressive!\n* Without a scratch!
+* And in time on top of that!\n* You sure are a smart one, aren't you??
+* Now you'll get yourself in that rocket and discover your first PLANET!
+* <color=yellow>Looney's there unless she isn't, you'll see.
+* There're already some pals, say hello, don't be shy!
+
+
+**index** 3		//The finish 2
+
+* Impressive!\n* Without a scratch!
+* You found a way to end this race in a trice but you manage to fail anyway...\n* Whatever!
+* Now you'll get yourself in that rocket and discover your first PLANET!
+* <color=yellow>Looney's there unless she isn't, you'll see.
+* There're already some pals, say hello, don't be shy!
+
+
+**index** 4		//The finish 3
+
+* Impressive!\n* Without a scratch!
+* Speed isn't one of your strong point but who cares?
+* Now you'll get yourself in that rocket and discover your first PLANET!
+* <color=yellow>Looney's there unless she isn't, you'll see.
+* There're already some pals, say hello, don't be shy!
+
+
+**index** 5		//The Death
+
+* ...
+* Seems like you just died!\n* Pretty lame...
+* Well, as I knew you weren't very skilled, I manage to keep some spare <color=yellow>souls in case.
+* Here you have 10 souls that you're free to use as you want!
+* Well not really as you want, it's <color=yellow>Liveley, a friend of mine, who keeps them.
+* So you just have to deal with him to foul the <color=red>Death!
+* Don't worry, he doesn't ask a lot in exchange, you'll see that later...
+* OR!
+* As you've already saved your existence in this world at <color=yellow>Looney's, you could also come back see her!
+* It'll cost you nothing.
+* As you want.
+
+
+**index** 6		//The Death without Save
+
+* ...
+* Seems like you just died!\n* Pretty lame...
+* Well, as I knew you weren't very skilled, I manage to keep some spare <color=yellow>souls in case.
+* Here you have 10 souls that you're free to use as you want!
+* Well not really as you want, it's <color=yellow>Liveley, a friend of mine, who keeps them.
+* So you just have to deal with him to foul the <color=red>Death!
+* Don't worry, he doesn't ask a lot in exchange, you'll see that later...
+* OR!
+* Errrr... you could have gone back to see <color=yellow>Looney if you'd saved earlier...
+* But you didn't.
+* So I guess you'll choose <color=yellow>Liveley.
+
+
+**index** 7		//The New Playground
+
+* Welcome to your new playground!\n* Make yourself like home!
+* Those <color=yellow>WHITE <color=yellow>AND <color=yellow>YELLOW <color=yellow>RABBIT seem like they want to play.\n* Go and catch them!
+* Have fun.
+
+
+**index** 8		//The One White And Yellow
+
+* WAAAAAAAAAAIT!
+You've already eaten %d of my friends!
+
+
+**index** 9		//The One White And Yellow (suite A)
+
+Apples aren't good enough anymore?
+I'm aware rabbits add at least <color=orange>+5 to your length but...
+We're also living people.
+However I'm ready to forgive all that bloody and cold-hearted slaughtering if...
+You listen to me...
+
+
+**index** 10		//The One White And Yellow (suite B)
+
+...
+So you've just killed my brothers... How kind of you.
+Rabbits add at least <color=orange>+5 to your length when you eat them...
+But you did not, thank god!
+However I'm ready to forgive the tragic loss of my family if you listen to me...
+
+
+**index** 11		//The One White And Yellow (suite C)
+
+Ooooooh...
+So you've eaten nobody, get bored and came for a nice chat!
+Rabbits add at least <color=orange>+5 to your length when you eat them...
+But you didn't eat anyone, thanks!
+So I feel like I have something to say...
+
+
+**index** 12		//QUESTION: The listening to him
+
+Will you listen to me?
+Sure!
+Nope.
+
+
+**index** 13		//Sure! (murderer)
+
+Thank you.
+As you have already been able to judge, some rabbits are different from others.
+You guessed it by seeing my muscular right arm...
+I am the world champion of one-handed rubik's cube! Heavyweight category!
+Hu, you ask why we need caterogy in a rubik's cube competition?
+Well, otherwise you could end up hurt obviously!
+Anyway, my former brothers and I are the caretakers of that place.
+We came here to reactivate that teleporter. Someone had taken it away...
+You could take it and get out of here!
+Soooo... In addition of my terrifying body...
+I am a man of culture as well! Unlike those <color=orange>YELLOW <color=orange>RABBIT.
+Some rabbits might just want to have a nice chat and thus make your stay here more enjoyable!
+... And when a rabbit has finished talking, life resumes its course...
+It'll be awkward if they had to repeat everything they said.
+So if you come back to him, I doubt something different than them being eaten by you happens.
+You're warned now.
+(Use the arrow keys to end a conversation.)
+
+
+**index** 14		//Sure! (future murderer?)
+
+Alright.
+As you have already been able to judge, some rabbits are different from others.
+You guessed it by seeing my muscular right arm...
+I am the world champion of one-handed rubik's cube! Featherweight category!
+Hu, you ask why we need caterogy in a rubik's cube competition?
+Well, otherwise someone could end up hurt obviously!
+Anyway, my beloved brothers and I are the caretakers of that place.
+We came here to reactivate that teleporter. Someone had taken it away...
+You could take it and come visit me later!
+Soooo... In addition of my gorgeous body...
+I am a man of culture as well! Unlike those <color=orange>YELLOW <color=orange>RABBIT.
+Some rabbits might just want to have a nice chat and thus make your stay here more enjoyable!
+... And when a rabbit has finished talking, life resumes its course...
+It'll be awkward if they had to repeat everything they said.
+So if you come back to him, I doubt something different than them being eaten by you happens.
+You're warned now.
+(Use the arrow keys to end a conversation.)
+
+
+**index** 15		//Nope. (murderer)
+
+Alrighty sweetheart.
+I do not think I can forgive you like that...
+Take this teleporter so you can get out of here.
+By the way I do <color=red>NOT like to repeat myself.
+So if you come back to me, I doubt something different than me being eaten by you happens.
+Bye now.
+(Use the arrow keys to end a conversation.)
+
+
+**index** 16		//Nope. (future murderer?)
+
+Alrighty.
+I am watching you.
+Take this teleporter so you can get out of here.
+By the way I do <color=red>NOT like to repeat myself.
+So if you come back to me, I doubt something different than me being eaten by you happens.
+Have a nice day!
+(Use the arrow keys to end a conversation.)
+
+
+**index** 17		//Repetition
+
+* What did I just say??
+
+
+**index** 18		//Repetition 2
+
+* I won't repeat it!
+
+
+**index** 19		//Repetition 3
+
+* I won't...\n* Alright then...
+
+
+
+
+
+#############################

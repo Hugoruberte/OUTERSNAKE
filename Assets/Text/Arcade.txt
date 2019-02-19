@@ -1,0 +1,418 @@
+**index** 1		//The surprising
+
+Surprise !
+Awesome, isn't it ?
+I set up a whole new world only for you and some of my pals !
+I did it while I was bored looking at you ...
+Oh and just a little hint, if you want to skip the intro next time, just hold the shift key ;)
+...
+Wait, I hide my beautiful title ...
+Better ?
+And here ?
+And now ?
+
+
+
+
+
+**index** 2		//The entering
+
+Just before you go, I have to tell you I improve your old gameplay a little just to make it more funney, don't mind it ...
+And concerning my pals, do as if they were not there, except maybe the red ones ... Weird guys.
+And now, come on in !!
+(Choose with the arrows and then enter)
+
+
+
+
+
+**index** 3		//The no-saving
+
+Errrrrrrr, you know that this is the first time you discover this world and so you don't have any save ..?
+Oh I get it ! You wanted to skip the boring beginning and get directly into the hard stuff !
+Or you just try to mess my menu and make fun of me :)
+...
+
+
+
+
+
+**index** 4		//The no-saving 2
+
+Ooooooh you're sooo silly :)
+...
+
+
+
+
+
+**index** 5		//The no-saving 3
+
+Well you know, we'll do that !
+You'll get what you want :)
+HERE HE GOES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+...
+Well, I haven't create this level yet, so please, just select "Reset" ...
+...
+
+
+
+
+
+**index** 6		//The no-saving 4
+
+Pleeeeeeease ...
+
+
+
+
+
+**index** 7		//The beginning
+
+HERE WE GO !
+
+
+
+
+
+**index** 8		//The come back
+
+Surprise !
+Well, not really a surprise, you already see this the last time, remember ?
+I hope you'll do better this time ...
+Ready to come in ?
+
+
+
+
+
+**index** 9		//The no-saving come back
+
+Errrrrrrr, You know you didn't save the last time either?
+You really want to discover what would happen if you continue to hit "Continue" without save ..?
+Or you just try to mess my menu and make fun of me :)
+...
+
+
+
+
+
+
+**index** 10		//Tuto : lazer
+
+If I was you, I'll try to avoid this -Lazer- as much as I can ...
+They will reduce your life little by little.
+Just ... try to stay away from them ...
+(They are pretty cool anyway)
+
+
+
+
+
+**index** 11		//Tuto : saw
+
+Yikes ! Watch out for these -Saw-, they could easily cut you in half ...
+... or kill you painfully ...
+:)
+
+
+
+
+**index** 12		//Tuto : nuclear
+
+Errrrr... well, stay calm, don't worry be happy, but I think you just activate some switch here ...
+And this switch will soon start blinking ...
+... more and more faster ...
+You should better leave this face now.
+I'm not sure about what will happen ...
+Do as you want.
+
+
+
+
+**index** 13		//Tuto : superlazer
+
+I should have warned you sooner ...
+But you see a huge Superlazer and step in without hesitation ...
+Nobel Prize, really.
+
+
+
+
+**index** 14		//Tuto : redrabbit
+
+So, this is one of my red pals ! I think his name iiiiis ... whatever !
+I dunno where he found that jetpack and his rocket launcher, but what a cool guy !
+Beware the headshot.
+
+
+
+
+**index** 15		//Some thought
+
+...
+Eh, I heard something funny lately recently :
+If you put "violently" in front of anything to describe your action it becomes 1000x funnier !
+"VIOLENTLY STUDIES"
+"VIOLENTLY BREATHES"
+"VIOLENTLY CLEANS HIS ROOM"
+"VIOLENTLY READS A BOOK"
+"VIOLENTLY PETS HIS DOG"
+"VIOLENTLY MURDERS TEN CHILDREN"
+Awesome, isn't it ?
+
+
+
+
+
+**index** 16		//Some thought 2
+
+...
+You're terrible, y'know ?
+I mean you really have absolutely NO talent for my gam- world !
+And you always end up dying ...
+Just sayin' ...
+
+
+
+
+
+**index** 17		Some thought 3
+
+...
+In the dog world, humans are elves that routinely live to be 500+ years old.
+...
+"-They live so long ... but the good ones still bond with us for our entire lives."
+"-These immortals are so kind, we must be good friends to them."
+...
+"-Now I am old. The fur around my muzzle is grey and my joints ache when we walk together..."
+"...Yet she remains unchanged, her hair still glossy, her skin still fresh, her step still sprightly..."
+"...Time doesn't touch her and yet I love her still."
+...
+
+
+
+
+
+**index** 18		Some thought 3 - suivant
+
+...
+"-For generations, he has guarded over my family. Since the days of my great-great-great-grandfather he has kept us safe..."
+"...For so long we thought him immortal..."
+"...But now I see differently, for just as my fur grows gray and my joints grow stiff, so too do his..."
+"...He did not take in my children, but gave them away to his..."
+"...I will be the last that he cares for..."
+"...My only hope is that I am able to last until his final moments..."
+"...The death of one of his kind is so rare. The ending of a life so long si such a tragedy..."
+"...He has seen so much, he knows so much. I know he takes comfort in my presence..."
+"...I only wish that I will be able to give him this confort until the end."
+...
+
+
+
+
+
+**index** 19		Some thought 4
+
+...
+Y'know, If I had to give a name to this world, I would call it "OUTERSNAKE" ...
+Oh ! What a coincidence, it was the title you saw at the beginning !
+Why "OUTERSNAKE" you ask ?
+Well, y'know, you're in a 3D world now, you go from planet to planet ...
+... planet, space, Outerspace, Snake ...
+OUTERSNAKE !
+Just so you know ...
+...
+
+
+
+
+
+
+**index** 20		Some thought 5
+
+...
+What is your idea of "the perfect date" ?
+In my opinion, it's DD/MM/YYYY, other formats are just barbaric !
+...
+
+
+
+
+
+**index** 21		Some thought 6
+
+...
+According to all known laws of aviation, there is no way that a bee should be able to fly.
+Its wings are too small to get its fat little body off the ground.
+The bee, of course, flies anyway. Because the bee doesn't care what humans think is impossible.
+...
+
+
+
+
+
+**index** 22		Some thought 7
+
+...
+Don't you think all my friends look alike ..?
+They all behave the same and don't have so much conversation ...
+They look like dumb clones unable to communicate ...
+I dunno.
+...
+
+
+
+
+
+**index** 23		Tuto : rabbit
+
+Wait, did you just killed one of my friends ??
+Yeah, I am aware to the fact that it looks funny (and that they add +10 to your length ...)
+But I mean, they're living beings just like you and me ...
+And also a precious frien- I mean they all are precious friends of mine !
+So just enjoy apples.
+And you do not know what they are able to do ...
+Crazy guy.
+
+
+
+
+
+**index** 24		Tuto : tree
+
+...
+A tree.
+You just ran into a tree.
+A basic tree.
+Well done.
+(I like the way the leaves fall by the way)
+
+
+
+
+
+**index** 25		Tuto : no continue after nuclear
+
+It seems that nuclear bomb was a little too powerful and blows up our entire world ...
+I think you have to choose "Reset" ...
+Be careful next time.
+
+
+
+
+
+**index** 26		The reboot
+
+(nothing happened)
+
+
+
+
+**index** 27		Tuto : rotten apple
+
+Yuuuck! this apple was not very fresh ...
+In fact I think it was probably a poop of rabbit.
+Each his own !
+
+
+
+
+**index** 28		Tuto : rocket
+
+Warning : this device isn't completely reliable.
+Yet you have to take it if you want to discover new world :)
+And I increase the difficulty every time you take the rocket :) :)
+Good luck ! :> :> :>
+
+
+
+
+**index** 29	Tuto : nuclear 2
+
+Have you just exploded one of the faces of my planet ??
+It takes me times to do it !
+Don't you dare do it again !
+
+
+
+
+**index** 30		Tuto : casterblaster
+
+These Casterblaster are pretty cool, aren't they ??
+Hu, do they seem familiar to you ?
+Because I was slightly inspired by another ga- world for them.
+Do not let them turn you around !!
+
+
+
+
+**index** 31		Tuto : hole
+
+Oops, I maybe forgot to warn you about the hole ...
+In fact you can't go in there, because of, y'know, the radiation of the core, all that stuff ...
+Don't you dare find a way to go in there !
+
+
+
+
+**index** 32		Tuto : meteore
+
+Caution : possible falls of meteor in the area.
+They don't make so much damage anymay ...
+Have fun.
+
+
+
+
+**index** 33		//The no-saving 5
+
+Just kidding.
+
+
+
+
+
+**index** 34		//The Death with Save
+
+...
+Seems like you just died ! Pretty lame ...
+Well, as I knew you weren't very skilled, I manage to keep some spare souls in case.
+Here you have 10 souls that you're free to use as you want !
+Well not really as you want, it's Liveley, a friend of mine, who keeps them.
+So you just have to deal with him to foul the Death !
+Don't worry, he doesn't ask a lot in exchange, you'll see that later ...
+OR !
+As you've already saved your existence in this world at Looney's, you could also come back see her !
+It'll cost you nothing.
+So as you want.
+
+
+
+
+
+**index** 35		//The Death without Save
+
+...
+Seems like you just died ! Pretty lame ...
+Well, as I knew you weren't very skilled, I manage to keep some spare souls in case.
+Here you have 10 souls that you're free to use as you want !
+Well not really as you want, it's Liveley, a friend of mine, who keeps them.
+So you just have to deal with him to foul the Death !
+Don't worry, he doesn't ask a lot in exchange, you'll see that later ...
+OR !
+Errrr ... you could have gone back to see Looney if you'd saved earlier ...
+But you didn't saved yet.
+So I guess you'll choose the Liveley option.
+
+
+
+
+
+**index** 36		//The Looney's place
+
+Hey ! You go at Looney's !
+We're not in very good terms ...
+But she's cool anyway !
+She'll allow you to save your existence in this world !
+And also do not forget to try the milk honey ...
