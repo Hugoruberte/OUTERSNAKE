@@ -16,6 +16,8 @@ public class Grill
 
 	public int width { get; private set; }
 	public int height { get; private set; }
+	private float width_corrector = 0f;
+	private float height_corrector = 0f;
 
 	private const float MAX_ACCEPTABLE_HEIGHT = 2f;
 
@@ -64,7 +66,7 @@ public class Grill
 		}
 	}
 
-	public Cell GetOneSurroundingCellOf(Cell c, int radius, bool canDiagonalMove = true)
+	public Cell GetOneSurroundingCellOf(Cell c, int radius, bool diagonal = true)
 	{
 		Vector3 p;
 		int index;
@@ -81,7 +83,7 @@ public class Grill
 			
 			count --;
 		}
-		while((index < 0 || (w == 0 && h == 0) || (!canDiagonalMove && w != 0 && h != 0)) && count > 0);
+		while((index < 0 || (w == 0 && h == 0) || (!diagonal && w != 0 && h != 0)) && count > 0);
 
 		if(count == 0) {
 			return null;
@@ -194,7 +196,8 @@ public class Grill
 		Vector3 pos;
 		Cell cell;
 		bool bound;
-		int lx, lz, i;
+		float lx, lz;
+		int i;
 
 		if(face.gameObject.layer != LayerMask.NameToLayer("Planet Surface")) {
 			Debug.LogWarning($"WARNING : The face's ({face.name}) layer is not set to 'Planet Surface' !", face);
@@ -214,14 +217,19 @@ public class Grill
 			Debug.LogWarning($"WARNING : The face's ({face.name}) height is < 3 ! (height = {height})", face);
 		}
 
+		width_corrector = (0.5f * (width%2) - 0.5f);
+		height_corrector = (-0.5f * (height%2) + 0.5f);
+
 		this.cells = new Cell[width * height];
 		i = 0;
 
 		for(int w = 0; w < width; w++) {
 			for(int h = 0; h < height; h++) {
-				lx = w - width/2;
-				lz = height/2 - h;
+				
+				lx = w - width/2 - width_corrector;
+				lz = height/2 - h - height_corrector;
 				pos = this.position + lx * face.right + lz * face.forward;
+
 				bound = (w == 0 || w == width-1 || h == 0 || h == height-1);
 
 				cell = new Cell(this, pos, normal, new Vector3(lx, 0, lz), face, bound);
@@ -233,6 +241,7 @@ public class Grill
 	private int GetIndexFromPosition(Vector3 pos)
 	{
 		int index;
+		float columns, rows;
 		Vector3 local;
 
 		local = face.InverseTransformPointUnscaled(pos);
@@ -241,8 +250,9 @@ public class Grill
 			return -1;
 		}
 
-		Debug.Log($"local = {local} && width = {width} -> width/2 = {width/2} && height = {height} -> height/2 = {height/2}");
-		index = Mathf.RoundToInt((local.x + width/2) * height - (local.z - height/2));
+		columns = (local.x + width_corrector + width/2) * height;
+		rows = local.z + height_corrector - height/2;
+		index = (int)(columns - rows);
 
 		return index;
 	}
