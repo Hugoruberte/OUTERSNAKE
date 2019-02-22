@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.PostProcessing;
+// using UnityEngine.PostProcessing;
 using System.Collections;
 using Tools;
 
@@ -65,7 +65,7 @@ public class CameraScript : MonoBehaviour
 	[HideInInspector]
 	public UnityStandardAssets.ImageEffects.SunShafts shaft;
 	[HideInInspector]
-	public PostProcessingBehaviour postProcess;
+	// public PostProcessingBehaviour postProcess;
 
 	private GameManagerV1 gameManager;
 	private SnakeControllerV3 snakeScript;
@@ -86,7 +86,7 @@ public class CameraScript : MonoBehaviour
 		vignette = myCamera.GetComponent<UnityStandardAssets.ImageEffects.VignetteAndChromaticAberration>();
 		fisheye = myCamera.GetComponent<UnityStandardAssets.ImageEffects.Fisheye>();
 		shaft = myCamera.GetComponent<UnityStandardAssets.ImageEffects.SunShafts>();
-		postProcess = myCamera.GetComponent<PostProcessingBehaviour>();
+		// postProcess = myCamera.GetComponent<PostProcessingBehaviour>();
 		
 		gameManager = GameObject.Find("LevelManager").GetComponent<GameManagerV1>();
 
@@ -125,8 +125,8 @@ public class CameraScript : MonoBehaviour
 		vignette.enabled = active;
 		fisheye.enabled = active;
 		shaft.enabled = active;
-		postProcess.profile.depthOfField.enabled = active;
-		postProcess.profile.colorGrading.enabled = active;
+		// postProcess.profile.depthOfField.enabled = active;
+		// postProcess.profile.colorGrading.enabled = active;
 	}
 	public void StandardEffectSetup()
 	{
@@ -136,8 +136,8 @@ public class CameraScript : MonoBehaviour
 		vignette.enabled = true;
 		fisheye.enabled = true;
 		shaft.enabled = true;
-		postProcess.profile.depthOfField.enabled = false;
-		postProcess.profile.colorGrading.enabled = false;
+		// postProcess.profile.depthOfField.enabled = false;
+		// postProcess.profile.colorGrading.enabled = false;
 
 		bloom.threshold = 0.25f;
 		bloom.intensity = 0.4f;

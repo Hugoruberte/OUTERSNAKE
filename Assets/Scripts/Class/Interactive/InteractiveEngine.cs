@@ -20,17 +20,16 @@ namespace Interactive.Engine
 		public static void InteractionBetween(InteractiveEntity main, InteractiveEntity other, Collision collision)
 		{
 			// declaration
-			PhysicalInteractionEntity interaction;
-			ChemicalElementEntity element;
+			PhysicalInteractionEntity physicalInteraction;
+			ChemicalElementEntity chemicalInteraction;
 
 			// interactions
-			element = chemistry.InteractionBetween(main, other);
-			interaction = physic.InteractionBetween(main, other, collision);
+			chemicalInteraction = chemistry.InteractionBetween(main, other);
+			physicalInteraction = physic.InteractionBetween(main, other, collision);
 			
-			// reactions
-			Reaction(main, element, interaction);
-			chemistry.SetEntityWithChemical(main, main.setOnElement);
-
+			// reaction
+			Reaction(main, chemicalInteraction, physicalInteraction);
+			
 			// extensions interaction + reaction
 			foreach(InteractiveExtensionEngine ext in extensions) {
 				ext.InteractionBetween(main, other);
@@ -41,12 +40,17 @@ namespace Interactive.Engine
 		{
 			InteractiveStatus status;
 
-			// Update entity interactive status
+			// Calculate reaction :
+			// 1. Result between 'current physical state' and 'possible element' 
+			// For example : Frozen * Fire = Neutral; Water
 			status = main.physical * element;
+			
+			// Update entity interactive status
 			main.physical = status.state;
 			main.chemical = status.element;
 
 			// main manage its new status && the interaction with the unknown entity
+			chemistry.SetEntityWithChemical(main, main.setOnElement);
 			main.InteractivelyReactWith(status, interaction);
 		}
 	}

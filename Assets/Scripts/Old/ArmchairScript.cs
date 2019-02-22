@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.PostProcessing;
+// using UnityEngine.PostProcessing;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
@@ -60,7 +60,7 @@ public class ArmchairScript : MonoBehaviour
 	private SnakeControllerV3 snakeScript;
 	private SnakeManagement snakeManag;
 	private UnityStandardAssets.ImageEffects.BloomOptimized bloom;
-	private PostProcessingBehaviour postProcess;
+	// private PostProcessingBehaviour postProcess;
 
 	public Faces Face = Faces.FaceY2;
 
@@ -97,7 +97,7 @@ public class ArmchairScript : MonoBehaviour
 		snakeScript = mySnake.GetComponent<SnakeControllerV3>();
 		snakeManag = mySnake.GetComponent<SnakeManagement>();
 		bloom = GameObject.Find("MainCamera/Camera").GetComponent<UnityStandardAssets.ImageEffects.BloomOptimized>();
-		postProcess = GameObject.Find("MainCamera/Camera").GetComponent<PostProcessingBehaviour>();
+		// postProcess = GameObject.Find("MainCamera/Camera").GetComponent<PostProcessingBehaviour>();
 		gameManager = GameObject.Find("LevelManager").GetComponent<GameManagerV1>();
 		cameraScript = GameObject.Find("MainCamera").GetComponent<CameraScript>();
 		saveScript = GameObject.Find("LevelManager").GetComponent<SaveScript>();
@@ -219,8 +219,8 @@ public class ArmchairScript : MonoBehaviour
 		bloom.intensity = 0.4f;
 		bloom.blurIterations = 4;
 		bloom.blurSize = 5.5f;
-		postProcess.profile.depthOfField.enabled = true;
-		postProcess.profile.colorGrading.enabled = true;
+		// postProcess.profile.depthOfField.enabled = true;
+		// postProcess.profile.colorGrading.enabled = true;
 
 		Breath = true;
 
@@ -438,8 +438,8 @@ public class ArmchairScript : MonoBehaviour
 
 		bloom.blurSize = 3.0f;
 		bloom.blurIterations = 2;
-		postProcess.profile.depthOfField.enabled = false;
-		postProcess.profile.colorGrading.enabled = false;
+		// postProcess.profile.depthOfField.enabled = false;
+		// postProcess.profile.colorGrading.enabled = false;
 	}
 
 	private IEnumerator LevitatingArmchair()
@@ -646,7 +646,7 @@ public class ArmchairScript : MonoBehaviour
 
 	void OnApplicationQuit()
 	{
-		postProcess.profile.depthOfField.enabled = false;
-		postProcess.profile.colorGrading.enabled = false;
+		// postProcess.profile.depthOfField.enabled = false;
+		// postProcess.profile.colorGrading.enabled = false;
 	}
 }

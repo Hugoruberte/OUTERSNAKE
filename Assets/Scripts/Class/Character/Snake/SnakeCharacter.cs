@@ -5,34 +5,27 @@ using Interactive.Engine;
 using Snakes;
 
 
-public class SnakeCharacter : Snake, IDangerousEntity, IFoodChainEntity
+public class SnakeCharacter : SnakeEntity, IDangerousEntity
 {
 	private SnakeController snakeController;
+
+	public Transform _transform { get; private set; }
+
+	protected override void Awake()
+	{
+		base.Awake();
+		
+		this._transform = this.myTransform;
+	}
 
 	protected override void Start()
 	{
 		base.Start();
 
-		snakeController = SnakeManager.GetController();
-		snakeController.events.onStartStep.AddListener(this.ReserveNextCell);
-		snakeController.events.onEndStep.AddListener(this.UpdateCurrentCell);
+		snakeController = SnakeManager.instance.snakeController;
+		snakeController.events.onStartStep.AddListener(this.cellable.ReserveNextCell);
+		snakeController.events.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
 	}
-
-
-
-
-
-
-
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ----------------------------------- FOOD CHAIN VARIABLES ------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	public float foodChainValue { get; private set; } = 1000f;
-	public int foodChainRank { get; private set; } = 100;
 
 
 

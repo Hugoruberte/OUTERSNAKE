@@ -48,6 +48,7 @@
 # Whitelisted directories/files
 !/ProjectSettings/
 !/Assets/
+!/Packages/
 
 # Audio file
 /Assets/Audio

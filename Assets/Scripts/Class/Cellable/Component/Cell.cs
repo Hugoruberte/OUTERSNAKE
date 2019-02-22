@@ -17,7 +17,7 @@ public class Cell
 		}
 	}
 
-	private List<CellableEntity> elements = new List<CellableEntity>();
+	private List<Cellable> elements = new List<Cellable>();
 
 	public readonly Vector3 position;
 	public readonly Vector3 normal;
@@ -29,7 +29,7 @@ public class Cell
 	}
 	public bool isWalkable {
 		get {
-			foreach(CellableEntity e in this.elements) {
+			foreach(Cellable e in this.elements) {
 				if(!e.isWalkable) return false;
 			}
 			return true;
@@ -54,14 +54,14 @@ public class Cell
 		this.isInner = (bound) ? this.IsReallyInnerCell(t) : true;
 	}
 
-	public void AddElement(CellableEntity e)
+	public void AddElement(Cellable e)
 	{
 		if(!elements.Contains(e)) {
 			elements.Add(e);
 		}
 	}
 
-	public void RemoveElement(CellableEntity e)
+	public void RemoveElement(Cellable e)
 	{
 		if(elements.Contains(e)) {
 			elements.Remove(e);

@@ -18,7 +18,8 @@ namespace Interactive.Engine
 		Lightning,
 		Magma,
 		Steam,
-		Snow
+		Snow,
+		Sand
 	}
 
 
@@ -124,6 +125,15 @@ namespace Interactive.Engine
 
 		private static ChemicalElement[] combo = new ChemicalElement[] {
 			ChemicalElement.Steam,
+			ChemicalElement.Ice
+		};
+	}
+
+	public class Sand : ChemicalElementMixEntity {
+		public Sand(float i = 0f) : base(ChemicalElement.Sand, i) { this.recipe = Sand.combo; }
+
+		private static ChemicalElement[] combo = new ChemicalElement[] {
+			ChemicalElement.Earth,
 			ChemicalElement.Ice
 		};
 	}

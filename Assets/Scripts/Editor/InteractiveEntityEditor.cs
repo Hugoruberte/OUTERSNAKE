@@ -8,6 +8,9 @@ using Interactive.Engine;
 public class InteractiveEntityEditor : Editor
 {
 	private bool showInteractiveInfo = false;
+	private bool showCellInfo = false;
+	private bool hasCell;
+	
 	protected Rect rect;
 
 	// float val = 0f;
@@ -59,8 +62,35 @@ public class InteractiveEntityEditor : Editor
 
 			EditorGUILayout.Space();
 		}
-		
 
+
+		if(script.cellable.isInitialized) {
+			hasCell = (script.cellable.currentCell != null);
+
+			showCellInfo = EditorGUILayout.Foldout(showCellInfo, "");
+			rect = EditorGUILayout.GetControlRect(true, 0);
+			rect.y += -18;
+			rect.width = 150;
+			rect.height = 50;
+			EditorGUI.LabelField(rect, "Cell Information", EditorStyles.boldLabel);
+
+			if(showCellInfo) {
+				EditorGUI.indentLevel++;
+				GUI.enabled = false;
+
+				EditorGUILayout.Toggle("Is Walkable :", script.cellable.isWalkable);
+
+				if(hasCell) {
+					EditorGUILayout.Vector3Field("Position :", script.cellable.currentCell.position);
+					EditorGUILayout.Toggle("Is Inner :", script.cellable.currentCell.isInner);
+				}
+
+				GUI.enabled = true;
+				EditorGUILayout.Space();
+				EditorGUI.indentLevel--;
+			}
+		}
+		
 		serializedObject.ApplyModifiedProperties();
 	}
 }

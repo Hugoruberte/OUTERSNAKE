@@ -46,7 +46,7 @@ public class PathfindingManager : MonoBehaviour
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
-	public List<Step> GetPathTo(CellableEntity e, Vector3 dest, Vector3 normal, AstarMoveMode mode = AstarMoveMode.Diagonal)
+	public List<Step> GetPathTo(Cellable e, Vector3 dest, Vector3 normal, AstarMoveMode mode = AstarMoveMode.Diagonal)
 	{
 		List<Step> steps;
 		PlanetPathfinding pathfinder;
@@ -62,7 +62,7 @@ public class PathfindingManager : MonoBehaviour
 		return steps;
 	}
 
-	public List<Step> GetAnotherPathFor(CellableEntity e)
+	public List<Step> GetAnotherPathFor(Cellable e)
 	{
 		List<Step> steps;
 		PlanetPathfinding pathfinder;

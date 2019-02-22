@@ -49,7 +49,7 @@ namespace PathfindingAI
 		private Surface surface;
 		private Dictionary<Grill, Cell[,]> cells;
 		private Dictionary<Grill, int[,]> grids;
-		private Dictionary<CellableEntity, Path> paths;
+		private Dictionary<Cellable, Path> paths;
 
 
 		public PlanetPathfinding(Surface s)
@@ -61,10 +61,10 @@ namespace PathfindingAI
 
 			this.grids = this.ConvertSurfaceToGrid(this.cells);
 
-			this.paths = new Dictionary<CellableEntity, Path>();
+			this.paths = new Dictionary<Cellable, Path>();
 		}
 
-		public List<Step> GetPath(CellableEntity e, Vector3 target, Vector3 targetNormal, AstarMoveMode mode = AstarMoveMode.Diagonal)
+		public List<Step> GetPath(Cellable e, Vector3 target, Vector3 targetNormal, AstarMoveMode mode = AstarMoveMode.Diagonal)
 		{
 			Path path;
 			int[] from, to;
@@ -107,7 +107,7 @@ namespace PathfindingAI
 			return steps;
 		}
 
-		public List<Step> GetAnotherPath(CellableEntity e)
+		public List<Step> GetAnotherPath(Cellable e)
 		{
 			Path path;
 			AstarMoveMode mode;

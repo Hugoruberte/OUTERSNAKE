@@ -19,89 +19,7 @@ public abstract class MovementController
 		}
 	}
 
-
 	public LivingEntity entity {get; protected set;}
-	public Transform myTransform {get; protected set;}
-
-	public float walkSpeed = 5f;
-	protected const float ROTATION_SPEED = 1.75f;
-
-
-
-	
-
-
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* -------------------------------- BASIC MOVEMENT COROUTINE ----------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	public virtual IEnumerator StepToWander()
-	{
-		// declaration
-		Cell c;
-		int radius;
-		
-		// search new cell
-		radius = Random.Range(1, this.entity.maxStepDistance + 1);
-		c = this.GetOneSurroundingCell(radius);
-
-		if(c == null) {
-			yield break;
-		} else {
-			yield return entity.StartCoroutine(this.StepTowards(c));
-		}
-	}
-
-	public virtual IEnumerator StepToRunAway(Transform from)
-	{
-		// declaration
-		Cell c;
-		Vector3 dir;
-		
-		// initialization
-		dir = Vector3.ProjectOnPlane(this.entity.currentCell.position - from.position, this.entity.currentCell.normal).normalized;
-
-		// search new cell
-		c = this.GetOneCellWithDirection(dir);
-
-		// cannot move
-		if(c == null)
-		{
-			// search for other random cell
-			c = this.GetOneSurroundingCell(this.entity.maxStepDistance);
-			if(c != null) {
-				yield return entity.StartCoroutine(this.StepTowards(c));
-			}
-		}
-		// can move
-		else
-		{
-			yield return entity.StartCoroutine(this.StepTowards(c));
-		}
-	}
-
-
-
-
-
-
-
-
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* ------------------------------------- ACTION FUNCTION --------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	protected abstract IEnumerator StepTowards(Cell c);
-
-	protected abstract IEnumerator StepOverFace(StepOver stepover);
-
-	public abstract IEnumerator Rest();
 
 
 
@@ -124,14 +42,14 @@ public abstract class MovementController
 		Vector3 dir, start, end;
 
 		end = c.position;
-		start = myTransform.position;
+		start = entity.myTransform.position;
 		dir = end - start;
 		dist = dir.magnitude;
 		dir.Normalize();
 
         hits = Physics.SphereCastAll(start, 0.49f, dir, dist);
         foreach(RaycastHit hit in hits) {
-        	if(hit.transform != myTransform && hit.transform.GetComponent<CellableEntity>() != null) {
+        	if(hit.transform != entity.myTransform) {
         		return false;
         	}
         }
@@ -143,11 +61,11 @@ public abstract class MovementController
 	{
 		Vector3 relative;
 
-		relative = this.entity.currentCell.local - c.local;
+		relative = this.entity.cellable.currentCell.local - c.local;
 
 		for(int i = 0; i < 3; i++) {
 			if(relative[i] > this.entity.maxStepDistance) {
-				Debug.LogWarning("Target is too far away ! Entity cannot walk it in only one step !", myTransform);
+				Debug.LogWarning("Target is too far away ! Entity cannot walk it in only one step !", entity.myTransform);
 				return true;
 			}
 		}
@@ -176,12 +94,12 @@ public abstract class MovementController
 		Cell res;
 		int count;
 
-		g = this.entity.currentCell.grill;
+		g = this.entity.cellable.currentCell.grill;
 		res = null;
 		count = 10;
 
 		do {
-			res = g.GetOneSurroundingCellOf(this.entity.currentCell, radius);
+			res = g.GetOneSurroundingCellOf(this.entity.cellable.currentCell, radius);
 			count --;
 		}
 		while((res == null || !res.isWalkable || !this.PathIsFreeTo(res)) && count > 0);
@@ -199,12 +117,12 @@ public abstract class MovementController
 		Cell res;
 		int count;
 
-		g = this.entity.currentCell.grill;
+		g = this.entity.cellable.currentCell.grill;
 		res = null;
 		count = 10;
 
 		do {
-			res = g.GetOneCellInThisDirection(this.entity.currentCell, dir, this.entity.maxStepDistance);
+			res = g.GetOneCellInThisDirection(this.entity.cellable.currentCell, dir, this.entity.maxStepDistance);
 			count --;
 		}
 		while((res == null || !res.isWalkable || !this.PathIsFreeTo(res)) && count > 0);

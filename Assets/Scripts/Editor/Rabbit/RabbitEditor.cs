@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Rabbit), true), CanEditMultipleObjects]
-public class RabbitEditor : CellableEntityEditor
+[CustomEditor(typeof(RabbitEntity), true), CanEditMultipleObjects]
+public class RabbitEditor : InteractiveEntityEditor
 {
 	private Vector2 tempo;
 	private float ws, jh;
@@ -18,7 +18,7 @@ public class RabbitEditor : CellableEntityEditor
 
 	public override void OnInspectorGUI()
 	{
-		Rabbit script = target as Rabbit;
+		RabbitEntity script = target as RabbitEntity;
 
 		base.OnInspectorGUI();
 

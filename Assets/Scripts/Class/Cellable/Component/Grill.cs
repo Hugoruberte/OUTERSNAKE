@@ -5,17 +5,17 @@ using Tools;
 
 public class Grill
 {
-	public Surface surface;
+	public readonly Surface surface;
 
-	public List<Cell> cells = new List<Cell>();
+	public Cell[] cells { get; private set; }
 
-	public Transform face;
+	public readonly Transform face;
 
 	public Vector3 normal { get { return face.up; }}
 	public Vector3 position { get { return face.position; }}
 
-	public int width = 0;
-	public int height = 0;
+	public int width { get; private set; }
+	public int height { get; private set; }
 
 	private const float MAX_ACCEPTABLE_HEIGHT = 2f;
 
@@ -45,16 +45,23 @@ public class Grill
 
 		local = this.face.InverseTransformPointUnscaled(pos);
 
-		return new int[] {Mathf.RoundToInt(local.x + width/2), Mathf.RoundToInt(height/2 - local.z)};
+		return new int[2] {Mathf.RoundToInt(local.x + width/2), Mathf.RoundToInt(height/2 - local.z)};
 	}
 
 	public Cell GetCellWithPosition(Vector3 pos)
 	{
 		int index;
 
-		index = GetIndexFromPosition(pos);
+		index = this.GetIndexFromPosition(pos);
 
-		return (index >= 0) ? this.cells[index] : null;
+		if(index >= this.cells.Length) {
+			Debug.LogError($"ERROR : Index ({index}) out of cells length ({cells.Length}) !", this.face);
+			return null;
+		} else if(index < 0) {
+			return null;
+		} else {
+			return this.cells[index];
+		}
 	}
 
 	public Cell GetOneSurroundingCellOf(Cell c, int radius, bool canDiagonalMove = true)
@@ -187,26 +194,28 @@ public class Grill
 		Vector3 pos;
 		Cell cell;
 		bool bound;
-		int lx, lz;
+		int lx, lz, i;
 
 		if(face.gameObject.layer != LayerMask.NameToLayer("Planet Surface")) {
-			Debug.LogWarning($"ERROR : The face's ({face.name}) layer is not set to 'Planet Surface' !", face);
+			Debug.LogWarning($"WARNING : The face's ({face.name}) layer is not set to 'Planet Surface' !", face);
 		}
 		width = Mathf.RoundToInt(face.localScale.x * 10);
 		if(width % 2 == 0) {
-			Debug.LogWarning($"ERROR : The face's ({face.name}) width is not odd ! (width = {width})", face);
+			Debug.LogWarning($"WARNING : The face's ({face.name}) width is not odd ! (width = {width})", face);
 		}
 		if(width < 3) {
-			Debug.LogWarning($"ERROR : The face's ({face.name}) width is < 3 ! (width = {width})", face);
+			Debug.LogWarning($"WARNING : The face's ({face.name}) width is < 3 ! (width = {width})", face);
 		}
 		height = Mathf.RoundToInt(face.localScale.z * 10);
 		if(height % 2 == 0) {
-			Debug.LogWarning($"ERROR : The face's ({face.name}) height is not odd ! (height = {height})", face);
+			Debug.LogWarning($"WARNING : The face's ({face.name}) height is not odd ! (height = {height})", face);
 		}
 		if(height < 3) {
-			Debug.LogWarning($"ERROR : The face's ({face.name}) height is < 3 ! (height = {height})", face);
+			Debug.LogWarning($"WARNING : The face's ({face.name}) height is < 3 ! (height = {height})", face);
 		}
 
+		this.cells = new Cell[width * height];
+		i = 0;
 
 		for(int w = 0; w < width; w++) {
 			for(int h = 0; h < height; h++) {
@@ -216,7 +225,7 @@ public class Grill
 				bound = (w == 0 || w == width-1 || h == 0 || h == height-1);
 
 				cell = new Cell(this, pos, normal, new Vector3(lx, 0, lz), face, bound);
-				this.cells.Add(cell);
+				this.cells[i++] = cell;
 			}
 		}
 	}
@@ -232,6 +241,7 @@ public class Grill
 			return -1;
 		}
 
+		Debug.Log($"local = {local} && width = {width} -> width/2 = {width/2} && height = {height} -> height/2 = {height/2}");
 		index = Mathf.RoundToInt((local.x + width/2) * height - (local.z - height/2));
 
 		return index;

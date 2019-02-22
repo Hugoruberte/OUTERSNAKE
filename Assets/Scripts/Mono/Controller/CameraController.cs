@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.PostProcessing;
 using System.Collections;
 using Tools;
 
@@ -55,8 +54,7 @@ namespace Cameras
 
 		void Update()
 		{
-			if(state == CameraMoveState.Idle)
-			{
+			if(state == CameraMoveState.Idle) {
 				return;
 			}
 

@@ -5,7 +5,7 @@ using UnityEditor;
 using Snakes;
 
 [CustomEditor(typeof(SnakePartCharacter))]
-public class SnakePartCharacterEditor : CellableEntityEditor
+public class SnakePartCharacterEditor : InteractiveEntityEditor
 {
 	public override void OnInspectorGUI()
 	{

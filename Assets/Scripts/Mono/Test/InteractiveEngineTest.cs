@@ -94,7 +94,6 @@ public class InteractiveEngineTest : MonoBehaviour
 		
 
 
-
 		Debug.LogWarning("\n\nELEMENT * MATERIAL:");
 		Debug.LogWarning($"{fire} * {wood} = {fire * wood}");
 		Debug.LogWarning($"{water} * {wood} = {water * wood}");
@@ -103,22 +102,16 @@ public class InteractiveEngineTest : MonoBehaviour
 		
 
 
-
 		Debug.LogWarning("\n\nELEMENT * STATE");
-		Debug.LogWarning($"{burn} * {fire} = {burn * fire}");
 		Debug.LogWarning($"{burn} * {fire} = {burn * fire}");
 		Debug.LogWarning($"{explosive} * {fire} = {explosive * fire}");
 		Debug.LogWarning($"{frozen} * {fire} = {frozen * fire}");
 
 
 
-
 		Debug.LogWarning("\n\nSTATE * STATE:");
 		Debug.LogWarning($"{frozen} * {explosive} = {frozen * explosive}");
 		Debug.LogWarning($"{frozen} * {burn} = {frozen * burn}");
-
-		// Debug.LogWarning("\nSTATE * MATERIAL:");
-		// Debug.LogWarning($"{burn} * {wood} = {burn * wood}");
 		
 		//Debug.LogWarning($"{fire} * {wood} * {frozen} = ({fire * wood}) * {frozen} = {fire * wood * frozen}");
 	}

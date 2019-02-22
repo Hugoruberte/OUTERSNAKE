@@ -7,6 +7,12 @@ namespace Interactive.Engine
 	[RequireComponent(typeof(Collider))]
 	public abstract class InteractiveEntity : MonoBehaviour
 	{
+		public Transform myTransform { get; private set; }
+		protected Transform body;
+
+		protected Collider myCollider;
+
+
 		private InteractiveStatus status = new InteractiveStatus(PhysicalStateEntity.neutral, ChemicalElementEntity.voidd);
 
 		public PhysicalStateEntity physical {
@@ -30,7 +36,7 @@ namespace Interactive.Engine
 
 		public bool isAlive { get { return (this.life > 0f); }}
 
-		protected Collider myCollider;
+		public readonly Cellable cellable = new Cellable();
 
 
 
@@ -38,13 +44,22 @@ namespace Interactive.Engine
 		protected virtual void Awake()
 		{
 			// initialize variable
+			myTransform = transform;
+			body = myTransform.Find("Body");
 			myCollider = GetComponent<Collider>();
+
+			if(!body) {
+				Debug.LogWarning("WARNING : This entity does not have a \"Body\". Is this wanted ?", myTransform);
+			}
 		}
 
 		protected virtual void Start()
 		{
 			// initialize state
 			InteractiveEngine.chemistry.SetEntityWithChemical(this, this.setOnElement);
+
+			// initialize cell
+			this.cellable.Initialize(myTransform);
 		}
 
 		protected virtual void OnCollisionEnter(Collision other)
@@ -81,7 +96,7 @@ namespace Interactive.Engine
 		public virtual void SetOnSteam(bool active){}
 		public virtual void SetOnIce(bool active){}
 
-		public abstract void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i);
+		public virtual void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i){}
 
 		public override string ToString() => $"{gameObject.name} (Interactive Entity: status = {status} and material = {material})";
 	}
