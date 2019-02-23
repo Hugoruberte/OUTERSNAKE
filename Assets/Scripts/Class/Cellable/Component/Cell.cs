@@ -49,8 +49,9 @@ public class Cell
 
 		this.ledges = new List<Ledge>();
 
-		// if constructor said cell is bound, then check if it's really true
-		// else we can trust the constructor : this cell is inner
+		// If grill said cell is bound, then check if it's really
+		// true (it can be false if two grill are next to each other).
+		// Else we can trust the constructor : this cell is inner.
 		this.isInner = (bound) ? this.IsReallyInnerCell(t) : true;
 	}
 

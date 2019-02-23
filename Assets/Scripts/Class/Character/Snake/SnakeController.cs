@@ -45,7 +45,7 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator moveCoroutine = null;
 	
-	public Vector3 targetPosition = Vector3.zero;
+	private Vector3 targetPosition = Vector3.zero;
 
 	[Header("Settings")]
 	[Range(0.0f, 100.0f)]
