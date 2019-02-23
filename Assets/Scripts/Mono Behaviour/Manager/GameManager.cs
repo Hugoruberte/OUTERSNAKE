@@ -1,51 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Snakes;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-	private static GameManager _instance = null;
-	public static GameManager instance {
-		get {
-			if(_instance == null) {
-				Debug.LogError("Instance is null, either you tried to access it from the Awake function or it has not been initialized in its own Awake function");
-			}
-			return _instance;
-		}
-		set {
-			_instance = value;
-		}
-	}
+	public GameData gameData;
 
-	private static Transform _garbage = null;
+	public Transform heart;
 
 	void Awake()
 	{
 		instance = this;
 
-		CreateNewGarbage();
+		if(!heart) {
+			this.CreateNewHeart();
+		}
+
+		this.CreateNewGarbage();
 	}
 
-	private static void CreateNewGarbage()
+	private void CreateNewHeart()
+	{
+		GameObject heartObject;
+
+		heartObject = new GameObject();
+		heartObject.name = "Heart";
+		heart = heartObject.transform;
+	}
+
+	private void CreateNewGarbage()
 	{
 		GameObject g = new GameObject();
 		g.name = "Garbage";
-
-		_garbage = g.transform;
-		_garbage.parent = _instance.transform;
+		gameData.garbage = g.transform;
 	}
 
 	public static void PutInGarbage(GameObject o)
 	{
 		o.SetActive(false);
 
-		o.transform.parent = _garbage;
+		MonoBehaviour[] monos = o.GetComponentsInChildren<MonoBehaviour>();
+		foreach(MonoBehaviour m in monos) {
+			m.StopAllCoroutines();
+		}
+
+		o.transform.parent = instance.gameData.garbage;
 	}
 
-	public static void CleanTheGarbage()
+	public static void EmptyTheGarbage()
 	{
-		Destroy(_garbage.gameObject);
+		Destroy(instance.gameData.garbage.gameObject);
 
-		CreateNewGarbage();
+		instance.CreateNewGarbage();
 	}
 }

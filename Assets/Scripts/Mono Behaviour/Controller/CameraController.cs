@@ -12,8 +12,12 @@ namespace Cameras
 
 	public class CameraController : MonoBehaviour
 	{
-		public Transform heart;
-		public Transform snake;
+		[Header("State")]
+		public CameraMoveState state = CameraMoveState.Idle;
+
+		private SnakeData snakeData;
+		private Transform heart;
+		private Transform snake;
 		private Transform myTransform;
 		private _Transform cacheHeart = new _Transform();
 		private _Transform oldHeart = new _Transform();
@@ -32,9 +36,6 @@ namespace Cameras
 		private Quaternion targetRotation;
 		private Quaternion previousTargetRotation = Quaternion.identity;
 
-		[Header("State")]
-		public CameraMoveState state = CameraMoveState.Idle;
-
 		private IEnumerator smoothRotationCoroutine = null;
 
 
@@ -45,6 +46,10 @@ namespace Cameras
 
 		void Start()
 		{
+			snakeData = SnakeManager.instance.snakeData;
+			snake = SnakeManager.instance.snake.transform;
+			heart = GameManager.instance.heart;
+
 			targetRotation = heart.rotation * Quaternion.Euler(90, 0, 0);
 			previousTargetRotation = targetRotation;
 

@@ -6,52 +6,14 @@ using Snakes;
 
 public class SnakeController : MonoBehaviour 
 {
-	private class FaceSwitcher {
-		private int delay = 0;
+	private SnakeData snakeData;
 
-		private bool _switching;
-		public bool switching {
-			get {
-				if(_switching) {
-					if(delay > 0) delay --;
-					if(delay == 0) _switching = false;
-				}
-				return _switching;
-			}
-		}
-
-		public Vector3 normal;
-		public Vector3 destination;
-
-		public FaceSwitcher()
-		{
-			this._switching = false;
-			this.delay = 0;
-			this.normal = Vector3.zero;
-			this.destination = Vector3.zero;
-		}
-
-		public void SetFaceSwitching(int d, Vector3 n, Vector3 dest)
-		{
-			this._switching = true;
-			this.delay = d;
-			this.normal = n;
-			this.destination = dest;
-		}
-	}
-
-	public Transform heart;
 	private Transform myTransform;
+	private Transform heart;
 
 	private IEnumerator moveCoroutine = null;
 	
 	private Vector3 targetPosition = Vector3.zero;
-
-	[Header("Settings")]
-	[Range(0.0f, 100.0f)]
-	public float speed = 10.0f;
-	[SerializeField, Range(0.01f, 0.2f), Tooltip("The accuracy of the deplacement of Snake, less is more accurrate (0.1f is fine).")]
-	private float positionAccuracy = 0.1f;		//plus c'est bas, plus c'est précis
 
 	private int right = 0;
 	private int forward = 0;
@@ -62,16 +24,9 @@ public class SnakeController : MonoBehaviour
 
 	private int targetMask;
 
-	[Header("States")]
-	public SnakeMoveState state = SnakeMoveState.Stop;
+	private FaceSwitcher faceswitcher = new FaceSwitcher(true);
 
-	[HideInInspector]
-	public bool cancelInput = false;
-
-	private FaceSwitcher faceswitcher = new FaceSwitcher();
-
-	public readonly SnakeMovementEvents events = new SnakeMovementEvents();
-
+	private SnakeMovementEvents events;
 
 
 	void Awake()
@@ -84,6 +39,10 @@ public class SnakeController : MonoBehaviour
 
 	void Start()
 	{
+		snakeData = SnakeManager.instance.snakeData;
+		events = SnakeManager.instance.events;
+		heart = GameManager.instance.heart;
+		
 		this.StartSnakeMovement();
 	}
 
@@ -115,7 +74,7 @@ public class SnakeController : MonoBehaviour
 
 	public void StopSnakeMovement()
 	{
-		cancelInput = true;
+		snakeData.cancelInput = true;
 
 		StopAllCoroutines();
 		moveCoroutine = StopSnakeMovementCoroutine();
@@ -141,7 +100,7 @@ public class SnakeController : MonoBehaviour
 	/* --------------------------------------------------------------------------------------------*/
 	private void GetInputs()
 	{
-		if(cancelInput) {
+		if(snakeData.cancelInput) {
 			return;
 		}
 			
@@ -159,7 +118,7 @@ public class SnakeController : MonoBehaviour
 			rightStored = 0;
 		}
 		
-		if(state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
+		if(snakeData.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
 		{
 			if(vertical == -1) {
 				myTransform.rotation = heart.rotation * Quaternion.Euler(0, 180, 0);
@@ -167,7 +126,7 @@ public class SnakeController : MonoBehaviour
 				myTransform.rotation = heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
 			}
 				
-			state = SnakeMoveState.Run;
+			snakeData.state = SnakeMoveState.Run;
 		}
 	}
 
@@ -177,8 +136,7 @@ public class SnakeController : MonoBehaviour
 
 		while(true)
 		{
-			if(state != SnakeMoveState.Run)
-			{
+			if(snakeData.state != SnakeMoveState.Run) {
 				yield return null;
 				continue;
 			}
@@ -205,13 +163,13 @@ public class SnakeController : MonoBehaviour
 			}
 			
 			// Move snake according to previous calculated target position
-			if(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy) {
+			if(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy) {
 				// Events -> will reserve next cell + optional callback
 				events.onStartStep.Invoke(targetPosition, myTransform.up);
 
-				while(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy)
+				while(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy)
 				{
-					myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, speed * Time.deltaTime);
+					myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, snakeData.speed * Time.deltaTime);
 					yield return null;
 				}
 
@@ -229,8 +187,9 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator StopSnakeMovementCoroutine()
 	{
-		while(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy) {
-			myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, speed * Time.deltaTime);
+		while(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy)
+		{
+			myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, snakeData.speed * Time.deltaTime);
 			yield return null;
 		}
 
@@ -239,7 +198,7 @@ public class SnakeController : MonoBehaviour
 		// Event
 		events.onEndStep.Invoke();
 
-		cancelInput = false;
+		snakeData.cancelInput = false;
 	}
 
 
@@ -299,7 +258,7 @@ public class SnakeController : MonoBehaviour
 	{
 		Vector3 target;
 
-		if(Vector3.Distance(myTransform.position, faceswitcher.destination) < positionAccuracy)
+		if(Vector3.Distance(myTransform.position, faceswitcher.destination) < snakeData.positionAccuracy)
 		{
 			// snake rotation
 			myTransform.rotation = SnakeRotationOverFace(dir);
@@ -347,5 +306,45 @@ public class SnakeController : MonoBehaviour
 		newRotation = myTransform.AbsoluteRotation() * rotator;
 
 		return newRotation;
+	}
+
+
+
+
+
+
+
+	private struct FaceSwitcher {
+		private int delay;
+
+		private bool _switching;
+		public bool switching {
+			get {
+				if(_switching) {
+					if(delay > 0) delay --;
+					if(delay == 0) _switching = false;
+				}
+				return _switching;
+			}
+		}
+
+		public Vector3 normal;
+		public Vector3 destination;
+
+		public FaceSwitcher(bool mdr)
+		{
+			this._switching = false;
+			this.delay = 0;
+			this.normal = Vector3.zero;
+			this.destination = Vector3.zero;
+		}
+
+		public void SetFaceSwitching(int d, Vector3 n, Vector3 dest)
+		{
+			this._switching = true;
+			this.delay = d;
+			this.normal = n;
+			this.destination = dest;
+		}
 	}
 }

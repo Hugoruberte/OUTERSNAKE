@@ -7,8 +7,6 @@ using Snakes;
 
 public class SnakeCharacter : SnakeEntity, IDangerousEntity
 {
-	private SnakeController snakeController;
-
 	public Transform _transform { get { return this.myTransform; } }
 
 	protected override void Awake()
@@ -20,9 +18,8 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 	{
 		base.Start();
 
-		snakeController = SnakeManager.instance.snakeController;
-		snakeController.events.onStartStep.AddListener(this.cellable.ReserveNextCell);
-		snakeController.events.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
+		SnakeManager.instance.events.onStartStep.AddListener(this.cellable.ReserveNextCell);
+		SnakeManager.instance.events.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
 	}
 
 

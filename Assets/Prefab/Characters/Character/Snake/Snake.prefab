@@ -184,11 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c941d6d924e82489246d4cc368e3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heart: {fileID: 0}
-  speed: 10
-  positionAccuracy: 0.05
-  state: 2
-  cancelInput: 0
+  snakeManager: {fileID: 11400000, guid: ebcb4bcc62cf297478a5c77b2ce6fd06, type: 2}
 --- !u!114 &288344288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,5 +197,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64700eb3f8927a64089222d7e6f35ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  isWalkable: 0
+  speed: 2
+  maxStepDistance: 2
+  rangeOfView: 5
+  behaviour: {fileID: 0}
+  isTired: 0
+  isHungry: 0
+  isScared: 0
+  snakeManager: {fileID: 11400000, guid: ebcb4bcc62cf297478a5c77b2ce6fd06, type: 2}

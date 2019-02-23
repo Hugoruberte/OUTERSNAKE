@@ -7,10 +7,11 @@ using Interactive.Engine;
 
 public class SnakePartCharacter : SnakeEntity
 {
+	public SnakeBodyManager snakeBodyManager;
+
 	private IEnumerator behaviourCoroutine = null;
 	private ParticleSystem explosion;
-	private SnakeBodyController snakeBodyController;
-
+	
 	public SnakePartState snakePartState { get; private set; }
 
 
@@ -22,13 +23,6 @@ public class SnakePartCharacter : SnakeEntity
 		snakePartState = SnakePartState.Alive;
 
 		explosion = GetComponentInChildren<ParticleSystem>();
-	}
-
-	protected override void Start()
-	{
-		base.Start();
-
-		snakeBodyController = SnakeManager.instance.snakeBodyController;
 	}
 
 
@@ -143,7 +137,7 @@ public class SnakePartCharacter : SnakeEntity
 
 		snakePartState = SnakePartState.Explode;
 		StopAllCoroutines();
-		snakeBodyController.ExplodeFromSnakePart(myTransform);
+		snakeBodyManager.ExplodeFromSnakePart(myTransform);
 	}
 
 	// Only called from SnakeBodyController, do not called it from anywhere else !

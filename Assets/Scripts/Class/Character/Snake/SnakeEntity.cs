@@ -21,8 +21,6 @@ namespace Snakes
 
 	public abstract class SnakeEntity : CharacterEntity
 	{
-		// public Transform _transform { get { return this.myTransform; } }
-
 		protected override void Awake()
 		{
 			base.Awake();
