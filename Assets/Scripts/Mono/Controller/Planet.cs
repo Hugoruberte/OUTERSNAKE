@@ -22,16 +22,16 @@ public class Planet : MonoBehaviour
 		return false;
 	}
 
-	public void SetElementOnPlanet(Transform t, ref Cell c)
+	public Cell SetElementOnPlanet(Transform t)
 	{
 		foreach(Grill g in this.surface.grills) {
 			if(g.IsGrillOf(t)) {
-				
-				c = g.GetCellWithPosition(t.position);
-				return;
+				return g.GetCellWithPosition(t.position);
 			}
 		}
 
 		Debug.LogError("ERROR : This transform was not on this planet ! Check before using this function.\nUse 'CellableEntity.InitializeSurfaceAndCell' to avoid this error.");
+
+		return null;
 	}
 }

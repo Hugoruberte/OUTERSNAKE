@@ -25,6 +25,8 @@ public class SnakeManager : MonoBehaviour
 
 	public SnakeBodyController snakeBodyController { get; private set; }
 
+	public GameObject tmp;
+
 
 	void Awake()
 	{

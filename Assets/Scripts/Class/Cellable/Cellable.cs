@@ -8,9 +8,9 @@ public class Cellable
 	private Vector3 currentNormal;
 
 	private Cell reservedCell = null;
-	public Cell currentCell = null;
+	public Cell currentCell { get; private set; } = null;
 
-	public Surface currentSurface { get; private set; }
+	public Surface currentSurface { get; private set; } = null;
 
 	public bool isWalkable { get; protected set; } = true;
 	public bool isInitialized { get; private set; } = false;
@@ -102,7 +102,7 @@ public class Cellable
 		foreach(Planet p in planets) {
 			if(p.IsPlanetOf(myTransform)) {
 
-				p.SetElementOnPlanet(myTransform, ref this.currentCell);
+				this.currentCell = p.SetElementOnPlanet(myTransform);
 				this.currentCell.AddElement(this);
 				this.currentSurface = this.currentCell.surface;
 				return;

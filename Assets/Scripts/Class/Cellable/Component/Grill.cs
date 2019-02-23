@@ -79,7 +79,7 @@ public class Grill
 			w = Random.Range(-radius, radius+1);
 			h = Random.Range(-radius, radius+1);
 			p = c.position + w * face.right + h * face.forward;
-			index = GetIndexFromPosition(p);
+			index = this.GetIndexFromPosition(p);
 			
 			count --;
 		}
@@ -102,7 +102,7 @@ public class Grill
 
 		for(int i = maxLength; i >= 1; i--) {
 			p = (c.position + dir * i).SetRoundToInt();
-			index = GetIndexFromPosition(p);
+			index = this.GetIndexFromPosition(p);
 
 			if(index >= 0) {
 				break;
@@ -165,7 +165,7 @@ public class Grill
 
 					p = pos + w * face.right + h * face.forward;
 					
-					index = GetIndexFromPosition(p);	
+					index = this.GetIndexFromPosition(p);	
 					if(index >= 0) {
 						surroundingCells.Add(this.cells[index]);
 					}
@@ -196,38 +196,35 @@ public class Grill
 		Vector3 pos;
 		Cell cell;
 		bool bound;
-		float lx, lz;
+		float lx, lz, anchorx, anchorz;
 		int i;
 
 		if(face.gameObject.layer != LayerMask.NameToLayer("Planet Surface")) {
 			Debug.LogWarning($"WARNING : The face's ({face.name}) layer is not set to 'Planet Surface' !", face);
 		}
-		width = Mathf.RoundToInt(face.localScale.x * 10);
-		if(width % 2 == 0) {
-			Debug.LogWarning($"WARNING : The face's ({face.name}) width is not odd ! (width = {width})", face);
+		this.width = Mathf.RoundToInt(face.localScale.x * 10);
+		if(width < 2) {
+			Debug.LogWarning($"WARNING : The face's ({face.name}) width is < 2 ! (width = {width})", face);
 		}
-		if(width < 3) {
-			Debug.LogWarning($"WARNING : The face's ({face.name}) width is < 3 ! (width = {width})", face);
-		}
-		height = Mathf.RoundToInt(face.localScale.z * 10);
-		if(height % 2 == 0) {
-			Debug.LogWarning($"WARNING : The face's ({face.name}) height is not odd ! (height = {height})", face);
-		}
-		if(height < 3) {
-			Debug.LogWarning($"WARNING : The face's ({face.name}) height is < 3 ! (height = {height})", face);
+		this.height = Mathf.RoundToInt(face.localScale.z * 10);
+		if(height < 2) {
+			Debug.LogWarning($"WARNING : The face's ({face.name}) height is < 2 ! (height = {height})", face);
 		}
 
-		width_corrector = (0.5f * (width%2) - 0.5f);
-		height_corrector = (-0.5f * (height%2) + 0.5f);
+		this.width_corrector = (0.5f * (width%2) - 0.5f);
+		this.height_corrector = (-0.5f * (height%2) + 0.5f);
+
+		anchorx = -(width/2) - width_corrector;
+		anchorz = (height/2) - height_corrector;
 
 		this.cells = new Cell[width * height];
 		i = 0;
 
 		for(int w = 0; w < width; w++) {
 			for(int h = 0; h < height; h++) {
-				
-				lx = w - width/2 - width_corrector;
-				lz = height/2 - h - height_corrector;
+
+				lx = anchorx + w;
+				lz = anchorz - h;
 				pos = this.position + lx * face.right + lz * face.forward;
 
 				bound = (w == 0 || w == width-1 || h == 0 || h == height-1);
@@ -259,13 +256,10 @@ public class Grill
 
 	private bool IsLocalPositionInGrill(Vector3 local)
 	{
-		int x = Mathf.RoundToInt(local.x);
-		int z = Mathf.RoundToInt(local.z);
-
-		if(x > width/2 || x < -(width/2)) {
+		if(local.x > width/2 || local.x < -(width/2)) {
 			return false;
 		}
-		if(z > height/2 || z < -(height/2)) {
+		if(local.z > height/2 || local.z < -(height/2)) {
 			return false;
 		}
 

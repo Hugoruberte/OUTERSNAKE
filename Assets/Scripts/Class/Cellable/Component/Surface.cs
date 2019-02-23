@@ -87,9 +87,7 @@ public class Surface
 	public Cell GetCellWithPositionAndFaceTransform(Vector3 pos, Transform f)
 	{
 		foreach(Grill g in this.grills) {
-
 			if(g.face == f) {
-				
 				return g.GetCellWithPosition(pos);
 			}
 		}
@@ -100,9 +98,7 @@ public class Surface
 	public Cell GetCellWithPositionAndFaceNormal(Vector3 pos, Vector3 faceNormal)
 	{
 		foreach(Grill g in this.grills) {
-
 			if(g.IsGrillOf(pos, faceNormal)) {
-				
 				return g.GetCellWithPosition(pos);
 			}
 		}

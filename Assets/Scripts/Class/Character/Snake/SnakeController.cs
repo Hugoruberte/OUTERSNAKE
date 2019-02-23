@@ -45,12 +45,12 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator moveCoroutine = null;
 	
-	private Vector3 targetPosition = Vector3.zero;
+	public Vector3 targetPosition = Vector3.zero;
 
 	[Header("Settings")]
 	[Range(0.0f, 100.0f)]
 	public float speed = 10.0f;
-	[SerializeField, Range(0.01f, 0.2f), Tooltip("The accuracy of the deplacement of Snake, less is more accurrate (0.15f is fine).")]
+	[SerializeField, Range(0.01f, 0.2f), Tooltip("The accuracy of the deplacement of Snake, less is more accurrate (0.1f is fine).")]
 	private float positionAccuracy = 0.1f;		//plus c'est bas, plus c'est précis
 
 	private int right = 0;
@@ -68,21 +68,18 @@ public class SnakeController : MonoBehaviour
 	[HideInInspector]
 	public bool cancelInput = false;
 
-	private FaceSwitcher faceswitcher;
+	private FaceSwitcher faceswitcher = new FaceSwitcher();
 
-	public SnakeMovementEvents events;
+	public readonly SnakeMovementEvents events = new SnakeMovementEvents();
 
 
 
 	void Awake()
 	{
 		myTransform = transform;
-		targetMask = (1 << LayerMask.NameToLayer("Planet Surface"));
-		faceswitcher = new FaceSwitcher();
-
-		events = new SnakeMovementEvents();
-
 		targetPosition = myTransform.AbsolutePosition();
+
+		targetMask = (1 << LayerMask.NameToLayer("Planet Surface"));
 	}
 
 	void Start()
@@ -144,8 +141,9 @@ public class SnakeController : MonoBehaviour
 	/* --------------------------------------------------------------------------------------------*/
 	private void GetInputs()
 	{
-		if(cancelInput)
+		if(cancelInput) {
 			return;
+		}
 			
 		int vertical = (int)Input.GetAxisRaw("Vertical");
 		int horizontal = (int)Input.GetAxisRaw("Horizontal");
@@ -163,10 +161,11 @@ public class SnakeController : MonoBehaviour
 		
 		if(state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
 		{
-			if(vertical == -1)
+			if(vertical == -1) {
 				myTransform.rotation = heart.rotation * Quaternion.Euler(0, 180, 0);
-			else if(horizontal != 0)
+			} else if(horizontal != 0) {
 				myTransform.rotation = heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
+			}
 				
 			state = SnakeMoveState.Run;
 		}
@@ -207,7 +206,7 @@ public class SnakeController : MonoBehaviour
 			
 			// Move snake according to previous calculated target position
 			if(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy) {
-				// Events
+				// Events -> will reserve next cell + optional callback
 				events.onStartStep.Invoke(targetPosition, myTransform.up);
 
 				while(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy)
@@ -218,7 +217,7 @@ public class SnakeController : MonoBehaviour
 
 				myTransform.position = targetPosition;
 
-				// Event
+				// Event -> reserved cell become current cell + optional callback 
 				events.onEndStep.Invoke();
 			}
 			else {
@@ -230,12 +229,10 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator StopSnakeMovementCoroutine()
 	{
-		do
-		{
+		while(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy) {
 			myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, speed * Time.deltaTime);
 			yield return null;
 		}
-		while(Vector3.Distance(myTransform.position, targetPosition) > positionAccuracy);
 
 		myTransform.position = targetPosition;
 
@@ -273,10 +270,11 @@ public class SnakeController : MonoBehaviour
 				forwardStored = 0;
 				rightStored = 0;
 
-				if(right == 0)
+				if(right == 0) {
 					myTransform.rotation = heart.rotation * Quaternion.Euler(0, (1 - forward) * 90, 0);
-				else
+				} else {
 					myTransform.rotation = heart.rotation * Quaternion.Euler(0, (right) * 90, 0);
+				}
 			}
 		}
 	}
@@ -299,9 +297,9 @@ public class SnakeController : MonoBehaviour
 
 	private Vector3 ManageFaceRotationAndAdaptTargetPosition(Vector3 dir)
 	{
-		Vector3 target = Vector3.zero;
+		Vector3 target;
 
-		if(Vector3.Distance(myTransform.position, faceswitcher.destination) < 0.1f)
+		if(Vector3.Distance(myTransform.position, faceswitcher.destination) < positionAccuracy)
 		{
 			// snake rotation
 			myTransform.rotation = SnakeRotationOverFace(dir);
