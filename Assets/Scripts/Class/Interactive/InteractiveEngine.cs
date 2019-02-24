@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace Interactive.Engine
 {
-	public class InteractiveEngine : MonoBehaviour
+	public class InteractiveEngine : Singleton<InteractiveEngine>
 	{
+		public InteractiveEngineData interactiveEngineData;
+
 		private static List<InteractiveExtensionEngine> extensions = new List<InteractiveExtensionEngine>();
 
 		public static ChemistryEngine chemistry = new ChemistryEngine();
@@ -13,6 +15,8 @@ namespace Interactive.Engine
 
 		void Awake()
 		{
+			instance = this;
+
 			// Add extension engine :
 			extensions.Add(new FoodChainEngine());
 		}
