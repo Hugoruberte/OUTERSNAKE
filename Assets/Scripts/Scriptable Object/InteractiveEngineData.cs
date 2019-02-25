@@ -4,33 +4,18 @@ using UnityEngine;
 using Interactive.Engine;
 using System;
 using System.Linq;
-using System.Reflection;
+
 
 [CreateAssetMenu(fileName = "InteractiveEngineData", menuName = "Scriptable Object/Other/InteractiveEngineData", order = 3)]
 public class InteractiveEngineData : ScriptableObject
 {
 	[HideInInspector] public List<ChemicalElementMixEntity> chemicalElementMixEntityPoolList = new List<ChemicalElementMixEntity>();
 	[HideInInspector] public List<ChemicalElement> chemicalElementPoolList = new List<ChemicalElement>();
-	[HideInInspector] public ChemicalElementMixEntity[] mixes = null;
-	[HideInInspector] public Type[] types = null;
 
-	[HideInInspector] public object[] STANDARD_PARAMS = new object[] {0f};
-
-
-	private Dictionary<ChemicalElement, ChemicalElement[]> primaries = new Dictionary<ChemicalElement, ChemicalElement[]>();
-	private Dictionary<ChemicalElement, ChemicalElement[]> weaknesses = new Dictionary<ChemicalElement, ChemicalElement[]>();
-	private Dictionary<int, ChemicalElementEntity> couples = new Dictionary<int, ChemicalElementEntity>();
-	private Dictionary<int, ChemicalElement> winners = new Dictionary<int, ChemicalElement>();
-
-
-
-	void Awake()
-	{
-		this.types = this.GetAllTypes();
-		this.mixes = this.GetAllMixes();
-	}
-
-
+	public Dictionary<ChemicalElement, ChemicalElement[]> primaries = new Dictionary<ChemicalElement, ChemicalElement[]>();
+	public Dictionary<ChemicalElement, ChemicalElement[]> weaknesses = new Dictionary<ChemicalElement, ChemicalElement[]>();
+	public Dictionary<int, ChemicalElementEntity> couples = new Dictionary<int, ChemicalElementEntity>();
+	public Dictionary<int, ChemicalElement> winners = new Dictionary<int, ChemicalElement>();
 
 
 
@@ -135,45 +120,5 @@ public class InteractiveEngineData : ScriptableObject
 			Debug.LogWarning($"WARNING : This couple ({main} + {other}) is not yet registered ! Check it out !");
 			return false;
 		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private Type[] GetAllTypes()
-	{
-		Type t;
-
-		t = typeof(ChemicalElementMixEntity);
-
-		return Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
-	}
-
-	private ChemicalElementMixEntity[] GetAllMixes()
-	{
-		int i;
-		Type[] ts;
-		ChemicalElementMixEntity[] res;
-
-		ts = types;
-		res = new ChemicalElementMixEntity[ts.Length];
-		i = 0;
-
-		foreach(Type type in ts) {
-			res[i++] = Activator.CreateInstance(type, this.STANDARD_PARAMS) as ChemicalElementMixEntity;
-		}
-
-		return res;
 	}
 }

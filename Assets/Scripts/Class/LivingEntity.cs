@@ -15,9 +15,4 @@ public abstract class LivingEntity : InteractiveEntity
 	[HideInInspector] public bool isTired = false;
 	[HideInInspector] public bool isHungry = false;
 	[HideInInspector] public bool isScared = false;
-
-	protected override void Start()
-	{
-		base.Start();
-	}
 }

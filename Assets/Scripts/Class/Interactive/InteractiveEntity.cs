@@ -13,7 +13,7 @@ namespace Interactive.Engine
 		protected Collider myCollider;
 
 
-		private InteractiveStatus status = new InteractiveStatus(PhysicalStateEntity.neutral, ChemicalElementEntity.voidd);
+		private InteractiveStatus status;
 
 		public PhysicalStateEntity physical {
 			get { return this.status.state; }
@@ -43,10 +43,12 @@ namespace Interactive.Engine
 
 		protected virtual void Awake()
 		{
-			// initialize variable
+			// Initialize variable
 			myTransform = transform;
 			body = myTransform.Find("Body");
 			myCollider = GetComponent<Collider>();
+
+			status = new InteractiveStatus(PhysicalStateEntity.neutral, new Voidd());
 
 			if(!body) {
 				Debug.LogWarning("WARNING : This entity does not have a \"Body\". Is this wanted ?", myTransform);

@@ -16857,6 +16857,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89560c5f96ec83f4c94d67b82cb52520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactiveEngineData: {fileID: 11400000, guid: e01d973974ed9ac4d9f9ad95d5e7cc26,
+    type: 2}
 --- !u!1 &1108726372
 GameObject:
   m_ObjectHideFlags: 0
@@ -19224,7 +19226,7 @@ PrefabInstance:
     - target: {fileID: 5812141742805469257, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5812141742805469254, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}

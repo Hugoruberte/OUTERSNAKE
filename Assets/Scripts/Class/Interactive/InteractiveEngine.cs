@@ -6,6 +6,8 @@ namespace Interactive.Engine
 {
 	public class InteractiveEngine : Singleton<InteractiveEngine>
 	{
+		public InteractiveEngineData interactiveEngineData;
+		
 		private static List<InteractiveExtensionEngine> extensions = new List<InteractiveExtensionEngine>();
 
 		public static ChemistryEngine chemistry = new ChemistryEngine();

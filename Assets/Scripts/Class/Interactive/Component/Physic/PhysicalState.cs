@@ -23,7 +23,7 @@ namespace Interactive.Engine
 			if(this.strengths != null) {
 				foreach(ChemicalElement c in this.strengths) {
 					if(c == e.type) {
-						return new InteractiveStatus(this, ChemicalElementEntity.voidd);
+						return new InteractiveStatus(this, new Voidd());
 					}
 				}
 			}
