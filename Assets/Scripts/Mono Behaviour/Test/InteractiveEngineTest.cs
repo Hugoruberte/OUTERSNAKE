@@ -19,14 +19,16 @@ public class InteractiveEngineTest : MonoBehaviour
 		// PhysicalStateEntity burn = PhysicalStateEntity.burn;
 
 
-		Debug.LogWarning("\n\nELEMENT * ELEMENT:");
-		for(int i = 0; i < elements.Length - 1; i++) {
+		// Debug.Log("\n\nELEMENT * ELEMENT:");
+		for(int i = 0; i < elements.Length; i++) {
 			for(int j = i; j < elements.Length; j++) {
 				result = elements[i] * elements[j];
-				Debug.Log($"{elements[i]} * {elements[j]} = {result}");
+				// Debug.Log($"{elements[i]} * {elements[j]} = {result}");
 			}
-			Debug.Log("\n");
+			// Debug.Log("\n");
 		}
+		// Debug.Log("Done");
+
 		
 
 

@@ -20,40 +20,38 @@ public class InteractiveEngineDataEditor : Editor
 
 		showPrimaries = EditorGUILayout.Foldout(showPrimaries, "Primaries");
 		if(showPrimaries) {
-			EditorGUI.indentLevel++;
-			foreach(ChemicalElement e in script.primaries.Keys) {
-				EditorGUILayout.LabelField(e.ToString());
+			EditorGUI.indentLevel += 2;
+			foreach(ChemicalToArrayData e in script.primaries) {
+				EditorGUILayout.LabelField(e.element.ToString(), EditorStyles.boldLabel);
 
-				array = script.primaries[e];
+				array = e.array;
 
-				EditorGUI.indentLevel++;
+				EditorGUI.indentLevel += 2;
 				foreach(ChemicalElement k in array) {
-					EditorGUILayout.EnumPopup("Element", k);
+					EditorGUILayout.LabelField(k.ToString(), EditorStyles.miniLabel);
 				}
-				EditorGUI.indentLevel--;
+				EditorGUILayout.Space();
+				EditorGUI.indentLevel -= 2;
 			}
-			EditorGUI.indentLevel--;
+			EditorGUI.indentLevel -= 2;
 		}
 		
 		showWeaknesses = EditorGUILayout.Foldout(showWeaknesses, "Weaknesses");
 		if(showWeaknesses) {
-			EditorGUI.indentLevel++;
-			foreach(ChemicalElement e in script.weaknesses.Keys) {
-				EditorGUILayout.LabelField(e.ToString());
+			EditorGUI.indentLevel += 2;
+			foreach(ChemicalToArrayData e in script.weaknesses) {
+				EditorGUILayout.LabelField(e.element.ToString(), EditorStyles.boldLabel);
 
-				array = script.weaknesses[e];
+				array = e.array;
 
-				if(array == null) {
-					Debug.Log(e + " -> null");
-				} else {
-					EditorGUI.indentLevel++;
-					foreach(ChemicalElement k in array) {
-						EditorGUILayout.EnumPopup("Element", k);
-					}
-					EditorGUI.indentLevel--;
+				EditorGUI.indentLevel++;
+				foreach(ChemicalElement k in array) {
+					EditorGUILayout.LabelField(k.ToString(), EditorStyles.miniLabel);
 				}
+				EditorGUILayout.Space();
+				EditorGUI.indentLevel--;
 			}
-			EditorGUI.indentLevel--;
+			EditorGUI.indentLevel -= 2;
 		}
 		
 
