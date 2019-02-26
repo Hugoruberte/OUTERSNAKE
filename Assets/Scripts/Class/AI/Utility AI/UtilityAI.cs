@@ -10,7 +10,7 @@ namespace Utility.AI
 		private List<UtilityAction> actions = null;
 		private List<UtilityAction> selected = null;
 
-		public UtilityAI(List<UtilityAction> acts, UtilityBehaviourAI target)
+		public UtilityAI(List<UtilityAction> acts, UtilityAIBehaviour target)
 		{
 			this.actions = acts;
 			this.selected = new List<UtilityAction>();
@@ -41,7 +41,6 @@ namespace Utility.AI
 				}
 
 				score = act.Score(ctr);
-				// Debug.Log(" -> " + act.method + " score = " + score);
 				
 				if(score > max) {
 					max = score;
@@ -53,8 +52,6 @@ namespace Utility.AI
 					nb ++;
 				}
 			}
-
-			// Debug.Log(" \n ");
 
 			if(nb == 1) {
 				result = this.selected[0];
@@ -70,7 +67,7 @@ namespace Utility.AI
 			return result;
 		}
 
-		private void Initialize(UtilityBehaviourAI target)
+		private void Initialize(UtilityAIBehaviour target)
 		{
 			if(this.actions == null) {
 				Debug.LogError("ERROR: Could not initialize AI, maybe the initialization was called in an Awake function instead of a Start function.");
@@ -84,7 +81,7 @@ namespace Utility.AI
 			this.Check(target);
 		}
 
-		private void Check(UtilityBehaviourAI target)
+		private void Check(UtilityAIBehaviour target)
 		{
 			UtilityAction action;
 			string[] methods = new string[this.actions.Count];

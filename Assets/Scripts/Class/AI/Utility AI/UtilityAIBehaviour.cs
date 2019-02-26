@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utility.AI;
 
-public abstract class UtilityBehaviourAI : MonoBehaviour
+public abstract class UtilityAIBehaviour : MonoBehaviour
 {
 	private class CAA {
 		public readonly MovementController ctr;
@@ -29,7 +29,7 @@ public abstract class UtilityBehaviourAI : MonoBehaviour
 
 
 
-	private UtilityAI utilityAI = null;
+	private UtilityAI utilityAI;
 	
 	private float lastUpdate = 0f;
 	public float updateRate = 0.02f;
@@ -41,6 +41,11 @@ public abstract class UtilityBehaviourAI : MonoBehaviour
 	{
 		this.utilityAI = new UtilityAI(this.actions, this);
 		this.controllers = new List<CAA>();
+	}
+
+	protected virtual void Start()
+	{
+		// empty
 	}
 
 	protected virtual void Update()
@@ -109,6 +114,7 @@ public abstract class UtilityBehaviourAI : MonoBehaviour
 
 	public void Remove(LivingEntity ent)
 	{
+		// only does that
 		this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
 	}
 

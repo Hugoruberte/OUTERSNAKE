@@ -10,7 +10,7 @@ public abstract class LivingEntity : InteractiveEntity
 	[HideInInspector] public float rangeOfView = 5f;
 
 	// AI
-	[HideInInspector] public UtilityBehaviourAI behaviour;
+	[HideInInspector] public UtilityAIBehaviour behaviour;
 
 	[HideInInspector] public bool isTired = false;
 	[HideInInspector] public bool isHungry = false;

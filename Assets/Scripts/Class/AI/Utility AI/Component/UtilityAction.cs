@@ -57,7 +57,7 @@ public class UtilityAction
 		return max;
 	}
 
-	public void Start(MovementController ctr, UtilityBehaviourAI main)
+	public void Start(MovementController ctr, UtilityAIBehaviour main)
 	{
 		if(this.action != null) {
 			this.isRunning = false;
@@ -70,7 +70,7 @@ public class UtilityAction
 		}
 	}
 
-	public void Stop(UtilityBehaviourAI main)
+	public void Stop(UtilityAIBehaviour main)
 	{
 		if(this.action != null) {
 			Debug.LogError("ERROR: Could not stop this UtilityAction because it is not a coroutine !");
@@ -93,7 +93,7 @@ public class UtilityAction
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public void Initialize(string a, UtilityBehaviourAI target)
+	public void Initialize(string a, UtilityAIBehaviour target)
 	{
 		MethodInfo methodInfo;
 
@@ -112,7 +112,7 @@ public class UtilityAction
 		this.Check(a, target);
 	}
 
-	private void Check(string a, UtilityBehaviourAI target)
+	private void Check(string a, UtilityAIBehaviour target)
 	{
 		UtilityScorer scorer;
 		string[] methods = new string[this.scorers.Count];

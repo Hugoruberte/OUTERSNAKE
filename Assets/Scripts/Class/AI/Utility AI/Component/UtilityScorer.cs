@@ -72,7 +72,7 @@ public class UtilityScorer
 		return max;
 	}
 
-	public void Initialize(UtilityBehaviourAI target)
+	public void Initialize(UtilityAIBehaviour target)
 	{
 		if(this.isCondition)
 		{
@@ -105,12 +105,12 @@ public abstract class UtilityScorer
 	public AnimationCurve curve = null;
 
 	// inspector
-	protected UtilityBehaviourAI target;
+	protected UtilityAIBehaviour target;
 	public string method;
 	public int index = 0;
 
 
-	public UtilityScorer(UtilityBehaviourAI t)
+	public UtilityScorer(UtilityAIBehaviour t)
 	{
 		this.target = t;
 	}
@@ -124,7 +124,7 @@ public class UtilityScorerCondition : UtilityScorer
 {
 	private System.Func<bool> act;
 
-	public UtilityScorerCondition(UtilityBehaviourAI t) : base(t){}
+	public UtilityScorerCondition(UtilityAIBehaviour t) : base(t){}
 
 	public override int Check()
 	{
@@ -142,7 +142,7 @@ public class UtilityScorerCurve : UtilityScorer
 {
 	private System.Func<float> act;
 
-	public UtilityScorerCurve(UtilityBehaviourAI t) : base(t)
+	public UtilityScorerCurve(UtilityAIBehaviour t) : base(t)
 	{
 		this.curve = new AnimationCurve();
 	}

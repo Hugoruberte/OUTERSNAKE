@@ -4,13 +4,13 @@ using System.Linq;
 using UnityEngine;
 using Snakes;
 
-public class LazerTrapAI : UtilityBehaviourAI
+public class LazerTrapAI : UtilityAIBehaviour
 {
 	private Transform snake;
 
 	private static LazerTrapAI instance = null;
 
-	public static UtilityBehaviourAI Initialize(LazerTrap lazer)
+	public static UtilityAIBehaviour Initialize(LazerTrap lazer)
 	{
 		MovementController ctr = new LazerTrapController(lazer);
 		instance.AddController(ctr);
@@ -25,8 +25,10 @@ public class LazerTrapAI : UtilityBehaviourAI
 		instance = this;
 	}
 
-	void Start()
+	protected override void Start()
 	{
+		base.Start();
+		
 		snake = SnakeManager.instance.snake.transform;
 	}
 }

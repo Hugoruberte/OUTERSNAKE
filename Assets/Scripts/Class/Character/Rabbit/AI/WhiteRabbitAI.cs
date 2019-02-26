@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Snakes;
 
-public class WhiteRabbitAI : UtilityBehaviourAI
+public class WhiteRabbitAI : UtilityAIBehaviour
 {
 	private Transform danger;
 	private Transform snake;
@@ -14,7 +14,7 @@ public class WhiteRabbitAI : UtilityBehaviourAI
 
 	private static WhiteRabbitAI instance = null;
 
-	public static UtilityBehaviourAI Initialize(WhiteRabbit rabbit)
+	public static UtilityAIBehaviour Initialize(WhiteRabbit rabbit)
 	{
 		MovementController ctr = new WhiteRabbitController(rabbit);
 		instance.AddController(ctr);
@@ -29,8 +29,10 @@ public class WhiteRabbitAI : UtilityBehaviourAI
 		instance = this;
 	}
 
-	void Start()
+	protected override void Start()
 	{
+		base.Start();
+		
 		snake = SnakeManager.instance.snake.transform;
 
 		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();;

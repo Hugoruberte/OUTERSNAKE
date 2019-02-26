@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-[CustomEditor(typeof(UtilityBehaviourAI), true)]
-public class UtilityBehaviourAIEditor : Editor
+[CustomEditor(typeof(UtilityAIBehaviour), true)]
+public class UtilityAIBehaviourEditor : Editor
 {
 	private SerializedProperty actions;
 	private SerializedProperty actionRef;
@@ -43,7 +43,7 @@ public class UtilityBehaviourAIEditor : Editor
 
 	public sealed override void OnInspectorGUI()
 	{
-		UtilityBehaviourAI script = target as UtilityBehaviourAI;
+		UtilityAIBehaviour script = target as UtilityAIBehaviour;
 
 		baserect = EditorGUILayout.GetControlRect(true, 0);
 
@@ -57,7 +57,7 @@ public class UtilityBehaviourAIEditor : Editor
 		baserect.height += 17;
 
 		GUI.enabled = false;
-		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromMonoBehaviour(script), typeof(UtilityBehaviourAI), false);
+		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromMonoBehaviour(script), typeof(UtilityAIBehaviour), false);
 		GUI.enabled = true;
 
 		baserect.y += 20;

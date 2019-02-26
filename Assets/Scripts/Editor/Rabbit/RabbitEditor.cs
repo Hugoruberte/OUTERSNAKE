@@ -57,8 +57,8 @@ public class RabbitEditor : InteractiveEntityEditor
 		r.height = 16;
 
 		GUI.enabled = false;
-		EditorGUI.ObjectField(r, script.behaviour, typeof(UtilityBehaviourAI), false);
-		// EditorGUI.ObjectField(r, MonoScript.FromMonoBehaviour(script.behaviour), typeof(UtilityBehaviourAI), false);
+		EditorGUI.ObjectField(r, script.behaviour, typeof(UtilityAIBehaviour), false);
+		// EditorGUI.ObjectField(r, MonoScript.FromMonoBehaviour(script.behaviour), typeof(UtilityAIBehaviour), false);
 		GUI.enabled = true;
 
 		r.x += -120;
