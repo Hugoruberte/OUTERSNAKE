@@ -9,10 +9,10 @@ public class SnakeManager : Singleton<SnakeManager>
 
 	public readonly SnakeMovementEvents events = new SnakeMovementEvents();
 
-	void Awake()
+	protected override void Awake()
 	{
-		instance = this;
-
+		base.Awake();
+		
 		snake = GameObject.FindWithTag("Player");
 	}
 }

@@ -13,9 +13,9 @@ namespace Interactive.Engine
 		public static ChemistryEngine chemistry = new ChemistryEngine();
 		public static PhysicEngine physic = new PhysicEngine();
 
-		void Awake()
+		protected override void Awake()
 		{
-			instance = this;
+			base.Awake();
 
 			// Add extension engine :
 			extensions.Add(new FoodChainEngine());

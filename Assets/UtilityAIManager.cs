@@ -6,10 +6,10 @@ public class UtilityAIManager : Singleton<UtilityAIManager>
 {
 	public UtilityAIBehaviour[] behaviours;
 
-	void Awake()
+	protected override void Awake()
 	{
-		instance = this;
-
+		base.Awake();
+		
 		foreach(UtilityAIBehaviour b in this.behaviours) {
 			b.Initialize();
 		}

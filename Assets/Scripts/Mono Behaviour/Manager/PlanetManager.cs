@@ -8,10 +8,10 @@ public class PlanetManager : Singleton<PlanetManager>
 	[HideInInspector]
 	public Planet[] planets;
 
-	void Awake()
+	protected override void Awake()
 	{
-		instance = this;
-
+		base.Awake();
+		
 		planets = FindObjectsOfType<Planet>() as Planet[];
 	}
 }

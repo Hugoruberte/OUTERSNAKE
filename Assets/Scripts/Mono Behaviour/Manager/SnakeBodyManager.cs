@@ -20,12 +20,6 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	public const int SNAKE_MINIMAL_LENGTH = 2;
 	private float reduceSpeed;
 
-
-	void Awake()
-	{
-		instance = this;
-	}
-
 	
 	void Start()
 	{

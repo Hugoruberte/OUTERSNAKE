@@ -7,10 +7,10 @@ public class GameManager : Singleton<GameManager>
 
 	public Transform heart;
 
-	void Awake()
+	protected override void Awake()
 	{
-		instance = this;
-
+		base.Awake();
+		
 		if(!heart) {
 			this.CreateNewHeart();
 		}

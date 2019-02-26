@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public abstract class Singleton<T> : MonoBehaviour
+public abstract class Singleton<T> : MonoBehaviour where T : class
 {
 	private static T _instance = default(T);
 	public static T instance {
@@ -17,5 +17,10 @@ public abstract class Singleton<T> : MonoBehaviour
 			}
 			_instance = value;
 		}
+	}
+
+	protected virtual void Awake()
+	{
+		instance = this as T;
 	}
 }
