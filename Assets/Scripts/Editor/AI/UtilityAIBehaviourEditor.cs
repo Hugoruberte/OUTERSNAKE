@@ -57,7 +57,7 @@ public class UtilityAIBehaviourEditor : Editor
 		baserect.height += 17;
 
 		GUI.enabled = false;
-		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromMonoBehaviour(script), typeof(UtilityAIBehaviour), false);
+		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromScriptableObject(script), typeof(UtilityAIBehaviour), false);
 		GUI.enabled = true;
 
 		baserect.y += 20;

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utility.AI;
 
-public abstract class UtilityAIBehaviour : MonoBehaviour
+public abstract class UtilityAIBehaviour : ScriptableObject
 {
-	private class CAA {
+	[System.Serializable]
+	private struct CAA {
 		public readonly MovementController ctr;
 		public UtilityAction act;
 
@@ -13,53 +14,37 @@ public abstract class UtilityAIBehaviour : MonoBehaviour
 			this.ctr = c;
 			this.act = a;
 		}
+
+		public void UpdateAct(UtilityAction a) => this.act = a;
 	}
 
 	// inspector cache
-	[HideInInspector]
-	public string[] actionCandidates = {};
-	[HideInInspector]
-	public string[] scorerConditionCandidates = {};
-	[HideInInspector]
-	public string[] scorerCurveCandidates = {};
-	[HideInInspector]
-	public List<bool> displayScorers = new List<bool>();
-	[HideInInspector]
-	public List<UtilityAction> actions = new List<UtilityAction>();
+	[HideInInspector] public string[] actionCandidates = {};
+	[HideInInspector] public string[] scorerConditionCandidates = {};
+	[HideInInspector] public string[] scorerCurveCandidates = {};
+	[HideInInspector] public List<bool> displayScorers = new List<bool>();
+	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 
 
 
 	private UtilityAI utilityAI;
 	
-	private float lastUpdate = 0f;
+	[HideInInspector]
+	public float lastUpdate = 0f;
 	public float updateRate = 0.02f;
 
-	private List<CAA> controllers;
+	private List<CAA> controllers = new List<CAA>();
 
 
-	protected virtual void Awake()
+	private void Awake()
 	{
 		this.utilityAI = new UtilityAI(this.actions, this);
-		this.controllers = new List<CAA>();
 	}
 
-	protected virtual void Start()
-	{
-		// empty
-	}
+	public virtual void Initialize() {}
+	public virtual void Start() {}
 
-	protected virtual void Update()
-	{
-		if(Time.time - lastUpdate < updateRate) {
-			return;
-		}
-
-		lastUpdate = Time.time;
-
-		this.UpdateUtilityActions();
-	}
-
-	private void UpdateUtilityActions()
+	public void UpdateUtilityActions(UtilityAIManager manager)
 	{
 		UtilityAction act;
 		UtilityAction current;
@@ -83,11 +68,11 @@ public abstract class UtilityAIBehaviour : MonoBehaviour
 					// if best action is not the current action
 					if(current != act) {
 						// stop current
-						current.Stop(this);
+						current.Stop(manager);
 
 						// start selected action
-						act.Start(ctr, this);
-						this.controllers[i].act = act;
+						act.Start(ctr, manager);
+						this.controllers[i].UpdateAct(act);
 					}
 				}
 
@@ -101,8 +86,8 @@ public abstract class UtilityAIBehaviour : MonoBehaviour
 			act = utilityAI.Select(ctr);
 
 			// start selected action
-			act?.Start(ctr, this);
-			this.controllers[i].act = act;
+			act?.Start(ctr, manager);
+			this.controllers[i].UpdateAct(act);
 		}
 	}
 
@@ -131,20 +116,7 @@ public abstract class UtilityAIBehaviour : MonoBehaviour
 	/* -------------------------------------------------------------------------------------------*/
 	/* -------------------------------------------------------------------------------------------*/
 	/* -------------------------------------------------------------------------------------------*/
-	public void AddAction()
-	{
-		UtilityAction action = new UtilityAction();
-		this.actions.Add(action);
-	}
-
-	public void RemoveActionAt(int index)
-	{
-		this.actions.RemoveAt(index);
-	}
-
-	public UtilityAction GetCurrentAction(LivingEntity ent)
-	{
-		CAA caa = this.controllers.Find(x => x.ctr.entity == ent);
-		return caa?.act;
-	}
+	public void AddAction() => this.actions.Add(new UtilityAction());
+	public void RemoveActionAt(int index) => this.actions.RemoveAt(index);
+	public UtilityAction GetCurrentAction(LivingEntity ent) => this.controllers.Find(x => x.ctr.entity == ent).act;
 }

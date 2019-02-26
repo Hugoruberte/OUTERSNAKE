@@ -57,7 +57,7 @@ public class UtilityAction
 		return max;
 	}
 
-	public void Start(MovementController ctr, UtilityAIBehaviour main)
+	public void Start(MovementController ctr, UtilityAIManager main)
 	{
 		if(this.action != null) {
 			this.isRunning = false;
@@ -70,7 +70,7 @@ public class UtilityAction
 		}
 	}
 
-	public void Stop(UtilityAIBehaviour main)
+	public void Stop(UtilityAIManager main)
 	{
 		if(this.action != null) {
 			Debug.LogError("ERROR: Could not stop this UtilityAction because it is not a coroutine !");
@@ -109,17 +109,17 @@ public class UtilityAction
 			scorer.Initialize(target);
 		}
 
-		this.Check(a, target);
+		this.Check(a);
 	}
 
-	private void Check(string a, UtilityAIBehaviour target)
+	private void Check(string a)
 	{
 		UtilityScorer scorer;
 		string[] methods = new string[this.scorers.Count];
 		for(int i = 0; i < this.scorers.Count; i++) {
 			scorer = this.scorers[i];
 			if(Array.IndexOf(methods, scorer.method) >= 0) {
-				Debug.LogWarning($"WARNING : The scorer '{scorer.method}' is defined multiples times for the same action '{a}' !", target.transform);
+				Debug.LogWarning($"WARNING : The scorer '{scorer.method}' is defined multiples times for the same action '{a}' !");
 			} else {
 				methods[i] = scorer.method;
 			}

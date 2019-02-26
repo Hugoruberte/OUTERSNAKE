@@ -9,6 +9,6 @@ public class WhiteRabbit : RabbitEntity
 		base.Start();
 
 		// Initialize AI behaviour (this will launch the AI)
-		this.behaviour = WhiteRabbitAI.Initialize(this);
+		this.behaviour = WhiteRabbitAI.Launch(this);
 	}
 }

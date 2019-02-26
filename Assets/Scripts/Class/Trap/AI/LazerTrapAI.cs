@@ -18,14 +18,12 @@ public class LazerTrapAI : UtilityAIBehaviour
 		return instance;
 	}
 
-	protected override void Awake()
+	public override void Initialize()
 	{
-		base.Awake();
-
 		instance = this;
 	}
 
-	protected override void Start()
+	public override void Start()
 	{
 		base.Start();
 		

@@ -15376,7 +15376,7 @@ MonoBehaviour:
   speed: 2
   maxStepDistance: 2
   rangeOfView: 10
-  behaviour: {fileID: 1452862221}
+  behaviour: {fileID: 0}
   isTired: 0
   isHungry: 0
   isScared: 0
@@ -15859,55 +15859,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 708414537}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &712583724
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 712583725}
-  - component: {fileID: 712583726}
-  m_Layer: 0
-  m_Name: Trap AI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &712583725
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 712583724}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1555949991}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &712583726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 712583724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c774e24fdc849042b38952b2ce2682e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionCandidates: []
-  scorerConditionCandidates: []
-  scorerCurveCandidates: []
-  displayScorers: 
-  actions: []
-  updateRate: 0.02
 --- !u!1 &730388334
 GameObject:
   m_ObjectHideFlags: 0
@@ -16768,6 +16719,7 @@ GameObject:
   - component: {fileID: 1092589560}
   - component: {fileID: 1092589561}
   - component: {fileID: 1092589557}
+  - component: {fileID: 1092589562}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -16786,7 +16738,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1555949991}
   - {fileID: 1399124076}
   - {fileID: 1746229557}
   m_Father: {fileID: 0}
@@ -16859,6 +16810,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveEngineData: {fileID: 11400000, guid: e01d973974ed9ac4d9f9ad95d5e7cc26,
     type: 2}
+--- !u!114 &1092589562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092589555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a56bab64cf2f794e9c2bd54456744d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  behaviours:
+  - {fileID: 11400000, guid: 403d621a37a93b94088a2a7bd7e0e81d, type: 2}
 --- !u!1 &1108726372
 GameObject:
   m_ObjectHideFlags: 0
@@ -17502,7 +17467,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1092589556}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1399124077
 MonoBehaviour:
@@ -17607,140 +17572,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402843765}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1452862219
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1452862220}
-  - component: {fileID: 1452862221}
-  m_Layer: 0
-  m_Name: Rabbit AI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1452862220
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452862219}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1555949991}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1452862221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452862219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef614a81c5bbecc45a996423c7181ff9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionCandidates: []
-  scorerConditionCandidates: []
-  scorerCurveCandidates: []
-  displayScorers: 0000
-  actions:
-  - scorers:
-    - isCondition: 0
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 0.49841517
-          value: 49.76228
-          inSlope: 305.58798
-          outSlope: 305.58798
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.067331284
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 1
-          value: 100
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.059105456
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      method: DistanceToDanger
-      index: 0
-    - isCondition: 1
-      not: 0
-      score: 50
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      method: RabbitIsScared
-      index: 0
-    index: 3
-    score: 0
-    method: RunAway
-    active: 0
-    isStoppable: 0
-    isRunning: 0
-  - scorers:
-    - isCondition: 1
-      not: 1
-      score: 50
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      method: RabbitIsHungry
-      index: 1
-    - isCondition: 1
-      not: 1
-      score: 25
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      method: RabbitIsScared
-      index: 0
-    index: 2
-    score: 0
-    method: Wander
-    active: 1
-    isStoppable: 0
-    isRunning: 0
-  updateRate: 0.25
 --- !u!1 &1478660765
 GameObject:
   m_ObjectHideFlags: 0
@@ -17799,38 +17630,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c864c1c28423241b53ba68dfa368ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1555949990
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1555949991}
-  m_Layer: 0
-  m_Name: AI Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1555949991
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1555949990}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 712583725}
-  - {fileID: 1452862220}
-  m_Father: {fileID: 1092589556}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1608398436
 GameObject:
   m_ObjectHideFlags: 0
@@ -18094,7 +17893,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1092589556}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1748141856
 GameObject:
@@ -19035,7 +18834,7 @@ MonoBehaviour:
   speed: 2
   maxStepDistance: 2
   rangeOfView: 10
-  behaviour: {fileID: 1452862221}
+  behaviour: {fileID: 0}
   isTired: 0
   isHungry: 0
   isScared: 0

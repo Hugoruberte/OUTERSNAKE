@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Snakes;
 
+[CreateAssetMenu(fileName = "WhiteRabbitAI", menuName = "Scriptable Object/AI/WhiteRabbitAI", order = 3)]
 public class WhiteRabbitAI : UtilityAIBehaviour
 {
 	private Transform danger;
@@ -14,7 +15,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour
 
 	private static WhiteRabbitAI instance = null;
 
-	public static UtilityAIBehaviour Initialize(WhiteRabbit rabbit)
+	public static UtilityAIBehaviour Launch(WhiteRabbit rabbit)
 	{
 		MovementController ctr = new WhiteRabbitController(rabbit);
 		instance.AddController(ctr);
@@ -22,20 +23,16 @@ public class WhiteRabbitAI : UtilityAIBehaviour
 		return instance;
 	}
 
-	protected override void Awake()
+	public override void Initialize()
 	{
-		base.Awake();
-
 		instance = this;
 	}
 
-	protected override void Start()
+	public override void Start()
 	{
-		base.Start();
-		
 		snake = SnakeManager.instance.snake.transform;
 
-		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();;
+		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();
 	}
 
 

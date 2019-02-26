@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Utility.AI
 {
+	[Serializable]
 	public class UtilityAI
 	{
 		private List<UtilityAction> actions = null;
@@ -78,17 +79,17 @@ namespace Utility.AI
 				action.Initialize(action.method, target);
 			}
 
-			this.Check(target);
+			this.Check();
 		}
 
-		private void Check(UtilityAIBehaviour target)
+		private void Check()
 		{
 			UtilityAction action;
 			string[] methods = new string[this.actions.Count];
 			for(int i = 0; i < this.actions.Count; i++) {
 				action = this.actions[i];
 				if(Array.IndexOf(methods, action.method) >= 0) {
-					Debug.LogWarning($"WARNING : The action '{action.method}' is defined multiples times in inspector !", target.transform);
+					Debug.LogWarning($"WARNING : The action '{action.method}' is defined multiples times in inspector !");
 				} else {
 					methods[i] = action.method;
 				}
