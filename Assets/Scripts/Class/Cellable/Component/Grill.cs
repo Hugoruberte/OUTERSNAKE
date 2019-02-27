@@ -20,6 +20,7 @@ public class Grill
 	private float height_corrector = 0f;
 
 	private const float MAX_ACCEPTABLE_HEIGHT = 2f;
+	private const float MIN_ACCEPTABLE_HEIGHT = -0.25f;
 
 	public Grill(Surface s, Transform f)
 	{
@@ -46,6 +47,8 @@ public class Grill
 		Vector3 local;
 
 		local = this.face.InverseTransformPointUnscaled(pos);
+
+		Debug.LogWarning("HELP : May be a problem with '.5' in 'width/2' or 'height/2' here...");
 
 		return new int[2] {Mathf.RoundToInt(local.x + width/2), Mathf.RoundToInt(height/2 - local.z)};
 	}
@@ -133,19 +136,22 @@ public class Grill
 		// only does that
 		return this.IsGrillOf(t.position, t.up);
 	}
-	public bool IsGrillOf(Vector3 pos, Vector3 normal)
+	public bool IsGrillOf(Vector3 pos, Vector3 n)
 	{
 		Vector3 local;
+		float dot;
+
+		dot = Vector3.Dot(this.normal, n);
 
 		// Is grill oriented like the transform
-		if(Vector3.Dot(this.normal, normal) < 0.95f) {
+		if(dot < 0.95f) {
 			return false;
 		}
 
 		local = face.InverseTransformPointUnscaled(pos);
 
 		// Is transform position fit in grill + is transform on grill
-		return (IsLocalPositionInGrill(local) && local.y < MAX_ACCEPTABLE_HEIGHT);
+		return (this.IsLocalPositionInGrill(local) && (local.y >= MIN_ACCEPTABLE_HEIGHT && local.y < MAX_ACCEPTABLE_HEIGHT));
 	}
 	public List<Cell> GetSurroundingCellsOf(Cell c, int radius = 1)
 	{
@@ -243,7 +249,7 @@ public class Grill
 
 		local = face.InverseTransformPointUnscaled(pos);
 
-		if(!IsLocalPositionInGrill(local)) {
+		if(!this.IsLocalPositionInGrill(local)) {
 			return -1;
 		}
 
@@ -256,10 +262,10 @@ public class Grill
 
 	private bool IsLocalPositionInGrill(Vector3 local)
 	{
-		if(local.x > width/2 || local.x < -(width/2)) {
+		if(local.x > width/2f || local.x < -width/2f) {
 			return false;
 		}
-		if(local.z > height/2 || local.z < -(height/2)) {
+		if(local.z > height/2f || local.z < -height/2f) {
 			return false;
 		}
 

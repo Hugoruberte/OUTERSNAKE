@@ -55,7 +55,7 @@ namespace Interactive.Engine
 
 			// main manage its new status && the interaction with the unknown entity
 			chemistry.SetEntityWithChemical(main, main.setOnElement);
-			main.InteractivelyReactWith(status, interaction);
+			main.InteractWith(status, interaction);
 		}
 	}
 

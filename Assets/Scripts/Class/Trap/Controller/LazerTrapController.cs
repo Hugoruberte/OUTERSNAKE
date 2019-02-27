@@ -6,7 +6,7 @@ public class LazerTrapController : MovementController
 {
 	protected LazerTrap lazer;
 
-	public LazerTrapController(LazerTrap l)
+	public LazerTrapController(LazerTrap l) : base(l)
 	{
 		this.lazer = l;
 	}

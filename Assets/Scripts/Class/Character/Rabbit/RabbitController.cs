@@ -13,9 +13,8 @@ public abstract class RabbitController : MovementController
 	private const float ROTATION_OVER_FACE_SPEED = 1f;
 
 
-	public RabbitController(RabbitEntity r) : base()
+	public RabbitController(RabbitEntity r) : base(r)
 	{
-		this.entity = r;
 		this.rabbit = r;
 	}
 
@@ -104,7 +103,7 @@ public abstract class RabbitController : MovementController
 		from = new _Transform(this.entity.myTransform);
 
 		// jump
-		yield return JumpTo(stepover.cell, from, stepover.rotation, stepover.up, ROTATION_OVER_FACE_SPEED);
+		yield return this.JumpTo(stepover.cell, from, stepover.rotation, stepover.up, ROTATION_OVER_FACE_SPEED);
 	}
 
 	protected virtual IEnumerator StepTowards(Cell c)
@@ -114,7 +113,7 @@ public abstract class RabbitController : MovementController
 		Quaternion look;
 
 		// check
-		if(TargetIsTooFarAway(c)) {
+		if(this.TargetIsTooFarAway(c)) {
 			yield break;
 		}
 
@@ -123,7 +122,7 @@ public abstract class RabbitController : MovementController
 		look = Quaternion.LookRotation(c.position - this.entity.cellable.currentCell.position, entity.myTransform.up).SetAbsoluteRotation();
 
 		// jump
-		yield return JumpTo(c, from, look, this.entity.myTransform.up, ROTATION_SPEED);
+		yield return this.JumpTo(c, from, look, this.entity.myTransform.up, ROTATION_SPEED);
 	}
 
 	public virtual IEnumerator Rest()

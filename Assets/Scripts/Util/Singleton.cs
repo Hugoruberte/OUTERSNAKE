@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : class
 {
-	private static T _instance = default(T);
+	private static T _instance = null;
 	public static T instance {
 		get {
 			if(_instance == null) {
@@ -13,7 +13,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : class
 			return _instance;
 		}
 		set {
-			if(_instance != null) {
+			if(value != null && _instance != null) {
 				Debug.LogWarning("WARNING : Several instance of {typeof(T)} has been set ! Check it out.");
 				return;
 			}
@@ -24,6 +24,20 @@ public abstract class Singleton<T> : MonoBehaviour where T : class
 
 	protected virtual void Awake()
 	{
-		instance = this as T;
+		if(_instance == null) {
+			instance = this as T;
+		} else {
+			Destroy(gameObject);
+		}
 	}
+
+	protected virtual void Start()
+	{
+		// empty
+	}
+
+	protected virtual void OnDisable()
+    {
+        instance = null;
+    }
 }

@@ -18,12 +18,13 @@ public abstract class MovementController
 		}
 	}
 
-	public LivingEntity entity { get; protected set; }
+	public readonly LivingEntity entity;
 
 	private readonly int freePathLayerMask;
 
-	public MovementController()
+	public MovementController(LivingEntity e)
 	{
+		this.entity = e;
 		this.freePathLayerMask = ~(1 << LayerMask.NameToLayer("Ground"));
 	}
 
@@ -53,7 +54,7 @@ public abstract class MovementController
 		dist = dir.magnitude;
 		dir.Normalize();
 
-		hits = Physics.SphereCastAll(start, 0.49f, dir, dist, this.freePathLayerMask);
+		hits = Physics.SphereCastAll(start, 0.475f, dir, dist, this.freePathLayerMask);
 		foreach(RaycastHit hit in hits) {
 			if(hit.transform != entity.myTransform) {
 				return false;
@@ -154,6 +155,8 @@ public abstract class MovementController
 
 		normal = sign * dir;
 		pos = bound.position + dir * 0.5f - sign * 0.5f * bound.normal;
+		Debug.DrawRay(pos, normal * 5f, Color.red);
+		// Debug.Break();
 		cell = bound.surface.GetCellWithPositionAndFaceNormal(pos, normal);
 
 		look = Quaternion.LookRotation(dir, bound.normal).SetAbsoluteRotation();

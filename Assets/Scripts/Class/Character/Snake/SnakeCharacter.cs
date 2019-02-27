@@ -36,7 +36,7 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
-	public override void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i)
+	public override void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i)
 	{
 		// to do
 	}

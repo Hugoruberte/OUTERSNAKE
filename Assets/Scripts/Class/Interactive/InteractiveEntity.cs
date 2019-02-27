@@ -98,7 +98,7 @@ namespace Interactive.Engine
 		public virtual void SetOnSteam(bool active){}
 		public virtual void SetOnIce(bool active){}
 
-		public virtual void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i){}
+		public virtual void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i){}
 
 		public override string ToString() => $"{gameObject.name} (Interactive Entity: status = {status} and material = {material})";
 	}

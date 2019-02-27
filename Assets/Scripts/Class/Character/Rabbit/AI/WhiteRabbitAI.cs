@@ -126,10 +126,10 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 		RabbitController rtr = ctr as RabbitController;
 
 		act.isStoppable = false;
-		yield return rtr.StepToWander();
+		yield return ctr.entity.StartCoroutine(rtr.StepToWander());
 
 		act.isStoppable = true;
-		yield return rtr.Rest();
+		yield return ctr.entity.StartCoroutine(rtr.Rest());
 
 		act.isRunning = false;
 	}

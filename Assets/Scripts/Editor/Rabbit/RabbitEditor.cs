@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(RabbitEntity), true), CanEditMultipleObjects]
-public class RabbitEditor : InteractiveEntityEditor
+public class RabbitEditor : LivingEntityEditor
 {
 	private Vector2 tempo;
 	private float ws, jh;
 	private int id;
 	private bool showParameter = false;
-	private bool showAI = false;
-	private Rect r;
-	private UtilityAction act;
 
 	// private float val = 0f;
 
@@ -30,11 +28,11 @@ public class RabbitEditor : InteractiveEntityEditor
 		val = EditorGUI.FloatField(n, "Val", val);*/
 
 		showParameter = EditorGUILayout.Foldout(showParameter, "");
-		r = EditorGUILayout.GetControlRect(true, 0);
-		r.y += -18;
-		r.width = 150;
-		r.height = 50;
-		EditorGUI.LabelField(r, "Rabbit parameters", EditorStyles.boldLabel);
+		rect = EditorGUILayout.GetControlRect(true, 0);
+		rect.y += -18;
+		rect.width = 200;
+		rect.height = 50;
+		EditorGUI.LabelField(rect, script.name + " parameters", EditorStyles.boldLabel);
 
 		if(showParameter) {
 			script.speed = EditorGUILayout.Slider("Walk Speed", script.speed, 0.1f, 20f);
@@ -47,36 +45,18 @@ public class RabbitEditor : InteractiveEntityEditor
 			script.minAfterJumpTempo = Mathf.Min(Mathf.Max(tempo.x, 0f), tempo.y);
 			script.maxAfterJumpTempo = Mathf.Max(tempo.x, Mathf.Min(tempo.y, 10f));
 
+			serializedObject.Update();
+
 			EditorGUILayout.Space();
 		}
 
-		r = EditorGUILayout.GetControlRect(true, 0);
-		r.x += 120;
-		r.y += 1;
-		r.width += -120;
-		r.height = 16;
-
-		GUI.enabled = false;
-		EditorGUI.ObjectField(r, script.behaviour, typeof(UtilityAIBehaviour), false);
-		// EditorGUI.ObjectField(r, MonoScript.FromMonoBehaviour(script.behaviour), typeof(UtilityAIBehaviour), false);
-		GUI.enabled = true;
-
-		r.x += -120;
-		
-		EditorGUI.LabelField(r, "Rabbit AI", EditorStyles.boldLabel);
-
-		if(EditorApplication.isPlaying) {
-			showAI = EditorGUILayout.Foldout(showAI, "");
-
-			if(showAI) {
-				EditorGUI.indentLevel ++;
-				act = script.behaviour.GetCurrentAction(script);
-				EditorGUILayout.LabelField($"Current action : {act.method} (score = {act.score})", EditorStyles.miniLabel);
-				EditorGUI.indentLevel --;
-			}
-		} else {
-			GUILayout.Space(19);
+		if(!EditorApplication.isPlaying && GUI.changed)
+		{
+			EditorUtility.SetDirty(script);
+			EditorSceneManager.MarkSceneDirty(script.gameObject.scene);
 		}
+
+		// GUILayout.Space(19);
 
 		serializedObject.ApplyModifiedProperties();
 	}

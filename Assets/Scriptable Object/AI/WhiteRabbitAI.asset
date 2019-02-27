@@ -29,9 +29,9 @@ MonoBehaviour:
     score: 0
     method: Wander
     active: 1
-    isStoppable: 0
-    isRunning: 0
-  lastUpdate: 3.1231236
+    isStoppable: 1
+    isRunning: 1
+  lastUpdate: 18.42133
   updateRate: 0.2
   actionCandidates:
   - EatFood

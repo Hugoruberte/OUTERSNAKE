@@ -47,7 +47,7 @@ public abstract class RabbitEntity : CharacterEntity
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
-	public override void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i)
+	public override void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i)
 	{
 		Debug.Log(s + " & " + i);
 	}

@@ -38,7 +38,7 @@ public class SnakePartCharacter : SnakeEntity
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/
-	public override void InteractivelyReactWith(InteractiveStatus s, PhysicalInteractionEntity i)
+	public override void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i)
 	{
 		// to do
 	}
