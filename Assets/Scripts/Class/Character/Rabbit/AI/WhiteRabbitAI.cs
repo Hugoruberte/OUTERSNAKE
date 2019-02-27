@@ -141,7 +141,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 		act.isStoppable = false;
 
 		Transform from = (this.danger != null) ? this.danger : this.snake;
-		yield return rtr.StepToRunAway(from);
+		yield return ctr.entity.StartCoroutine(rtr.StepToRunAway(from));
 		
 		act.isRunning = false;
 	}

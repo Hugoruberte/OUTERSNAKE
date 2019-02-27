@@ -199,8 +199,8 @@ public class Grill
 		float lx, lz, anchorx, anchorz;
 		int i;
 
-		if(face.gameObject.layer != LayerMask.NameToLayer("Planet Surface")) {
-			Debug.LogWarning($"WARNING : The face's ({face.name}) layer is not set to 'Planet Surface' !", face);
+		if(face.gameObject.layer != LayerMask.NameToLayer("Ground")) {
+			Debug.LogWarning($"WARNING : The face's ({face.name}) layer is not set to 'Ground' !", face);
 		}
 		this.width = Mathf.RoundToInt(face.localScale.x * 10);
 		if(width < 2) {

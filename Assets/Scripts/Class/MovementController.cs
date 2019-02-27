@@ -6,21 +6,26 @@ using Tools;
 [System.Serializable]
 public abstract class MovementController
 {
-	protected struct StepOver
-	{
+	protected struct StepOver {
 		public Cell cell;
 		public Vector3 up;
 		public Quaternion rotation;
 
-		public StepOver(Cell c, Vector3 u, Quaternion q)
-		{
+		public StepOver(Cell c, Vector3 u, Quaternion q) {
 			this.cell = c;
 			this.rotation = q;
 			this.up = u;
 		}
 	}
 
-	public LivingEntity entity {get; protected set;}
+	public LivingEntity entity { get; protected set; }
+
+	private readonly int freePathLayerMask;
+
+	public MovementController()
+	{
+		this.freePathLayerMask = ~(1 << LayerMask.NameToLayer("Ground"));
+	}
 
 
 
@@ -48,14 +53,14 @@ public abstract class MovementController
 		dist = dir.magnitude;
 		dir.Normalize();
 
-        hits = Physics.SphereCastAll(start, 0.49f, dir, dist);
-        foreach(RaycastHit hit in hits) {
-        	if(hit.transform != entity.myTransform) {
-        		return false;
-        	}
-        }
+		hits = Physics.SphereCastAll(start, 0.49f, dir, dist, this.freePathLayerMask);
+		foreach(RaycastHit hit in hits) {
+			if(hit.transform != entity.myTransform) {
+				return false;
+			}
+		}
 
-        return true;
+		return true;
 	}
 
 	protected bool TargetIsTooFarAway(Cell c)

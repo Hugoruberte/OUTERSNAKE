@@ -99,12 +99,14 @@ public class UtilityAIBehaviourEditor : Editor
 			cacherect.y += -2;
 			cacherect.width = 108;
 			cacherect.height = 17;
+			if(EditorApplication.isPlaying){GUI.enabled = false;}
 			if(GUI.Button(cacherect, "REMOVE")) {
 				script.displayScorers.RemoveAt(act);
 				script.RemoveActionAt(act);
 				serializedObject.Update();
 				return;
 			}
+			if(EditorApplication.isPlaying){GUI.enabled = true;}
 			// reset
 			baserect.x += 108;
 			baserect.y += -2;
@@ -164,11 +166,13 @@ public class UtilityAIBehaviourEditor : Editor
 					cacherect = baserect;
 					cacherect.width = 59;
 					cacherect.height = 15;
+					if(EditorApplication.isPlaying){GUI.enabled = false;}
 					if(GUI.Button(cacherect, "REMOVE")) {
 						script.actions[act].RemoveScorerAt(sco);
 						serializedObject.Update();
 						return;
 					}
+					if(EditorApplication.isPlaying){GUI.enabled = true;}
 
 					baserect.x += -19;
 					baserect.y += 29;
@@ -185,6 +189,7 @@ public class UtilityAIBehaviourEditor : Editor
 				cacherect.y += -7;
 				cacherect.width = 61;
 				cacherect.height = 20;
+				if(EditorApplication.isPlaying){GUI.enabled = false;}
 				if(GUI.Button(cacherect, "BOOL")) {
 					if((scorerConditionMethodNames.Length + scorerConditionMethodNames.Length) == script.actions[act].scorers.Count) {
 						Debug.Log("No need to add another scorer, there is enough !");
@@ -202,6 +207,7 @@ public class UtilityAIBehaviourEditor : Editor
 						serializedObject.Update();
 					}
 				}
+				if(EditorApplication.isPlaying){GUI.enabled = true;}
 
 				baserect.x += 10;
 				baserect.y += -7;
@@ -226,6 +232,7 @@ public class UtilityAIBehaviourEditor : Editor
 		baserect.y += 14;
 		baserect.width += 1;
 		baserect.height = 23;
+		if(EditorApplication.isPlaying){GUI.enabled = false;}
 		if(GUI.Button(baserect, "ADD NEW ACTION")) {
 			if(actionMethodNames.Length == script.actions.Count) {
 				Debug.Log($"There is no more action to add ! (Number of action found: {actionMethodNames.Length})");
@@ -235,6 +242,7 @@ public class UtilityAIBehaviourEditor : Editor
 				serializedObject.Update();
 			}
 		}
+		if(EditorApplication.isPlaying){GUI.enabled = true;}
 
 		GUILayout.Space(baserect.y + 25);
 		

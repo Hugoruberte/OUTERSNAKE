@@ -12,10 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef614a81c5bbecc45a996423c7181ff9, type: 3}
   m_Name: WhiteRabbitAI
   m_EditorClassIdentifier: 
-  actions: []
-  lastUpdate: 0
-  updateRate: 0.02
-  actionCandidates: []
-  scorerConditionCandidates: []
-  scorerCurveCandidates: []
-  displayScorers: 
+  actions:
+  - scorers:
+    - isCondition: 1
+      not: 0
+      score: 0
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      method: RabbitIsScared
+      index: 0
+    index: 2
+    score: 0
+    method: Wander
+    active: 1
+    isStoppable: 0
+    isRunning: 0
+  lastUpdate: 3.1231236
+  updateRate: 0.2
+  actionCandidates:
+  - EatFood
+  - GoToFood
+  - Wander
+  - RunAway
+  scorerConditionCandidates:
+  - RabbitIsScared
+  - RabbitIsHungry
+  - ThereIsFood
+  - CanReachFood
+  - RabbitIsTired
+  scorerCurveCandidates:
+  - DistanceToDanger
+  displayScorers: 01

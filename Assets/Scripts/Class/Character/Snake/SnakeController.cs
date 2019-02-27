@@ -34,7 +34,7 @@ public class SnakeController : MonoBehaviour
 		myTransform = transform;
 		targetPosition = myTransform.AbsolutePosition();
 
-		targetMask = (1 << LayerMask.NameToLayer("Planet Surface"));
+		targetMask = (1 << LayerMask.NameToLayer("Ground"));
 	}
 
 	void Start()

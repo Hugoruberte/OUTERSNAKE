@@ -13,7 +13,7 @@ public abstract class RabbitController : MovementController
 	private const float ROTATION_OVER_FACE_SPEED = 1f;
 
 
-	public RabbitController(RabbitEntity r)
+	public RabbitController(RabbitEntity r) : base()
 	{
 		this.entity = r;
 		this.rabbit = r;
@@ -45,7 +45,7 @@ public abstract class RabbitController : MovementController
 		if(c == null) {
 			yield break;
 		} else {
-			yield return entity.StartCoroutine(this.StepTowards(c));
+			yield return this.StepTowards(c);
 		}
 	}
 
@@ -68,13 +68,13 @@ public abstract class RabbitController : MovementController
 			// search for other random cell
 			c = this.GetOneSurroundingCell(this.entity.maxStepDistance);
 			if(c != null) {
-				yield return entity.StartCoroutine(this.StepTowards(c));
+				yield return this.StepTowards(c);
 			}
 		}
 		// can move
 		else
 		{
-			yield return entity.StartCoroutine(this.StepTowards(c));
+			yield return this.StepTowards(c);
 		}
 	}
 
@@ -104,7 +104,7 @@ public abstract class RabbitController : MovementController
 		from = new _Transform(this.entity.myTransform);
 
 		// jump
-		yield return entity.StartCoroutine(JumpTo(stepover.cell, from, stepover.rotation, stepover.up, ROTATION_OVER_FACE_SPEED));
+		yield return JumpTo(stepover.cell, from, stepover.rotation, stepover.up, ROTATION_OVER_FACE_SPEED);
 	}
 
 	protected virtual IEnumerator StepTowards(Cell c)
@@ -123,7 +123,7 @@ public abstract class RabbitController : MovementController
 		look = Quaternion.LookRotation(c.position - this.entity.cellable.currentCell.position, entity.myTransform.up).SetAbsoluteRotation();
 
 		// jump
-		yield return entity.StartCoroutine(JumpTo(c, from, look, this.entity.myTransform.up, ROTATION_SPEED));
+		yield return JumpTo(c, from, look, this.entity.myTransform.up, ROTATION_SPEED);
 	}
 
 	public virtual IEnumerator Rest()

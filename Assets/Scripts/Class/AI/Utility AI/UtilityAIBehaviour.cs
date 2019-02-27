@@ -15,14 +15,15 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[System.NonSerialized] private List<CAA> controllers = new List<CAA>();
 
 
-	public void UpdateUtilityActions(UtilityAIManager manager)
-	{
+	public void UpdateUtilityActions(UtilityAIManager manager) {
 		UtilityAction act;
 		UtilityAction current;
 		MovementController ctr;
+		// Debug.Log("1");
 
 		// foreach controller
 		for(int i = 0; i < this.controllers.Count; i++) {
+			// Debug.Log("2");
 
 			ctr = this.controllers[i].ctr;
 			current = this.controllers[i].act;
@@ -30,28 +31,33 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			// if current is running
 			if(current != null && current.isRunning)
 			{
+				// Debug.Log("3");
 				// if current is stoppable
 				if(current.isStoppable)
 				{
+					// Debug.Log("4");
 					// select best action by score
 					act = utilityAI.Select(ctr, this.actions);
 
 					// if best action is not the current action
 					if(current != act) {
+						// Debug.Log("5");
 						// stop current
 						current.Stop(manager);
 
 						// start selected action
 						act.Start(ctr, manager);
-						this.controllers[i].UpdateAct(act);
+						this.controllers[i].act = act;
 					}
 				}
+				// Debug.Log("6");
 
 				// either current is unstoppable or a
 				// new best action has been launch or
 				// current action is the best action.
 				continue;
 			}
+			// Debug.Log("7");
 
 			// if current is not running
 			// select best action by score
@@ -59,14 +65,17 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 			// start selected action
 			act?.Start(ctr, manager);
-			this.controllers[i].UpdateAct(act);
+			this.controllers[i].act = act;
 		}
 	}
 
 	public virtual void OnAwake() {
 		this.lastUpdate = 0f;
+		foreach(UtilityAction act in this.actions) {
+			act.Initialize(this);
+		}
 	}
-	public virtual void OnStart(){
+	public virtual void OnStart() {
 		// empty
 	}
 
@@ -74,7 +83,10 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		CAA caa = new CAA(ctr, null);
 		this.controllers.Add(caa);
 	}
-	public void Remove(LivingEntity ent) => this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
+	public void Remove(LivingEntity ent) {
+		// only does that
+		this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
+	}
 
 
 
@@ -100,7 +112,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	// inspector function //
 	public void AddAction(string method, int index) {
 		UtilityAction act = new UtilityAction(method, index);
-		act.Initialize(this);
+		// act.Initialize(this);
 		this.actions.Add(act);
 	}
 	public void RemoveActionAt(int index) {
@@ -121,7 +133,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	[System.Serializable]
-	private struct CAA {
+	private class CAA {
 		[SerializeField] public MovementController ctr;
 		[SerializeField] public UtilityAction act;
 
@@ -129,8 +141,6 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			this.ctr = c;
 			this.act = a;
 		}
-
-		public void UpdateAct(UtilityAction a) => this.act = a;
 	}
 }
 

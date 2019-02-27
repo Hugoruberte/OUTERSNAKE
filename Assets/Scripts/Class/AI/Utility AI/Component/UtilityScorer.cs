@@ -12,23 +12,19 @@ public class UtilityScorer
 {
 	public bool isCondition = true;
 	public bool not = false;
-	private bool initialized = false;
 
 	// score
 	public int score = 0;
 	public AnimationCurve curve = null;
+	private int _max = int.MaxValue;
 
 	// inspector
 	public string method;
 	public int index = 0;
 
 	// action
-	public System.Func<MovementController, bool> condition;
-	[SerializeField] private System.Func<MovementController, float> mapper;
-
-
-	public delegate void MyDelegate(int num);
-    public MyDelegate myDelegate = null;
+	private System.Func<MovementController, bool> condition;
+	private System.Func<MovementController, float> mapper;
 
 
 	public UtilityScorer(bool c, string method)
@@ -42,10 +38,6 @@ public class UtilityScorer
 		int res;
 		bool cond;
 
-		if(!this.initialized) {
-			return 0;
-		}
-
 		if(this.isCondition) {
 			cond = this.condition(ctr);
 			res = ((!cond && this.not) || (cond && !this.not)) ? score : 0;
@@ -58,6 +50,10 @@ public class UtilityScorer
 
 	public int Max()
 	{
+		if(this._max < int.MaxValue) {
+			return this._max;
+		}
+
 		int max;
 
 		max = int.MinValue;
@@ -74,6 +70,7 @@ public class UtilityScorer
 			}
 		}
 
+		this._max = max;
 		return max;
 	}
 
@@ -84,7 +81,5 @@ public class UtilityScorer
 		} else {
 			this.mapper = System.Func<MovementController, float>.CreateDelegate(typeof(System.Func<MovementController, float>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, float>;
 		}
-
-		this.initialized = true;
 	}
 }

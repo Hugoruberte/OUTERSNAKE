@@ -15,7 +15,6 @@ public class UtilityAction
 	public int score = 0;
 	public string method = "";
 	public bool active = true;
-	private UtilityAIBehaviour target;
 
 	// invocation
 	public System.Action<MovementController> action = null;
@@ -96,13 +95,19 @@ public class UtilityAction
 	{
 		MethodInfo methodInfo;
 
-		this.target = t;
+		this.isStoppable = false;
+		this.isRunning = false;
+
 		methodInfo = t.GetType().GetMethod(method);
 
 		if(methodInfo.ReturnType == typeof(void)) {
 			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
 		} else {
 			this.coroutineFactory = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+		}
+
+		foreach(UtilityScorer sc in this.scorers) {
+			sc.Initialize(t);
 		}
 	}
 
@@ -123,14 +128,12 @@ public class UtilityAction
 	public void AddCondition(string method)
 	{
 		UtilityScorer scorer = new UtilityScorer(true, method);
-		scorer.Initialize(this.target);
 		this.scorers.Add(scorer);
 	}
 
 	public void AddCurve(string method)
 	{
 		UtilityScorer scorer = new UtilityScorer(false, method);
-		scorer.Initialize(this.target);
 		this.scorers.Add(scorer);
 	}
 

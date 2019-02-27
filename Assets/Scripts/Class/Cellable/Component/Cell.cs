@@ -84,7 +84,7 @@ public class Cell
 
 		pos = position + normal * 0.5f;
 		directions = new Vector3[4] {t.right, -t.right, t.forward, -t.forward};
-		targetMask = (1 << LayerMask.NameToLayer("Planet Surface"));
+		targetMask = (1 << LayerMask.NameToLayer("Ground"));
 
 		foreach(Vector3 d in directions) {
 			p = pos + d;

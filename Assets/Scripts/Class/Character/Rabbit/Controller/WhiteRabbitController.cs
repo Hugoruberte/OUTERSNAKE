@@ -22,7 +22,7 @@ public class WhiteRabbitController : RabbitController
 		if(this.entity.cellable.currentCell.isBound && (random < 33))
 		{
 			stepover = this.GetOneStepOverFrom(this.entity.cellable.currentCell);
-			yield return entity.StartCoroutine(this.StepOverFace(stepover));
+			yield return this.StepOverFace(stepover);
 		}
 		else
 		{
@@ -30,7 +30,7 @@ public class WhiteRabbitController : RabbitController
 			radius = Random.Range(1, this.entity.maxStepDistance + 1);
 			c = this.GetOneSurroundingCell(radius);
 			if(c != null) {
-				yield return entity.StartCoroutine(this.StepTowards(c));
+				yield return this.StepTowards(c);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class WhiteRabbitController : RabbitController
 				// is this cell better ?
 				if(Vector3.Distance(from.position, stepover.cell.position) > Vector3.Distance(from.position, current.position))
 				{
-					yield return entity.StartCoroutine(this.StepOverFace(stepover));
+					yield return this.StepOverFace(stepover);
 				}
 			}
 			else
@@ -69,14 +69,14 @@ public class WhiteRabbitController : RabbitController
 				c = this.GetOneSurroundingCell(this.entity.maxStepDistance);
 
 				if(c != null) {
-					yield return entity.StartCoroutine(this.StepTowards(c));
+					yield return this.StepTowards(c);
 				}
 			}
 		}
 		// can move
 		else
 		{
-			yield return entity.StartCoroutine(this.StepTowards(c));
+			yield return this.StepTowards(c);
 		}
 	}
 }
