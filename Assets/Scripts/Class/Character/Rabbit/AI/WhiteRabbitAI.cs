@@ -140,7 +140,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 		
 		act.isStoppable = false;
 
-		Transform from = (this.danger != null) ? this.danger : this.snake;
+		Transform from = this.danger ?? this.snake;
 		yield return ctr.entity.StartCoroutine(rtr.StepToRunAway(from));
 		
 		act.isRunning = false;

@@ -22,8 +22,8 @@ public class UtilityAction
 	private IEnumerator coroutine = null;
 
 	// state
-	public bool isStoppable = false; // need to be change by the coroutine launched by this UtilityAction !
-	public bool isRunning = false; // need to be change by the coroutine launched by this UtilityAction !
+	[System.NonSerialized] public bool isStoppable = false; // to be changed by the coroutine launched by this UtilityAction !
+	[System.NonSerialized] public bool isRunning = false; // to be changed by the coroutine launched by this UtilityAction !
 	
 
 

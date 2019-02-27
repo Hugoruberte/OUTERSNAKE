@@ -151,20 +151,23 @@ public abstract class RabbitController : MovementController
 	{
 		// declaration
 		Vector3 to;
-		float step;
+		float step, height;
 
 		// initialization
 		to = c.position;
 		step = 0f;
 
-		// move to new cell
+		// reserve new cell
 		this.entity.cellable.ReserveNextCell(c);
+
+		// move to new cell
 		while(step < 1f) {
 			step += this.entity.speed * Time.deltaTime;
+			height = Mathf.PingPong(Mathf.Min(step * this.jumpHeight * 2f, this.jumpHeight * 2f), this.jumpHeight);
 
 			// movement
 			this.entity.myTransform.rotation = Quaternion.Slerp(from.rotation, look, step * omega);
-			this.entity.myTransform.position = Vector3.Lerp(from.position, to, step) + up * Mathf.PingPong(step * this.jumpHeight * 2f, this.jumpHeight);
+			this.entity.myTransform.position = Vector3.Lerp(from.position, to, step) + up * height;
 
 			yield return null;
 		}

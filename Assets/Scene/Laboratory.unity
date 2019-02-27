@@ -15376,7 +15376,7 @@ MonoBehaviour:
   speed: 2
   maxStepDistance: 2
   rangeOfView: 10
-  behaviour: {fileID: 0}
+  behaviour: {fileID: 11400000, guid: 403d621a37a93b94088a2a7bd7e0e81d, type: 2}
   isTired: 0
   isHungry: 0
   isScared: 0
@@ -18834,7 +18834,7 @@ MonoBehaviour:
   speed: 2
   maxStepDistance: 2
   rangeOfView: 10
-  behaviour: {fileID: 0}
+  behaviour: {fileID: 11400000, guid: 403d621a37a93b94088a2a7bd7e0e81d, type: 2}
   isTired: 0
   isHungry: 0
   isScared: 0
@@ -19025,7 +19025,7 @@ PrefabInstance:
     - target: {fileID: 5812141742805469257, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5812141742805469254, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
@@ -19101,7 +19101,7 @@ PrefabInstance:
     - target: {fileID: 5812141742805469262, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
       propertyPath: speed
-      value: 20
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5812141742805469262, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
@@ -19111,7 +19111,7 @@ PrefabInstance:
     - target: {fileID: 5812141742805469262, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}
       propertyPath: maxAfterJumpTempo
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4987868705141194892, guid: ab0dcc2ae9e0a3f4da6a4879501a49a2,
         type: 3}

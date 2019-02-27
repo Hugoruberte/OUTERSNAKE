@@ -4,21 +4,24 @@ using System.Collections.Generic;
 
 namespace Tools
 {
-	public class _Transform
+	public struct _Transform
 	{
-		public Vector3 right = Vector3.right;
-		public Vector3 up = Vector3.up;
-		public Vector3 forward = Vector3.forward;
+		public Vector3 right;
+		public Vector3 up;
+		public Vector3 forward;
 
-		public Vector3 position = Vector3.zero;
-		public Quaternion rotation = Quaternion.identity;
-
-		public _Transform(){
-			// empty
-		}
+		public Vector3 position;
+		public Quaternion rotation;
 
 		public _Transform(Transform t)
 		{
+			this.position = Vector3.zero;
+			this.rotation = Quaternion.identity;
+
+			this.right = Vector3.right;
+			this.up = Vector3.up;
+			this.forward = Vector3.forward;
+
 			this.Copy(t);
 		}
 
@@ -26,6 +29,10 @@ namespace Tools
 		{
 			this.position = pos;
 			this.rotation = rot;
+
+			this.right = Vector3.right;
+			this.up = Vector3.up;
+			this.forward = Vector3.forward;
 		}
 
 		public void Copy(Transform tr)

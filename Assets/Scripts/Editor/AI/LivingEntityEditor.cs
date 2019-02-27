@@ -19,7 +19,7 @@ public class LivingEntityEditor : InteractiveEntityEditor
 	{
 		LivingEntity script = target as LivingEntity;
 
-		nameAI = script.name;
+		nameAI = script.GetType().ToString();
 		nameAI = nameAI.Replace(" ", string.Empty);
 		nameAI += "AI";
 	}
@@ -51,7 +51,7 @@ public class LivingEntityEditor : InteractiveEntityEditor
 		rect.width += -120;
 		rect.height = 16;
 
-		EditorGUI.LabelField(rect, script.name + " AI", EditorStyles.boldLabel);
+		EditorGUI.LabelField(rect, script.GetType() + " AI", EditorStyles.boldLabel);
 
 		rect.x += 120;
 		rect.height = 17;

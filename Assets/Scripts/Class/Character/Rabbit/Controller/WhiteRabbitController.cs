@@ -15,11 +15,12 @@ public class WhiteRabbitController : RabbitController
 		// declaration
 		Cell c;
 		StepOver stepover;
-		int radius, random;
+		int radius;
+		bool random;
 
 		// jump over face
-		random = Random.Range(0, 100);
-		if(this.entity.cellable.currentCell.isBound && (random < 33))
+		random = (Random.Range(0, 100) < 33);
+		if(this.entity.cellable.currentCell.isBound && random)
 		{
 			stepover = this.GetOneStepOverFrom(this.entity.cellable.currentCell);
 			yield return this.StepOverFace(stepover);

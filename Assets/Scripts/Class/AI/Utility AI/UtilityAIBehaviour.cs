@@ -19,11 +19,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		UtilityAction act;
 		UtilityAction current;
 		MovementController ctr;
-		// Debug.Log("1");
 
 		// foreach controller
 		for(int i = 0; i < this.controllers.Count; i++) {
-			// Debug.Log("2");
 
 			ctr = this.controllers[i].ctr;
 			current = this.controllers[i].act;
@@ -31,17 +29,14 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			// if current is running
 			if(current != null && current.isRunning)
 			{
-				// Debug.Log("3");
 				// if current is stoppable
 				if(current.isStoppable)
 				{
-					// Debug.Log("4");
 					// select best action by score
 					act = utilityAI.Select(ctr, this.actions);
 
 					// if best action is not the current action
 					if(current != act) {
-						// Debug.Log("5");
 						// stop current
 						current.Stop(manager);
 
@@ -50,14 +45,12 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 						this.controllers[i].act = act;
 					}
 				}
-				// Debug.Log("6");
 
 				// either current is unstoppable or a
 				// new best action has been launch or
 				// current action is the best action.
 				continue;
 			}
-			// Debug.Log("7");
 
 			// if current is not running
 			// select best action by score

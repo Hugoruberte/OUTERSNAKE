@@ -32,7 +32,7 @@ public class RabbitEditor : LivingEntityEditor
 		rect.y += -18;
 		rect.width = 200;
 		rect.height = 50;
-		EditorGUI.LabelField(rect, script.name + " parameters", EditorStyles.boldLabel);
+		EditorGUI.LabelField(rect, script.GetType() + " Parameters", EditorStyles.boldLabel);
 
 		if(showParameter) {
 			script.speed = EditorGUILayout.Slider("Walk Speed", script.speed, 0.1f, 20f);

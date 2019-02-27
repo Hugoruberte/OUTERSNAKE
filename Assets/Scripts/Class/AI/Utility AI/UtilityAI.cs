@@ -16,7 +16,7 @@ namespace Utility.AI
 			int score;
 			int nb;
 
-			score = int.MinValue;
+			result = null;
 			max = int.MinValue;
 			nb = 0;
 
@@ -37,8 +37,8 @@ namespace Utility.AI
 				
 				if(score > max) {
 					max = score;
+					result = act;
 					this.selected.Clear();
-					this.selected.Add(act);
 					nb = 1;
 				} else if(score == max) {
 					this.selected.Add(act);
@@ -46,11 +46,9 @@ namespace Utility.AI
 				}
 			}
 
-			if(nb == 1) {
-				result = this.selected[0];
-			} else if(nb > 1) {
+			if(nb > 1) {
 				result = this.selected[UnityEngine.Random.Range(0, nb)];
-			} else {
+			} else if(nb == 0) {
 				Debug.LogWarning("WARNING : This Utility AI does not have any action.");
 				result = null;
 			}

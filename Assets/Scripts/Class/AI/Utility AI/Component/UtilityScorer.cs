@@ -16,7 +16,7 @@ public class UtilityScorer
 	// score
 	public int score = 0;
 	public AnimationCurve curve = null;
-	private int _max = int.MaxValue;
+	[SerializeField] private int _max = int.MaxValue;
 
 	// inspector
 	public string method;

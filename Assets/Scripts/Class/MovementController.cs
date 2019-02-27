@@ -72,7 +72,7 @@ public abstract class MovementController
 
 		for(int i = 0; i < 3; i++) {
 			if(relative[i] > this.entity.maxStepDistance) {
-				Debug.LogWarning("Target is too far away ! Entity cannot walk it in only one step !", entity.myTransform);
+				Debug.LogWarning("Target is too far away ! Entity cannot walk it in only one step ! (max step distance = {this.entity.maxStepDistance} and relative = {relative[i]}", entity.myTransform);
 				return true;
 			}
 		}
@@ -156,7 +156,7 @@ public abstract class MovementController
 		normal = sign * dir;
 		pos = bound.position + dir * 0.5f - sign * 0.5f * bound.normal;
 		Debug.DrawRay(pos, normal * 5f, Color.red);
-		// Debug.Break();
+		Debug.Break();
 		cell = bound.surface.GetCellWithPositionAndFaceNormal(pos, normal);
 
 		look = Quaternion.LookRotation(dir, bound.normal).SetAbsoluteRotation();
