@@ -4,32 +4,26 @@ using System.Linq;
 using UnityEngine;
 using Snakes;
 
+[System.Serializable]
 [CreateAssetMenu(fileName = "WhiteRabbitAI", menuName = "Scriptable Object/AI/WhiteRabbitAI", order = 3)]
-public class WhiteRabbitAI : UtilityAIBehaviour
+public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 {
 	private Transform danger;
 	private Transform snake;
 
 	private IEnumerable<IDangerousEntity> dangers;
 
-
-	private static WhiteRabbitAI instance = null;
-
-	public static UtilityAIBehaviour Launch(WhiteRabbit rabbit)
+	public UtilityAIBehaviour Launch(WhiteRabbit rabbit)
 	{
 		MovementController ctr = new WhiteRabbitController(rabbit);
-		instance.AddController(ctr);
-
-		return instance;
+		this.AddController(ctr);
+		return this;
 	}
 
-	public override void Initialize()
+	public override void OnStart()
 	{
-		instance = this;
-	}
+		base.OnStart();
 
-	public override void Start()
-	{
 		snake = SnakeManager.instance.snake.transform;
 
 		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();

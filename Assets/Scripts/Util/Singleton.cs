@@ -7,14 +7,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : class
 	public static T instance {
 		get {
 			if(_instance == null) {
-				Debug.LogError($"Instance of {typeof(T)} is null, either you tried to access it from the Awake function or it has not been initialized in its own Awake function");
+				Debug.LogError($"ERROR : Instance of {typeof(T)} is null, either you tried to access it from the Awake function or it has not been initialized in its own Awake function");
 			}
+
 			return _instance;
 		}
 		set {
 			if(_instance != null) {
-				Debug.LogWarning("Several instance of {typeof(T)} has been set ! Check it out.");
+				Debug.LogWarning("WARNING : Several instance of {typeof(T)} has been set ! Check it out.");
+				return;
 			}
+
 			_instance = value;
 		}
 	}

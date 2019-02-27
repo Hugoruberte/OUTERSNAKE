@@ -8,18 +8,19 @@ using UnityEngine;
 public class UtilityAction
 {
 	// scorers
-	public List<UtilityScorer> scorers;
+	public List<UtilityScorer> scorers = new List<UtilityScorer>();
 
 	// inspector
 	public int index = 0;
 	public int score = 0;
 	public string method = "";
 	public bool active = true;
+	private UtilityAIBehaviour target;
 
 	// invocation
-	public System.Action<MovementController> action;
-	public System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory;
-	private IEnumerator coroutine;
+	public System.Action<MovementController> action = null;
+	public System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory = null;
+	private IEnumerator coroutine = null;
 
 	// state
 	public bool isStoppable = false; // need to be change by the coroutine launched by this UtilityAction !
@@ -28,11 +29,10 @@ public class UtilityAction
 
 
 
-	public UtilityAction()
+	public UtilityAction(string method, int index)
 	{
-		this.action = null;
-		this.coroutineFactory = null;
-		this.scorers = new List<UtilityScorer>();
+		this.index = index;
+		this.method = method;
 	}
 
 	public int Score(MovementController ctr)
@@ -62,8 +62,7 @@ public class UtilityAction
 		if(this.action != null) {
 			this.isRunning = false;
 			this.action(ctr);
-		}
-		else {
+		} else {
 			this.coroutine = this.coroutineFactory(ctr, this);
 			this.isRunning = true;
 			main.StartCoroutine(this.coroutine);
@@ -93,38 +92,20 @@ public class UtilityAction
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public void Initialize(string a, UtilityAIBehaviour target)
+	public void Initialize(UtilityAIBehaviour t)
 	{
 		MethodInfo methodInfo;
 
-		methodInfo = target.GetType().GetMethod(method);
+		this.target = t;
+		methodInfo = t.GetType().GetMethod(method);
 
 		if(methodInfo.ReturnType == typeof(void)) {
-			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), target, methodInfo) as System.Action<MovementController>;
+			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
 		} else {
-			this.coroutineFactory = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), target, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
-		}
-
-		foreach(UtilityScorer scorer in this.scorers) {
-			scorer.Initialize(target);
-		}
-
-		this.Check(a);
-	}
-
-	private void Check(string a)
-	{
-		UtilityScorer scorer;
-		string[] methods = new string[this.scorers.Count];
-		for(int i = 0; i < this.scorers.Count; i++) {
-			scorer = this.scorers[i];
-			if(Array.IndexOf(methods, scorer.method) >= 0) {
-				Debug.LogWarning($"WARNING : The scorer '{scorer.method}' is defined multiples times for the same action '{a}' !");
-			} else {
-				methods[i] = scorer.method;
-			}
+			this.coroutineFactory = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
 		}
 	}
+
 
 
 
@@ -139,15 +120,17 @@ public class UtilityAction
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public void AddCondition()
+	public void AddCondition(string method)
 	{
-		UtilityScorer scorer = new UtilityScorer(true);
+		UtilityScorer scorer = new UtilityScorer(true, method);
+		scorer.Initialize(this.target);
 		this.scorers.Add(scorer);
 	}
 
-	public void AddCurve()
+	public void AddCurve(string method)
 	{
-		UtilityScorer scorer = new UtilityScorer(false);
+		UtilityScorer scorer = new UtilityScorer(false, method);
+		scorer.Initialize(this.target);
 		this.scorers.Add(scorer);
 	}
 

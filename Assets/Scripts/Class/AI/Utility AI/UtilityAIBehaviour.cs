@@ -5,44 +5,15 @@ using Utility.AI;
 
 public abstract class UtilityAIBehaviour : ScriptableObject
 {
-	[System.Serializable]
-	private struct CAA {
-		public readonly MovementController ctr;
-		public UtilityAction act;
+	private UtilityAI utilityAI = new UtilityAI();
 
-		public CAA(MovementController c, UtilityAction a) {
-			this.ctr = c;
-			this.act = a;
-		}
+	public List<UtilityAction> actions = new List<UtilityAction>();
 
-		public void UpdateAct(UtilityAction a) => this.act = a;
-	}
-
-	// inspector cache
-	[HideInInspector] public string[] actionCandidates = {};
-	[HideInInspector] public string[] scorerConditionCandidates = {};
-	[HideInInspector] public string[] scorerCurveCandidates = {};
-	[HideInInspector] public List<bool> displayScorers = new List<bool>();
-	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
-
-
-
-	private UtilityAI utilityAI;
-	
-	[HideInInspector]
 	public float lastUpdate = 0f;
 	public float updateRate = 0.02f;
 
-	private List<CAA> controllers = new List<CAA>();
+	[System.NonSerialized] private List<CAA> controllers = new List<CAA>();
 
-
-	private void Awake()
-	{
-		this.utilityAI = new UtilityAI(this.actions, this);
-	}
-
-	public virtual void Initialize() {}
-	public virtual void Start() {}
 
 	public void UpdateUtilityActions(UtilityAIManager manager)
 	{
@@ -63,7 +34,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 				if(current.isStoppable)
 				{
 					// select best action by score
-					act = utilityAI.Select(ctr);
+					act = utilityAI.Select(ctr, this.actions);
 
 					// if best action is not the current action
 					if(current != act) {
@@ -82,8 +53,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 				continue;
 			}
 
+			// if current is not running
 			// select best action by score
-			act = utilityAI.Select(ctr);
+			act = utilityAI.Select(ctr, this.actions);
 
 			// start selected action
 			act?.Start(ctr, manager);
@@ -91,32 +63,85 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 	}
 
-	protected void AddController(MovementController ctr)
-	{
+	public virtual void OnAwake() {
+		this.lastUpdate = 0f;
+	}
+	public virtual void OnStart(){
+		// empty
+	}
+
+	protected void AddController(MovementController ctr) {
 		CAA caa = new CAA(ctr, null);
 		this.controllers.Add(caa);
 	}
+	public void Remove(LivingEntity ent) => this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
 
-	public void Remove(LivingEntity ent)
-	{
-		// only does that
-		this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
+
+
+
+
+
+
+
+	/* -------------------------------------------------------------------------------------------*/
+	/* -------------------------------------------------------------------------------------------*/
+	/* -------------------------------------------------------------------------------------------*/
+	/* --------------------------------------- INSPECTORS ----------------------------------------*/
+	/* -------------------------------------------------------------------------------------------*/
+	/* -------------------------------------------------------------------------------------------*/
+	/* -------------------------------------------------------------------------------------------*/
+	// inspector cache //
+	[HideInInspector] public string[] actionCandidates = {};
+	[HideInInspector] public string[] scorerConditionCandidates = {};
+	[HideInInspector] public string[] scorerCurveCandidates = {};
+	[HideInInspector] public List<bool> displayScorers = new List<bool>();
+	// inspector cache //
+
+	// inspector function //
+	public void AddAction(string method, int index) {
+		UtilityAction act = new UtilityAction(method, index);
+		act.Initialize(this);
+		this.actions.Add(act);
 	}
-
-
-
-
-
-
-
-	/* -------------------------------------------------------------------------------------------*/
-	/* -------------------------------------------------------------------------------------------*/
-	/* -------------------------------------------------------------------------------------------*/
-	/* ----------------------------------- INSPECTOR FUNCTION ------------------------------------*/
-	/* -------------------------------------------------------------------------------------------*/
-	/* -------------------------------------------------------------------------------------------*/
-	/* -------------------------------------------------------------------------------------------*/
-	public void AddAction() => this.actions.Add(new UtilityAction());
-	public void RemoveActionAt(int index) => this.actions.RemoveAt(index);
+	public void RemoveActionAt(int index) {
+		this.actions.RemoveAt(index);
+	}
 	public UtilityAction GetCurrentAction(LivingEntity ent) => this.controllers.Find(x => x.ctr.entity == ent).act;
+	// inspector function //
+
+
+
+
+
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* ------------------ USEFUL STRUCT BECAUSE DICTIONARY ARE NOT SERIALIZABLE -------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	[System.Serializable]
+	private struct CAA {
+		[SerializeField] public MovementController ctr;
+		[SerializeField] public UtilityAction act;
+
+		public CAA(MovementController c, UtilityAction a) {
+			this.ctr = c;
+			this.act = a;
+		}
+
+		public void UpdateAct(UtilityAction a) => this.act = a;
+	}
+}
+
+public abstract class UtilityAIBehaviour<T> : UtilityAIBehaviour where T : class
+{
+	public static T instance;
+
+	public override void OnAwake()
+	{
+		base.OnAwake();
+
+		instance = this as T;
+	}
 }

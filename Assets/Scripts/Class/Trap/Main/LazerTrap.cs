@@ -9,7 +9,7 @@ public class LazerTrap : TrapEntity
 		base.Start();
 
 		// Initialize AI behaviour (this will launch the AI)
-		this.behaviour = LazerTrapAI.Initialize(this);
+		this.behaviour = LazerTrapAI.instance.Launch(this);
 	}
 
 	private void Attack()

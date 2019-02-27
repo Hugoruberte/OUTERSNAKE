@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tools;
 
+[System.Serializable]
 public abstract class MovementController
 {
 	protected struct StepOver

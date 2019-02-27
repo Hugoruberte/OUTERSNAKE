@@ -189,7 +189,7 @@ public class UtilityAIBehaviourEditor : Editor
 					if((scorerConditionMethodNames.Length + scorerConditionMethodNames.Length) == script.actions[act].scorers.Count) {
 						Debug.Log("No need to add another scorer, there is enough !");
 					} else {
-						script.actions[act].AddCondition();
+						script.actions[act].AddCondition(this.scorerConditionMethodNames[0]);
 						serializedObject.Update();
 					}
 				}
@@ -198,7 +198,7 @@ public class UtilityAIBehaviourEditor : Editor
 					if((scorerConditionMethodNames.Length + scorerConditionMethodNames.Length) == script.actions[act].scorers.Count) {
 						Debug.Log("No need to add another scorer, there is enough !");
 					} else {
-						script.actions[act].AddCurve();
+						script.actions[act].AddCurve(this.scorerCurveMethodNames[0]);
 						serializedObject.Update();
 					}
 				}
@@ -228,10 +228,10 @@ public class UtilityAIBehaviourEditor : Editor
 		baserect.height = 23;
 		if(GUI.Button(baserect, "ADD NEW ACTION")) {
 			if(actionMethodNames.Length == script.actions.Count) {
-				Debug.Log($"No need to add another action, there is enough ! (Number of action found: {actionMethodNames.Length})");
+				Debug.Log($"There is no more action to add ! (Number of action found: {actionMethodNames.Length})");
 			} else {
 				script.displayScorers.Add(false);
-				script.AddAction();
+				script.AddAction(this.actionMethodNames[script.actions.Count], script.actions.Count);
 				serializedObject.Update();
 			}
 		}

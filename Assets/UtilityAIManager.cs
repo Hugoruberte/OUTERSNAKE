@@ -11,14 +11,14 @@ public class UtilityAIManager : Singleton<UtilityAIManager>
 		base.Awake();
 		
 		foreach(UtilityAIBehaviour b in this.behaviours) {
-			b.Initialize();
+			b.OnAwake();
 		}
 	}
 
 	void Start()
 	{
 		foreach(UtilityAIBehaviour b in this.behaviours) {
-			b.Start();
+			b.OnStart();
 		}
 	}
 
