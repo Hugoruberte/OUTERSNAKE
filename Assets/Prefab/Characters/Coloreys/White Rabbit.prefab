@@ -14675,10 +14675,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ad5645829758e449b553992bf0bee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 4
   maxStepDistance: 2
   rangeOfView: 10
-  behaviour: {fileID: 0}
+  behaviour: {fileID: 11400000, guid: 403d621a37a93b94088a2a7bd7e0e81d, type: 2}
   isTired: 0
   isHungry: 0
   isScared: 0

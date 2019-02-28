@@ -157,7 +157,7 @@ public class SnakePartCharacter : SnakeEntity
 		}
 		else
 		{
-			Death();
+			this.Death();
 		}
 	}
 
@@ -165,11 +165,13 @@ public class SnakePartCharacter : SnakeEntity
 	{
 		yield return new WaitWhile(() => explosion.IsAlive());
 
-		Death();
+		this.Death();
 	}
 
-	private void Death()
+	protected override void Death()
 	{
+		base.Death();
+
 		snakePartState = SnakePartState.Dead;
 		GameManager.PutInGarbage(gameObject);
 	}

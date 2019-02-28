@@ -9,10 +9,29 @@ public abstract class LivingEntity : InteractiveEntity
 	[HideInInspector] public int maxStepDistance = 2;
 	[HideInInspector] public float rangeOfView = 5f;
 
-	// AI
-	[HideInInspector] public UtilityAIBehaviour behaviour;
-
 	[HideInInspector] public bool isTired = false;
 	[HideInInspector] public bool isHungry = false;
 	[HideInInspector] public bool isScared = false;
+
+	// AI
+	[HideInInspector] public UtilityAIBehaviour behaviour;
+
+	
+
+
+
+	/* ---------------------------------------------------------------------------------------------*/
+	/* ------------------------------------------- LIFE --------------------------------------------*/
+	/* ---------------------------------------------------------------------------------------------*/
+	protected override void OnUpdateLife() {
+		base.OnUpdateLife();
+
+		if(this.life <= 0) {
+			this.Death();
+		}
+	}
+
+	protected virtual void Death() {
+		// empty
+	}
 }

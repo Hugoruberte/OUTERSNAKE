@@ -32,38 +32,27 @@ public abstract class RabbitEntity : CharacterEntity
 		death = myTransform.DeepFind("Death").gameObject;
 	}
 
-
-
-
-	
-
-
-
-
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ------------------------------------ INTERACT FUNCTIONS -------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
 	public override void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i)
 	{
-		Debug.Log(s + " & " + i);
-	}
-
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ------------------------------------------- LIFE --------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	protected override void OnUpdateLife()
-	{
-		if(this.life <= 0) {
-			this.Death();
+		if(this.currentSetOnElement != null) {
+			this.currentSetOnElement(false);
+			this.currentSetOnElement = null;
 		}
+		
+		switch(s.element.type) {
+
+			case ChemicalElement.Fire:
+				this.currentSetOnElement += this.SetOnFire;
+				break;
+		}
+
+		this.currentSetOnElement(true);
 	}
 
-	private void Death()
+	protected override void Death()
 	{
+		base.Death();
+
 		// will not interact in future
 		myCollider.enabled = false;
 		this.behaviour.Remove(this);
@@ -76,11 +65,7 @@ public abstract class RabbitEntity : CharacterEntity
 		Destroy(gameObject, 4f);
 	}
 
-
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ------------------------------------------- FIRE --------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	public override void SetOnFire(bool active)
+	private void SetOnFire(bool active)
 	{
 		if(fire.activeInHierarchy && active) {
 			return;
