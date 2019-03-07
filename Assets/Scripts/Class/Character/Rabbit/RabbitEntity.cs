@@ -44,9 +44,15 @@ public abstract class RabbitEntity : CharacterEntity
 			case ChemicalElement.Fire:
 				this.currentSetOnElement += this.SetOnFire;
 				break;
+
+			default:
+				this.currentSetOnElement = null;
+				break;
 		}
 
-		this.currentSetOnElement(true);
+		if(this.currentSetOnElement != null) {
+			this.currentSetOnElement(true);
+		}
 	}
 
 	protected override void Death()
