@@ -8,8 +8,6 @@ public class LazerController : PoolableEntity
 	private Transform trailTransform;
 
 	private TrailRenderer trailRenderer;
-
-	private float startTime;
 	
 	private Vector3 direction;
 
@@ -42,18 +40,27 @@ public class LazerController : PoolableEntity
 
 	public override void Launch()
 	{
-		this.startTime = Time.time;
-
 		base.Launch();
+
+		StartCoroutine(LifetimeCoroutine());
 	}
 
 	void Update()
 	{
 		this.trailTransform.Translate(this.direction * this.lazerData.speed * Time.deltaTime);
+	}
 
-		if(Time.time - this.startTime > this.lazerData.lifetime) {
-			this.poolingManager.Stow(this);
-		}
+	private IEnumerator LifetimeCoroutine()
+	{
+		yield return new WaitForSeconds(this.lazerData.lifetime);
+
+		// width point
+		float instantLength = Vector3.Distance(this.myTransform.position, this.trailTransform.position);
+		this.InitializeWidthPoint(instantLength);
+		yield return this.WidthPointCoroutine();
+
+		// stow
+		this.poolingManager.Stow(this);
 	}
 
 	public override void Reset()

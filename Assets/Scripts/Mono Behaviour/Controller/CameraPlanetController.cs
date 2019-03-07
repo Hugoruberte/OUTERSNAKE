@@ -10,7 +10,7 @@ namespace Cameras
 		Move
 	}
 
-	public class CameraController : MonoBehaviour
+	public class CameraPlanetController : Singleton<CameraPlanetController>
 	{
 		[Header("State")]
 		public Transform target;
@@ -38,8 +38,10 @@ namespace Cameras
 		private IEnumerator smoothRotationCoroutine = null;
 
 
-		void Awake()
+		protected override void Awake()
 		{
+			base.Awake();
+			
 			myTransform = transform;
 		}
 

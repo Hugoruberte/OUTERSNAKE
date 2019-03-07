@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   lifetime: 5
-  pointPerDistanceMinMax: {x: 2, y: 5}
-  initialWidth: 0.2
-  widthPointSpeed: 0
-  widthSpeed: 0
+  pointPerDistanceMinMax: {x: 3, y: 7}
+  initialWidth: 1
+  widthPointSpeed: 0.5
+  widthSpeed: 10

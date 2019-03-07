@@ -65,9 +65,6 @@ namespace Interactive.Engine
 		{
 			// initialize state
 			this.InteractWith(this.status, null);
-
-			// initialize cell
-			// this.cellable.Initialize(myTransform);
 		}
 
 		protected virtual void OnCollisionEnter(Collision other)
