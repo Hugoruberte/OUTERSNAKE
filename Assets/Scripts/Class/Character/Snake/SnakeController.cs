@@ -9,7 +9,7 @@ public class SnakeController : MonoBehaviour
 	private SnakeData snakeData;
 
 	private Transform myTransform;
-	private Transform heart;
+	private _Transform heart;
 
 	private IEnumerator moveCoroutine = null;
 	
@@ -19,6 +19,7 @@ public class SnakeController : MonoBehaviour
 	private int forward = 0;
 	private int forwardStored = 0;
 	private int rightStored = 0;
+
 	private const int WALL_DELAY = 2;
 	private const int LEDGE_DELAY = 5;
 
@@ -41,8 +42,8 @@ public class SnakeController : MonoBehaviour
 	{
 		snakeData = SnakeManager.instance.snakeData;
 		events = SnakeManager.instance.events;
-		heart = GameManager.instance.heart;
-		
+		heart = HeartManager.instance.heart;
+
 		this.StartSnakeMovement();
 	}
 

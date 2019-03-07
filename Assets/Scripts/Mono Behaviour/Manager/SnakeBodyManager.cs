@@ -21,7 +21,7 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	private float reduceSpeed;
 
 	
-	protected override void Start()
+	void Start()
 	{
 		snakeData = SnakeManager.instance.snakeData;
 

@@ -1,54 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 namespace Tools
 {
-	public struct _Transform
+	public class _Transform
 	{
-		public Vector3 right;
-		public Vector3 up;
-		public Vector3 forward;
+		public Vector3 right { get { return this.rotation * Vector3.right; }}
+		public Vector3 up { get { return this.rotation * Vector3.up; }}
+		public Vector3 forward { get { return this.rotation * Vector3.forward; }}
 
-		public Vector3 position;
-		public Quaternion rotation;
+		public Vector3 position { get; set; }
+		public Quaternion rotation { get; set; }
 
-		public _Transform(Transform t)
-		{
+		public _Transform() {
 			this.position = Vector3.zero;
 			this.rotation = Quaternion.identity;
+		}
 
-			this.right = Vector3.right;
-			this.up = Vector3.up;
-			this.forward = Vector3.forward;
-
+		public _Transform(Transform t) {
 			this.Copy(t);
 		}
 
-		public _Transform(Vector3 pos, Quaternion rot)
-		{
+		public _Transform(Vector3 pos, Quaternion rot) {
 			this.position = pos;
 			this.rotation = rot;
-
-			this.right = Vector3.right;
-			this.up = Vector3.up;
-			this.forward = Vector3.forward;
 		}
 
-		public void Copy(Transform tr)
-		{
-			this.right = tr.right;
-			this.up = tr.up;
-			this.forward = tr.forward;
+		public void Copy(Transform tr) {
 			this.position = tr.position;
 			this.rotation = tr.rotation;
 		}
 
-		public void Copy(_Transform tr)
-		{
-			this.right = tr.right;
-			this.up = tr.up;
-			this.forward = tr.forward;
+		public void Copy(_Transform tr) {
 			this.position = tr.position;
 			this.rotation = tr.rotation;
 		}
@@ -68,6 +53,18 @@ namespace Tools
 				result = child.DeepFind(n);
 				if(result != null) {
 					return result;
+				}
+			}
+
+			return null;
+		}
+		public static Transform DeepFind<T>(this Transform root, string n) where T : Component
+		{
+			T[] components = root.GetComponentsInChildren<T>();
+
+			foreach(T c in components) {
+				if(c.gameObject.name == n) {
+					return c.transform;
 				}
 			}
 

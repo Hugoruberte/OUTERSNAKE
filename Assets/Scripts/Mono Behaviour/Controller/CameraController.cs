@@ -13,17 +13,16 @@ namespace Cameras
 	public class CameraController : MonoBehaviour
 	{
 		[Header("State")]
+		public Transform target;
 		public CameraMoveState state = CameraMoveState.Idle;
 
-		private SnakeData snakeData;
-		private Transform heart;
-		private Transform snake;
 		private Transform myTransform;
+		private _Transform heart;
 		private _Transform cacheHeart = new _Transform();
 		private _Transform oldHeart = new _Transform();
 
 		[Header("Settings")]
-		[SerializeField, Tooltip("Distance camera <-> snake"), Range(10, 75)]
+		[SerializeField, Tooltip("Distance camera <-> target"), Range(5, 75)]
 		private int height = 25;
 
 		[Range(0.01f, 0.5f), SerializeField]
@@ -46,20 +45,22 @@ namespace Cameras
 
 		void Start()
 		{
-			snakeData = SnakeManager.instance.snakeData;
-			snake = SnakeManager.instance.snake.transform;
-			heart = GameManager.instance.heart;
+			heart = HeartManager.instance.heart;
 
 			targetRotation = heart.rotation * Quaternion.Euler(90, 0, 0);
 			previousTargetRotation = targetRotation;
 
 			cacheHeart.Copy(heart);
 			oldHeart.Copy(heart);
+
+			if(!target) {
+				Debug.LogWarning("WARNING : Camera does not have any target to follow !");
+			}
 		}
 
 		void Update()
 		{
-			if(state == CameraMoveState.Idle) {
+			if(state == CameraMoveState.Idle || !target) {
 				return;
 			}
 
@@ -79,7 +80,7 @@ namespace Cameras
 		/* --------------------------------------------------------------------------------------------*/
 		private void SmoothPosition()
 		{
-			targetPosition = snake.position + snake.up * height;
+			targetPosition = target.position + target.up * height;
 			myTransform.position = Vector3.SmoothDamp(myTransform.position, targetPosition, ref velocity, smooth);
 		}
 
@@ -96,7 +97,7 @@ namespace Cameras
 			targetRotation = heart.rotation * Quaternion.Euler(90, 0, 0);
 
 			// A face rotation has been detected !
-			// (at this point snake has already rotated to the new face)
+			// (at this point target has already rotated to the new face)
 			if(targetRotation != previousTargetRotation)
 			{
 				previousTargetRotation = targetRotation;
@@ -104,8 +105,9 @@ namespace Cameras
 				oldHeart.Copy(cacheHeart);
 				cacheHeart.Copy(heart);
 
-				if(smoothRotationCoroutine != null)
+				if(smoothRotationCoroutine != null) {
 					StopCoroutine(smoothRotationCoroutine);
+				}
 				smoothRotationCoroutine = SmoothRotationCoroutine(targetRotation);
 				StartCoroutine(smoothRotationCoroutine);
 			}
@@ -114,32 +116,32 @@ namespace Cameras
 		private IEnumerator SmoothRotationCoroutine(Quaternion targetHeart)
 		{
 			Vector3 lookUp;
-			Vector3 target;
+			Vector3 tgt;
 			int rightDot;
 			int forwardDot;
 			float previousAngle;
 			float angle;
 
 
-			rightDot = Mathf.RoundToInt(Vector3.Dot(snake.right, heart.right));
+			rightDot = Mathf.RoundToInt(Vector3.Dot(target.right, heart.right));
 			forwardDot = Mathf.RoundToInt(Vector3.Dot(oldHeart.up, -rightDot * heart.forward));
 			lookUp = heart.forward + rightDot * forwardDot * heart.up;
 
 
-			// Camera looks at snake during face rotation
+			// Camera looks at target during face rotation
 			do {
-				target = GetSnakeTargetLockAxis(rightDot);
-				myTransform.LookAt(target, lookUp);
+				tgt = GetTargetLockAxis(rightDot);
+				myTransform.LookAt(tgt, lookUp);
 				angle = Quaternion.Angle(myTransform.rotation, targetHeart);
 
 				yield return null;
 			}
 			while(angle > 10f);
 
-			// Camera continues to look at snake until it reaches best angle
+			// Camera continues to look at target until it reaches best angle
 			do {
-				target = GetSnakeTargetLockAxis(rightDot);
-				myTransform.LookAt(target, lookUp);
+				tgt = GetTargetLockAxis(rightDot);
+				myTransform.LookAt(tgt, lookUp);
 				previousAngle = angle;
 				angle = Quaternion.Angle(myTransform.rotation, targetHeart);
 
@@ -158,9 +160,9 @@ namespace Cameras
 			smoothRotationCoroutine = null;
 		}
 
-		private Vector3 GetSnakeTargetLockAxis(int dot)
+		private Vector3 GetTargetLockAxis(int dot)
 		{
-			Vector3 target = snake.position;
+			Vector3 tgt = target.position;
 
 			// dot == 0 -> heart rotate around its z axis
 			// dot != 0 -> heart rotate around its x axis
@@ -168,22 +170,24 @@ namespace Cameras
 			// We use old heart rotation for the calculus
 
 			if(dot == 0) {
-				if(Mathf.RoundToInt(Vector3.Dot(oldHeart.forward, Vector3.right)) != 0)
-					target.Set(myTransform.position.x, target.y, target.z);
-				else if(Mathf.RoundToInt(Vector3.Dot(oldHeart.forward, Vector3.up)) != 0)
-					target.Set(target.x, myTransform.position.y, target.z);
-				else
-					target.Set(target.x, target.y, myTransform.position.z);
+				if(Mathf.RoundToInt(Vector3.Dot(oldHeart.forward, Vector3.right)) != 0) {
+					tgt.Set(myTransform.position.x, tgt.y, tgt.z);
+				} else if(Mathf.RoundToInt(Vector3.Dot(oldHeart.forward, Vector3.up)) != 0) {
+					tgt.Set(tgt.x, myTransform.position.y, tgt.z);
+				} else {
+					tgt.Set(tgt.x, tgt.y, myTransform.position.z);
+				}
 			} else {
-				if(Mathf.RoundToInt(Vector3.Dot(oldHeart.right, Vector3.right)) != 0)
-					target.Set(myTransform.position.x, target.y, target.z);
-				else if(Mathf.RoundToInt(Vector3.Dot(oldHeart.right, Vector3.up)) != 0)
-					target.Set(target.x, myTransform.position.y, target.z);
-				else
-					target.Set(target.x, target.y, myTransform.position.z);
+				if(Mathf.RoundToInt(Vector3.Dot(oldHeart.right, Vector3.right)) != 0) {
+					tgt.Set(myTransform.position.x, tgt.y, tgt.z);
+				} else if(Mathf.RoundToInt(Vector3.Dot(oldHeart.right, Vector3.up)) != 0) {
+					tgt.Set(tgt.x, myTransform.position.y, tgt.z);
+				} else {
+					tgt.Set(tgt.x, tgt.y, myTransform.position.z);
+				}
 			}
 
-			return target;
+			return tgt;
 		}
 	}
 }

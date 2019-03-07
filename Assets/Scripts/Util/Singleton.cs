@@ -31,11 +31,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : class
 		}
 	}
 
-	protected virtual void Start()
-	{
-		// empty
-	}
-
 	protected virtual void OnDisable()
     {
         instance = null;

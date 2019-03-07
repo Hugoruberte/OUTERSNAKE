@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tools;
 
 public class LazerTrap : TrapEntity
 {
 	private PoolingManager poolingManager;
+
+	private Transform muzzle;
 
 	protected override void Start()
 	{
@@ -14,6 +17,8 @@ public class LazerTrap : TrapEntity
 		// this.behaviour = LazerTrapAI.instance.Launch(this);
 
 		poolingManager = PoolingManager.instance;
+
+		this.muzzle = transform.DeepFind("Muzzle");
 
 		this.Attack();
 	}
@@ -26,7 +31,7 @@ public class LazerTrap : TrapEntity
 			return;
 		}
 
-		lazer.Initialize(myTransform.position, new Vector3(10, 15, 10));
+		lazer.Initialize(muzzle.position, muzzle.forward);
 
 		lazer.Launch();
 	}

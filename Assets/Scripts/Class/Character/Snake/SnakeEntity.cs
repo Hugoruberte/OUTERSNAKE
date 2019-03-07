@@ -27,5 +27,13 @@ namespace Snakes
 
 			this.SetInteractiveState(new Fire(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
 		}
+
+		protected override void Start()
+		{
+			base.Start();
+
+			// initialize cell
+			this.cellable.Initialize(myTransform);
+		}
 	}
 }

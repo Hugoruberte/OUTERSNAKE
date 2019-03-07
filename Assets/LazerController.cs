@@ -34,10 +34,10 @@ public class LazerController : PoolableEntity
 		this.trailRenderer.widthMultiplier = lazerData.initialWidth;
 	}
 
-	public void Initialize(Vector3 from, Vector3 at)
+	public void Initialize(Vector3 from, Vector3 towards)
 	{
 		this.myTransform.position = from;
-		this.direction = (at - from).normalized;
+		this.direction = towards;
 	}
 
 	public override void Launch()

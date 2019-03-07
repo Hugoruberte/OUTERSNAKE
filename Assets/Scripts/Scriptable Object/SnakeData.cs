@@ -12,6 +12,8 @@ public class SnakeData : ScriptableObject
 	public float speed = 10f;
 	[Range(0.01f, 0.2f)]
 	public float positionAccuracy = 0.1f;
+	
+	[System.NonSerialized]
 	public bool cancelInput = false;
 
 	[Header("States")]

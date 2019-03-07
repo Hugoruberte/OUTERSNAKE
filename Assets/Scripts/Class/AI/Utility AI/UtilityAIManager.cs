@@ -15,7 +15,7 @@ public class UtilityAIManager : Singleton<UtilityAIManager>
 		}
 	}
 
-	protected override void Start()
+	void Start()
 	{
 		foreach(UtilityAIBehaviour b in this.behaviours) {
 			b.OnStart();
