@@ -5,12 +5,18 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "LazerData", menuName = "Scriptable Object/Data/LazerData", order = 3)]
 public class LazerData : ScriptableObject
 {
-	[Header("Paramaters")]
+	public enum LazerMode {
+		Shot = 0,
+		Continuous
+	}
+
+	[Header("Parameters")]
 	public float speed;
 	public float lifetime;
+	public LazerMode mode = LazerMode.Shot;
 	
-	[Header("Min Max Point per Distance")]
-	public Vector2 pointPerDistanceMinMax;
+	[Header("Min Max Distance per Point")]
+	public Vector2 distancePerPointMinMax;
 
 	[Header("Width")]
 	public float initialWidth;

@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
-using System;
 
 namespace Tools
 {
+	public static class CoroutineExtension
+	{
+		public static void StopAndStartCoroutine(this MonoBehaviour mono, IEnumerator handler, System.Func<IEnumerator> coroutine)
+		{
+			if(handler != null) {
+				mono.StopCoroutine(handler);
+			}
+			handler = coroutine();
+			mono.StartCoroutine(handler);
+		}
+	}
+
 	public class _Transform
 	{
 		public Vector3 right { get { return this.rotation * Vector3.right; }}

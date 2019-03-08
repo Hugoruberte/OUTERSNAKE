@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LazerTrapData
   m_EditorClassIdentifier: 
   speed: 10
-  lifetime: 5
-  pointPerDistanceMinMax: {x: 3, y: 7}
+  lifetime: 3
+  distancePerPointMinMax: {x: 5, y: 7}
   initialWidth: 1
   widthPointSpeed: 0.5
   widthSpeed: 10
