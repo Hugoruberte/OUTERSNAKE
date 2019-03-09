@@ -29,7 +29,7 @@ namespace Utility.AI
 				}
 
 				// discard this action, best it can do won't be greater than the current max
-				if(act.Max() < max) {
+				if(act.max < max) {
 					continue;
 				}
 

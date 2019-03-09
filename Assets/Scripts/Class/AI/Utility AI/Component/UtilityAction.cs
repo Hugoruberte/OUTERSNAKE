@@ -10,6 +10,14 @@ public class UtilityAction
 	// scorers
 	public List<UtilityScorer> scorers = new List<UtilityScorer>();
 
+	private int _max = int.MinValue;
+	public int max {
+		get {
+			if(_max == int.MinValue) { _max = this.Max(); }
+			return _max;
+		}
+	}
+
 	// inspector
 	public int index = 0;
 	public int score = 0;
@@ -22,8 +30,9 @@ public class UtilityAction
 	private IEnumerator coroutine = null;
 
 	// state
-	[System.NonSerialized] public bool isStoppable = false; // to be changed by the coroutine launched by this UtilityAction !
-	[System.NonSerialized] public bool isRunning = false; // to be changed by the coroutine launched by this UtilityAction !
+	[System.NonSerialized]
+	public bool isStoppable = false; // to be changed by the coroutine launched by this UtilityAction !
+	public bool isRunning { get; private set; } = false;
 	
 
 
@@ -44,26 +53,18 @@ public class UtilityAction
 		return score;
 	}
 
-	public int Max()
-	{
-		int max;
-
-		max = 0;
-		foreach(UtilityScorer s in this.scorers) {
-			max += s.Max();
-		}
-
-		return max;
-	}
-
 	public void Start(MovementController ctr, UtilityAIManager main)
 	{
 		if(this.action != null) {
 			this.isRunning = false;
 			this.action(ctr);
 		} else {
-			this.coroutine = this.coroutineFactory(ctr, this);
-			this.isRunning = true;
+			if(this.coroutine != null) {
+				Debug.Log("Ddhdhzdqnioufsdjjjjjjjjjjjjjjjjjjjj");
+			} else {
+				Debug.Log("Need to remove this...");
+			}
+			this.coroutine = this.CoroutineManager(ctr);
 			main.StartCoroutine(this.coroutine);
 		}
 	}
@@ -76,6 +77,7 @@ public class UtilityAction
 		}
 
 		main.StopCoroutine(this.coroutine);
+		this.coroutine = null;
 	}
 
 
@@ -109,6 +111,27 @@ public class UtilityAction
 		foreach(UtilityScorer sc in this.scorers) {
 			sc.Initialize(t);
 		}
+	}
+
+	private int Max()
+	{
+		int max;
+
+		max = 0;
+		foreach(UtilityScorer s in this.scorers) {
+			max += s.Max();
+		}
+
+		return max;
+	}
+
+	private IEnumerator CoroutineManager(MovementController ctr)
+	{
+		this.isRunning = true;
+
+		yield return this.coroutineFactory(ctr, this);
+
+		this.isRunning = false;
 	}
 
 

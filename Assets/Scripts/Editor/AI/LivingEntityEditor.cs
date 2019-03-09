@@ -39,11 +39,12 @@ public class LivingEntityEditor : InteractiveEntityEditor
 		base.OnInspectorGUI();
 
 		if(script.behaviour == null) {
-			guids = AssetDatabase.FindAssets("t:" + nameAI);
-			if(guids.Length > 0) {
-				path = AssetDatabase.GUIDToAssetPath(guids[0]);
-				script.behaviour = AssetDatabase.LoadAssetAtPath(path, typeof(WhiteRabbitAI)) as WhiteRabbitAI;
-			}
+			// guids = AssetDatabase.FindAssets("t:" + nameAI);
+			// if(guids.Length > 0) {
+			// 	path = AssetDatabase.GUIDToAssetPath(guids[0]);
+			// 	script.behaviour = AssetDatabase.LoadAssetAtPath(path, typeof(WhiteRabbitAI)) as WhiteRabbitAI;
+			// }
+			return;
 		}
 
 		rect = EditorGUILayout.GetControlRect(true, 0);

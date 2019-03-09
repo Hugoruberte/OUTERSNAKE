@@ -130,8 +130,6 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 
 		act.isStoppable = true;
 		yield return ctr.entity.StartCoroutine(rtr.Rest());
-
-		act.isRunning = false;
 	}
 
 	public IEnumerator RunAway(MovementController ctr, UtilityAction act)
@@ -142,7 +140,5 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 
 		Transform from = this.danger ?? this.snake;
 		yield return ctr.entity.StartCoroutine(rtr.StepToRunAway(from));
-		
-		act.isRunning = false;
 	}
 }
