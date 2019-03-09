@@ -38,8 +38,9 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public float DistanceToDanger(MovementController ctr)
+	public float DistanceToNearestTarget(MovementController ctr)
 	{
+		Debug.Log("TO DO");
 		return 0f;
 	}
 
@@ -56,10 +57,17 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public IEnumerator Patrol(MovementController ctr, UtilityAction act)
+	public IEnumerator Wander(MovementController ctr, UtilityAction act)
 	{
-		act.isStoppable = false;
+		Debug.Log("TO DO");
+		act.isStoppable = true;
+		yield return ctr.Wander();
+	}
 
+	public IEnumerator Aim(MovementController ctr, UtilityAction act)
+	{
+		Debug.Log("TO DO");
+		act.isStoppable = true;
 		yield return null;
 	}
 }

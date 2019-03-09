@@ -45,12 +45,12 @@ public class UtilityAction
 
 	public int Score(MovementController ctr)
 	{
-		score = 0;
+		this.score = 0;
 		foreach(UtilityScorer s in this.scorers) {
-			score += s.Score(ctr);
+			this.score += s.Score(ctr);
 		}
 
-		return score;
+		return this.score;
 	}
 
 	public void Start(MovementController ctr, UtilityAIManager main)
@@ -162,6 +162,7 @@ public class UtilityAction
 
 	public void RemoveScorerAt(int index)
 	{
+		// only does that
 		this.scorers.RemoveAt(index);
 	}
 }

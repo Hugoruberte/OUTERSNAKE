@@ -123,13 +123,11 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 
 	public IEnumerator Wander(MovementController ctr, UtilityAction act)
 	{
-		RabbitController rtr = ctr as RabbitController;
-
 		act.isStoppable = false;
-		yield return ctr.entity.StartCoroutine(rtr.StepToWander());
+		yield return ctr.Wander();
 
 		act.isStoppable = true;
-		yield return ctr.entity.StartCoroutine(rtr.Rest());
+		yield return ctr.Rest();
 	}
 
 	public IEnumerator RunAway(MovementController ctr, UtilityAction act)
@@ -139,6 +137,6 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 		act.isStoppable = false;
 
 		Transform from = this.danger ?? this.snake;
-		yield return ctr.entity.StartCoroutine(rtr.StepToRunAway(from));
+		yield return rtr.RunAway(from);
 	}
 }

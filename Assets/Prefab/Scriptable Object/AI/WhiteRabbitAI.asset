@@ -23,15 +23,14 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      _max: 0
       method: RabbitIsScared
       index: 0
     index: 2
     score: 0
     method: Wander
     active: 1
-    isStoppable: 1
-    isRunning: 1
-  lastUpdate: 18.42133
+  lastUpdate: 5.227258
   updateRate: 0.2
   actionCandidates:
   - EatFood

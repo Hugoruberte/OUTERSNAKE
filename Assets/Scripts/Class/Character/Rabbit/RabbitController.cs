@@ -31,7 +31,7 @@ public abstract class RabbitController : MovementController
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public virtual IEnumerator StepToWander()
+	public override IEnumerator Wander()
 	{
 		// declaration
 		Cell c;
@@ -48,7 +48,16 @@ public abstract class RabbitController : MovementController
 		}
 	}
 
-	public virtual IEnumerator StepToRunAway(Transform from)
+	public override IEnumerator Rest()
+	{
+		float duration;
+
+		duration = Random.Range(this.rabbit.minAfterJumpTempo, this.rabbit.maxAfterJumpTempo);
+
+		yield return new WaitForSeconds(duration);
+	}
+
+	public virtual IEnumerator RunAway(Transform from)
 	{
 		// declaration
 		Cell c, current;
@@ -76,6 +85,8 @@ public abstract class RabbitController : MovementController
 			yield return this.StepTowards(c);
 		}
 	}
+
+
 
 
 
@@ -125,16 +136,7 @@ public abstract class RabbitController : MovementController
 		yield return this.JumpTo(c, from, look, this.entity.myTransform.up, ROTATION_SPEED);
 	}
 
-	public virtual IEnumerator Rest()
-	{
-		float duration;
-
-		duration = Random.Range(this.rabbit.minAfterJumpTempo, this.rabbit.maxAfterJumpTempo);
-
-		yield return new WaitForSeconds(duration);
-	}
-
-
+	
 
 
 

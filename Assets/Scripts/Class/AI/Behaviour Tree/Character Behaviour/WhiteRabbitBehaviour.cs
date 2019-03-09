@@ -20,7 +20,7 @@ public class WhiteRabbitBehaviour : BehaviourTree
 	// 			// and if rabbit is scared
 	// 			If(wr.RabbitIsScared).Sequence(
 	// 				// then
-	// 				Do(wr.StepToRunAway)
+	// 				Do(wr.RunAway)
 	// 			),
 
 	// 			// else
@@ -48,7 +48,7 @@ public class WhiteRabbitBehaviour : BehaviourTree
 	// 			// and if player is nearby
 	// 			If(wr.SnakeIsNearby).Sequence(
 	// 				// then
-	// 				Do(wr.StepToRunAway)
+	// 				Do(wr.RunAway)
 	// 			),
 
 	// 			// else
@@ -72,7 +72,7 @@ public class WhiteRabbitBehaviour : BehaviourTree
 	// {
 	// 	BTNode root = Sequence(
 
-	// 		Do(wr.StepToWander),
+	// 		Do(wr.Wander),
 	// 		// this allow to cancel the temporization
 	// 		// if the rabbit is in danger
 	// 		If(wr.RabbitIsOkay).Sequence(Do(wr.Temporize))

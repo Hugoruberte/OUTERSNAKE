@@ -15,7 +15,9 @@ MonoBehaviour:
   actions: []
   lastUpdate: 0
   updateRate: 0.02
-  actionCandidates: []
+  actionCandidates:
+  - Patrol
   scorerConditionCandidates: []
-  scorerCurveCandidates: []
+  scorerCurveCandidates:
+  - DistanceToDanger
   displayScorers: 

@@ -10,7 +10,7 @@ public class WhiteRabbitController : RabbitController
 
 
 
-	public override IEnumerator StepToWander()
+	public override IEnumerator Wander()
 	{
 		// declaration
 		Cell c;
@@ -36,7 +36,7 @@ public class WhiteRabbitController : RabbitController
 		}
 	}
 
-	public override IEnumerator StepToRunAway(Transform from)
+	public override IEnumerator RunAway(Transform from)
 	{
 		// declaration
 		Cell c, current;
