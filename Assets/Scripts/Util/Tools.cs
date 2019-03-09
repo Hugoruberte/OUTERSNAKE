@@ -5,18 +5,6 @@ using System.Collections.Generic;
 
 namespace Tools
 {
-	public static class CoroutineExtension
-	{
-		public static void StopAndStartCoroutine(this MonoBehaviour mono, IEnumerator handler, System.Func<IEnumerator> coroutine)
-		{
-			if(handler != null) {
-				mono.StopCoroutine(handler);
-			}
-			handler = coroutine();
-			mono.StartCoroutine(handler);
-		}
-	}
-
 	public class _Transform
 	{
 		public Vector3 right { get { return this.rotation * Vector3.right; }}
@@ -48,6 +36,26 @@ namespace Tools
 		public void Copy(_Transform tr) {
 			this.position = tr.position;
 			this.rotation = tr.rotation;
+		}
+	}
+
+	public static class LayerMaskExtension
+	{
+		public static bool IsInLayerMask(this int layerMask, int layer)
+		{
+			return (layerMask == (layerMask | (1 << layer)));
+		}
+	}
+
+	public static class CoroutineExtension
+	{
+		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, System.Func<IEnumerator> coroutine)
+		{
+			if(handler != null) {
+				mono.StopCoroutine(handler);
+			}
+			handler = coroutine();
+			mono.StartCoroutine(handler);
 		}
 	}
 

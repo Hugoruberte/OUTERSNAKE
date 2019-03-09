@@ -10,16 +10,18 @@ public class LazerData : ScriptableObject
 		Continuous
 	}
 
-	[Header("Parameters")]
 	public float speed;
 	public float lifetime;
+	public bool bounce;
 	public LazerMode mode = LazerMode.Shot;
-	
-	[Header("Min Max Distance per Point")]
-	public Vector2 distancePerPointMinMax;
 
-	[Header("Width")]
-	public float initialWidth;
-	public float widthPointSpeed;
+	public bool easyAim;
+
+	public float length;
+	
+	public float width;
 	public float widthSpeed;
+
+	public float widthPointSpeed;
+	public Vector2 distancePerPointMinMax;
 }

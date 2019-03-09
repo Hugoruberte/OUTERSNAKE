@@ -6,25 +6,37 @@ using Tools;
 public class LazerController : PoolableEntity
 {
 	private Transform myTransform;
-	private Transform trailTransform;
+	private Rigidbody trailRigidbody;
 
 	private TrailRenderer trailRenderer;
 	
 	private Vector3 direction;
 
-	private IEnumerator behaviourCoroutine = null;
-
 	private AnimationCurve curve = new AnimationCurve();
 
 	private bool[] widthPoints;
-	private bool move = true;
 
-	private int lazerLayerMask;
+	private bool _move;
+	private bool move {
+		get { return this._move; }
+		set {
+			this._move = value;
+			if(!value) {
+				this.trailRigidbody.velocity = Vector3.zero;
+			}
+		}
+	}
+	private bool dying;
+	private bool hitSomething;
 
-	private const float CHECK_COLLISION_ACCURACY = 0.075f;
+	[HideInInspector]
+	public static int lazerLayerMask;
+	private static int bounceLayerMask;
 
-	// public delegate void OnLazerHit();
+	private float startTime;
 
+	public delegate void OnLazerHit(Collision other);
+	private OnLazerHit onLazerHit = null;
 
 	public LazerData lazerData;
 
@@ -35,84 +47,150 @@ public class LazerController : PoolableEntity
 
 		this.myTransform = transform;
 		this.trailRenderer = GetComponentInChildren<TrailRenderer>();
-		this.trailTransform = trailRenderer.transform;
+		this.trailRigidbody = trailRenderer.GetComponent<Rigidbody>();
 
-		// set
-		this.trailRenderer.time = lazerData.lifetime;
-		this.trailRenderer.widthMultiplier = lazerData.initialWidth;
+		lazerLayerMask = (1 << LayerMask.NameToLayer("Ground"))
+					   | (1 << LayerMask.NameToLayer("Snake"))
+					   | (1 << LayerMask.NameToLayer("Snake Body"));
 
-		this.lazerLayerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Player"));
+		bounceLayerMask = (1 << LayerMask.NameToLayer("Ground"))
+						| (1 << LayerMask.NameToLayer("Snake Body"));
 	}
 
-	public void Initialize(Vector3 from, Vector3 towards)
+	public void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
 	{
 		this.myTransform.position = from;
 		this.direction = towards;
+		this.onLazerHit = callback;
 	}
 
 	public override void Launch()
 	{
 		base.Launch();
 
-		this.StopAndStartCoroutine(this.behaviourCoroutine, LifetimeCoroutine);
+		this.startTime = Time.time;
+		this.move = true;
 	}
 
 	void Update()
 	{
-		if(move) {
-			this.trailTransform.Translate(this.direction * this.lazerData.speed * Time.deltaTime);
+		// Lifetime
+		if((Time.time > this.startTime + this.lazerData.lifetime) && this.dying == false && this.hitSomething == false) {
+			this.Death(true);
 		}
 	}
 
-	private IEnumerator LifetimeCoroutine()
+	void FixedUpdate()
 	{
-		// declaration
-		float clock, check, radius;
-		bool hitSomething;
+		// Movement
+		if(this.move) {
+			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+		}
+	}
 
-		// initialization
-		clock = check = 0f;
-		hitSomething = false;
-		radius = (this.lazerData.initialWidth / 2f) - 0.1f;
+	public void Hit(Collision other)
+	{
+		this.hitSomething = true;
 
-		while(clock < this.lazerData.lifetime) {
-			clock += Time.deltaTime;
-			check += Time.deltaTime;
+		// Callback
+		this.onLazerHit(other);
 
-			if(check > CHECK_COLLISION_ACCURACY) {
-				check = 0f;
-
-				// check collision
-				if(Physics.CheckSphere(this.trailTransform.position, radius, this.lazerLayerMask, QueryTriggerInteraction.Collide)) {
-					Debug.Log("Hit !!");
-					hitSomething = true;
-					break;
-				}
-			}
-
-			yield return null;
+		// Bounce
+		if(this.lazerData.bounce && bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
+			
+			this.direction = Vector3.Reflect(this.direction, other.contacts[0].normal);
+			this.hitSomething = false;
+			return;
 		}
 
-		if(hitSomething) {
-			// width point
+		this.move = false;
+			
+		this.Death(false);
+	}
+
+	private void Death(bool hitNothing)
+	{
+		this.dying = true;
+
+		if(this.lazerData.mode == LazerData.LazerMode.Shot) {
+			StartCoroutine(this.DeathShotCoroutine(hitNothing));
 		} else {
-			// global width
-			yield return this.WidthCoroutine();
+			StartCoroutine(this.DeathContinuousCoroutine());
 		}
+	}
+
+	private IEnumerator DeathShotCoroutine(bool hitNothing)
+	{
+		if(hitNothing) {
+			yield return this.WidthCoroutine();
+		} else {
+			yield return new WaitForSeconds(this.trailRenderer.time + 0.2f);
+		}
+		
+		// stow
+		this.poolingManager.Stow(this);
+	}
+
+	private IEnumerator DeathContinuousCoroutine()
+	{
+		this.move = false;
+
+		// width point
+		this.InitializeWidthPoint();
+		this.StartCoroutine(this.WidthPointCoroutine());
+		yield return this.WidthCoroutine();
 
 		// stow
 		this.poolingManager.Stow(this);
 	}
 
+	private IEnumerator WidthCoroutine()
+	{
+		float step = 0f;
+
+		while(step < 1f) {
+
+			step += this.lazerData.widthSpeed * Time.deltaTime;
+			this.trailRenderer.widthMultiplier = Mathf.Lerp(lazerData.width, 0f, step);
+
+			yield return null;
+		}
+
+		this.trailRenderer.widthMultiplier = 0f;
+	}
+
 	public override void Reset()
 	{
+		// coroutine
+		this.StopAllCoroutines();
+
 		// width
 		this.ClearWidthPoint();
 		this.curve.AddKey(0f, 1f);
 		this.curve.AddKey(1f, 1f);
 		this.trailRenderer.widthCurve = curve;
+		this.trailRenderer.widthMultiplier = this.lazerData.width;
 
-		this.trailTransform.localPosition = Vector3.zero;
+		// callback
+		this.onLazerHit = null;
+
+		// time
+		if(this.lazerData.mode == LazerData.LazerMode.Shot) {
+			this.trailRenderer.time = this.lazerData.length / this.lazerData.speed;
+		} else {
+			this.trailRenderer.time = float.MaxValue;
+		}
+
+		// boolean
+		this.hitSomething = false;
+		this.dying = false;
+		this.move = false;
+		
+		// position
+		this.trailRigidbody.transform.localPosition = Vector3.zero;
+
+		// trail
+		this.trailRenderer.Clear();
 
 		base.Reset();
 	}
@@ -131,6 +209,12 @@ public class LazerController : PoolableEntity
 
 
 	
+
+
+
+	
+
+
 
 
 
@@ -157,7 +241,9 @@ public class LazerController : PoolableEntity
 		float time, distancePerPoint, instantLength;
 		int nbOfPoint;
 
-		instantLength = Vector3.Distance(this.myTransform.position, this.trailTransform.position);
+		this.ClearWidthPoint();
+
+		instantLength = (Time.time - this.startTime) * this.lazerData.speed;
 		distancePerPoint = Random.Range(this.lazerData.distancePerPointMinMax[0], this.lazerData.distancePerPointMinMax[1]);
 		nbOfPoint = Mathf.CeilToInt(instantLength / distancePerPoint) + 1;
 		this.widthPoints = new bool[nbOfPoint];
@@ -165,7 +251,7 @@ public class LazerController : PoolableEntity
 		for(int i = 0; i < nbOfPoint; i++) {
 			time = Mathf.Min(i * distancePerPoint / instantLength, 1f);
 
-			this.widthPoints[i] = (Random.Range(0, 2) == 0);
+			this.widthPoints[i] = (Random.Range(0, 100) < 75);
 			this.curve.AddKey(time, 1f);
 		}
 	}
@@ -181,6 +267,9 @@ public class LazerController : PoolableEntity
 			value = Mathf.Lerp(1f, 0f, step);
 
 			for(int i = 0; i < length; i++) {
+				if(i >= this.widthPoints.Length) {
+					break;
+				}
 				if(!this.widthPoints[i]) {
 					continue;
 				}
@@ -191,20 +280,5 @@ public class LazerController : PoolableEntity
 			this.trailRenderer.widthCurve = curve;
 			yield return null;
 		}
-	}
-
-	private IEnumerator WidthCoroutine()
-	{
-		float step = 0f;
-
-		while(step < 1f) {
-
-			step += this.lazerData.widthSpeed * Time.deltaTime;
-			this.trailRenderer.widthMultiplier = Mathf.Lerp(lazerData.initialWidth, 0f, step);
-
-			yield return null;
-		}
-
-		this.trailRenderer.widthMultiplier = 0f;
 	}
 }

@@ -19,8 +19,6 @@ public class LazerTrap : TrapEntity
 		poolingManager = PoolingManager.instance;
 
 		this.muzzle = transform.DeepFind("Muzzle");
-
-		this.Attack();
 	}
 
 	private void Attack()
@@ -31,8 +29,20 @@ public class LazerTrap : TrapEntity
 			return;
 		}
 
-		lazer.Initialize(muzzle.position, muzzle.forward);
+		lazer.Initialize(muzzle.position, muzzle.forward, OnHit);
 
 		lazer.Launch();
+	}
+
+	private void OnHit(Collision other)
+	{
+		Debug.Log("TO DO");
+	}
+
+	void Update()
+	{
+		if(Input.GetButtonDown("Space")) {
+			this.Attack();
+		}
 	}
 }

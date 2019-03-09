@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 5858356031097560461}
   - component: {fileID: 5858356031097560463}
   - component: {fileID: 288344288}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Snake
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c941d6d924e82489246d4cc368e3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snakeManager: {fileID: 11400000, guid: ebcb4bcc62cf297478a5c77b2ce6fd06, type: 2}
 --- !u!114 &288344288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,8 +199,7 @@ MonoBehaviour:
   speed: 2
   maxStepDistance: 2
   rangeOfView: 5
-  behaviour: {fileID: 0}
   isTired: 0
   isHungry: 0
   isScared: 0
-  snakeManager: {fileID: 11400000, guid: ebcb4bcc62cf297478a5c77b2ce6fd06, type: 2}
+  behaviour: {fileID: 0}

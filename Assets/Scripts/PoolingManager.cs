@@ -24,7 +24,6 @@ public class PoolingManager : Singleton<PoolingManager>
 		PoolingData.Pool pool = this.poolingData.pools.Find(x => x.prefab is T);
 
 		if(pool.prefab != null) {
-			Debug.Log(pool.prefab);
 			foreach(PoolableEntity e in pool.objects) {
 				if(!e.isActive) {
 
@@ -33,9 +32,12 @@ public class PoolingManager : Singleton<PoolingManager>
 				}
 			}
 		}
+
+		if(entity != null) {
+			entity.isActive = true;
+			entity.transform.parent = null;
+		}
 		
-		entity.isActive = true;
-		entity.transform.parent = null;
 		return entity as T;
 	}
 
