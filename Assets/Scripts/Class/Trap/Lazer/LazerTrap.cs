@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tools;
+using Lazers;
 
 public class LazerTrap : TrapEntity
 {
@@ -34,7 +35,7 @@ public class LazerTrap : TrapEntity
 		lazer.Launch();
 	}
 
-	private void OnHit(Collision other)
+	private void OnHit(LazerHit other)
 	{
 		Debug.Log("TO DO");
 	}

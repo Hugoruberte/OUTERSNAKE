@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: LazerTrapContinuousData
   m_EditorClassIdentifier: 
   speed: 75
-  lifetime: 1
+  lifetime: 10
   bounce: 1
   mode: 1
-  distancePerPointMinMax: {x: 1, y: 5}
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  bounceLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  easyAim: 0
   length: 5
-  lengthSpeed: 5
   width: 0.2
-  widthPointSpeed: 5
-  widthSpeed: 2
+  widthSpeed: 1
+  widthPointSpeed: 4
+  distancePerPointMinMax: {x: 2, y: 5}

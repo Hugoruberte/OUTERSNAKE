@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PoolingData
   m_EditorClassIdentifier: 
   pools:
-  - prefab: {fileID: 6496802672037794782, guid: d9474ebf735b3364ca6cc1da70982d54,
+  - prefab: {fileID: 6496802672037794782, guid: fceecaf78b5fd3045b7bd968dff41b21,
       type: 3}
     size: 10

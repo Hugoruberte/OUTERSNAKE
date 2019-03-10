@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using UnityEngine.UI;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 
 namespace Tools
 {
@@ -44,6 +47,51 @@ namespace Tools
 		public static bool IsInLayerMask(this int layerMask, int layer)
 		{
 			return (layerMask == (layerMask | (1 << layer)));
+		}
+		public static bool IsInLayerMask(this LayerMask layerMask, int layer)
+		{
+			return layerMask.value.IsInLayerMask(layer);
+		}
+
+		public static string[] GetAllLayerName()
+		{
+			List<string> layerNames = new List<string>();
+			string layerN;
+
+			for(int i = 0; i < 32; i++) {
+				layerN = LayerMask.LayerToName(i);
+
+				if(layerN.Length > 0) {
+					layerNames.Add(layerN);
+				}
+			}
+
+			return layerNames.ToArray();
+		}
+
+		public static string[] GetAllUserLayerName()
+		{
+			List<string> layerNames = new List<string>();
+			string layerN;
+
+			for(int i = 8; i < 32; i++) {
+				layerN = LayerMask.LayerToName(i);
+
+				if(layerN.Length > 0) {
+					layerNames.Add(layerN);
+				}
+			}
+
+			return layerNames.ToArray();
+		}
+	}
+
+	public static class EditorGUILayoutExtension
+	{
+		public static LayerMask ConcatenatedMaskField(string name, LayerMask current)
+		{
+			LayerMask tempMask = EditorGUILayout.MaskField(name, InternalEditorUtility.LayerMaskToConcatenatedLayersMask(current), InternalEditorUtility.layers);
+			return InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
 		}
 	}
 
@@ -332,34 +380,24 @@ namespace Tools
 
 	public static class ArrayExtension
 	{
-		public static string[] DeepCopy(string[] arr1)
+		public static void Split<T>(this T[] array, int index, out T[] first, out T[] second)
 		{
-			string[] arr2 = new string[arr1.Length];
-			for(int i = 0; i < arr1.Length; i++)
-			arr2[i] = arr1[i];
-			return arr2;
+			first = array.Take(index).ToArray();
+			second = array.Skip(index).ToArray();
 		}
 
-		public static string[] DeepCopy(List<string> lis1)
+		public static void Split<T>(this T[] array, out T[] first, out T[] second)
 		{
-			List<string> lis2 = new List<string>(lis1);
-			return lis2.ToArray();
+			ArrayExtension.Split(array, array.Length / 2, out first, out second);
 		}
 
-		public static Vector3[] DeepCopy(Vector3[] arr1)
+		public static T[] DeepCopy<T>(T[] array)
 		{
-			Vector3[] arr2 = new Vector3[arr1.Length];
-			for(int i = 0; i < arr1.Length; i++)
-			arr2[i] = arr1[i];
-			return arr2;
-		}
-
-		public static Quaternion[] DeepCopy(Quaternion[] arr1)
-		{
-			Quaternion[] arr2 = new Quaternion[arr1.Length];
-			for(int i = 0; i < arr1.Length; i++)
-			arr2[i] = arr1[i];
-			return arr2;
+			T[] a = new T[array.Length];
+			for(int i = 0; i < array.Length; i++) {
+				a[i] = array[i];
+			}
+			return a;
 		}
 	}
 

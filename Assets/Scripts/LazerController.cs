@@ -1,7 +1,43 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Tools;
+using Lazers;
+
+namespace Lazers
+{
+	public struct LazerHit {
+		public Vector3 normal;
+		public Vector3 point;
+		public GameObject other;
+
+		public LazerHit(Collision c) {
+			this.normal = GetContactNormalSum(c);
+			this.point = c.contacts[0].point;
+			this.other = c.gameObject;
+		}
+
+		public LazerHit(RaycastHit h) {
+			this.normal = h.normal;
+			this.point = h.point;
+			this.other = h.transform.gameObject;
+		}
+
+		public static Vector3 GetContactNormalSum(Collision c)
+		{
+			Vector3 sum = Vector3.zero;
+
+			foreach(ContactPoint p in c.contacts) {
+				sum.Set(sum.x + p.normal.x, sum.y + p.normal.y, sum.z + p.normal.z);
+			}
+
+			return sum.normalized;
+		}
+	}
+
+	public delegate void OnLazerHit(LazerHit other);
+}
 
 public class LazerController : PoolableEntity
 {
@@ -10,12 +46,27 @@ public class LazerController : PoolableEntity
 
 	private TrailRenderer trailRenderer;
 	
-	private Vector3 direction;
+	private List<Vector3> hitPoints;
+	// private Vector3 surfaceNormal;
+	private Vector3 _direction;
+	private Vector3 direction {
+		get { return this._direction; }
+		set {
+			if(this.lazerData.flatten) {
+				Debug.Log("TO DO");
+				// value = Vector3.ProjectOnPlane(value, this.surfaceNormal);
+			}
+			this._direction = value;
+		}
+	}
 
 	private AnimationCurve curve = new AnimationCurve();
 
 	private bool[] widthPoints;
 
+	private bool shouldCheckRaycast;
+	private bool dying;
+	private bool hitSomething;
 	private bool _move;
 	private bool move {
 		get { return this._move; }
@@ -26,16 +77,9 @@ public class LazerController : PoolableEntity
 			}
 		}
 	}
-	private bool dying;
-	private bool hitSomething;
-
-	[HideInInspector]
-	public static int lazerLayerMask;
-	private static int bounceLayerMask;
 
 	private float startTime;
 
-	public delegate void OnLazerHit(Collision other);
 	private OnLazerHit onLazerHit = null;
 
 	public LazerData lazerData;
@@ -49,12 +93,10 @@ public class LazerController : PoolableEntity
 		this.trailRenderer = GetComponentInChildren<TrailRenderer>();
 		this.trailRigidbody = trailRenderer.GetComponent<Rigidbody>();
 
-		lazerLayerMask = (1 << LayerMask.NameToLayer("Ground"))
-					   | (1 << LayerMask.NameToLayer("Snake"))
-					   | (1 << LayerMask.NameToLayer("Snake Body"));
-
-		bounceLayerMask = (1 << LayerMask.NameToLayer("Ground"))
-						| (1 << LayerMask.NameToLayer("Snake Body"));
+		this.shouldCheckRaycast = (this.lazerData.bounce && this.lazerData.mode == LazerData.LazerMode.Continuous);
+		if(this.shouldCheckRaycast) {
+			this.hitPoints = new List<Vector3>();
+		}
 	}
 
 	public void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
@@ -62,6 +104,10 @@ public class LazerController : PoolableEntity
 		this.myTransform.position = from;
 		this.direction = towards;
 		this.onLazerHit = callback;
+
+		if(this.shouldCheckRaycast) {
+			this.hitPoints.Add(from + towards);
+		}
 	}
 
 	public override void Launch()
@@ -75,9 +121,31 @@ public class LazerController : PoolableEntity
 	void Update()
 	{
 		// Lifetime
-		if((Time.time > this.startTime + this.lazerData.lifetime) && this.dying == false && this.hitSomething == false) {
+		if((Time.time > this.startTime + this.lazerData.lifetime) && this.dying == false && this.hitSomething == false)
+		{
 			this.Death(true);
 		}
+		// else if(this.shouldCheckRaycast)
+		// {
+		// 	RaycastHit hit;
+		// 	for(int i = 0; i < this.hitPoints.Count - 1; i++) {
+		// 		Vector3 dir = (this.hitPoints[i+1] - this.hitPoints[i]).normalized;
+
+		// 		if(Physics.Linecast(this.hitPoints[i] + dir, this.hitPoints[i+1] - dir, out hit, this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
+		// 			this.Intersect(hit);
+		// 		}
+
+		// 		Debug.DrawLine(this.hitPoints[i] + dir, this.hitPoints[i+1] - dir, Color.white);
+		// 	}
+
+		// 	Vector3 last = this.hitPoints[this.hitPoints.Count - 1] + direction;
+		// 	if(Physics.Raycast(last, this.direction, out hit, Vector3.Distance(last, this.trailRigidbody.position - this.direction), this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
+
+		// 		this.Intersect(hit);
+		// 	}
+
+		// 	Debug.DrawRay(last, this.direction * Vector3.Distance(last, this.trailRigidbody.position - this.direction), Color.white);
+		// }
 	}
 
 	void FixedUpdate()
@@ -93,13 +161,17 @@ public class LazerController : PoolableEntity
 		this.hitSomething = true;
 
 		// Callback
-		this.onLazerHit(other);
+		this.onLazerHit(new LazerHit(other));
 
 		// Bounce
-		if(this.lazerData.bounce && bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
-			
-			this.direction = Vector3.Reflect(this.direction, other.contacts[0].normal);
+		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
+			this.direction = Vector3.Reflect(this.direction, LazerHit.GetContactNormalSum(other));
 			this.hitSomething = false;
+
+			if(this.shouldCheckRaycast) {
+				this.hitPoints.Add(other.contacts[0].point);
+			}
+
 			return;
 		}
 
@@ -107,6 +179,72 @@ public class LazerController : PoolableEntity
 			
 		this.Death(false);
 	}
+
+	// private void Intersect(RaycastHit hit)
+	// {
+	// 	Debug.Log("Intersect with " + hit.transform.name, hit.transform);
+
+	// 	this.hitSomething = true;
+
+	// 	// Callback
+	// 	this.onLazerHit(new LazerHit(hit));
+
+	// 	// Bounce
+	// 	if(lazerData.bounceLayerMask.IsInLayerMask(hit.transform.gameObject.layer)) {
+	// 		this.BounceOnIntersect(hit);
+	// 		return;
+	// 	}
+
+	// 	this.move = false;
+			
+	// 	this.Death(false);
+	// }
+
+	// private void BounceOnIntersect(RaycastHit hit)
+	// {
+	// 	Debug.Log("Bounce on intersect with " + hit.transform.name);
+
+	// 	// declaration
+	// 	int index, hitpointindex;
+	// 	Vector3[] pos;
+	// 	Vector3 hitpoint;
+
+	// 	// initialization
+	// 	index = 0;
+	// 	pos = new Vector3[this.trailRenderer.positionCount];
+	// 	this.trailRenderer.GetPositions(pos);
+	// 	hitpointindex = 0;
+	// 	hitpoint = this.hitPoints[hitpointindex];
+
+	// 	// bounce junk work
+	// 	this.direction = Vector3.Reflect(this.direction, hit.normal);
+	// 	this.hitSomething = false;
+
+	// 	// check bounce recalculation
+	// 	for(int i = 0; i < pos.Length; i++) {
+
+	// 		// check still valid hitpoints
+	// 		if(Vector3.Distance(pos[i], hitpoint) <= this.trailRenderer.minVertexDistance) {
+	// 			hitpoint = this.hitPoints[++ hitpointindex];
+	// 		}
+
+	// 		// check intersect point on trail
+	// 		if(Vector3.Distance(pos[i], hit.point) <= this.trailRenderer.minVertexDistance) {
+	// 			index = i;
+	// 			break;
+	// 		}
+	// 	}
+
+	// 	// hit points recalculation
+	// 	this.hitPoints.RemoveRange(hitpointindex, this.hitPoints.Count - hitpointindex);
+	// 	this.hitPoints.Add(hit.point);
+
+	// 	// trail recalculation
+	// 	this.trailRenderer.Clear();
+	// 	pos = pos.Take(index).ToArray();
+	// 	this.trailRenderer.SetPositions(pos);
+	// 	this.trailRigidbody.position = hit.point;
+	// }
 
 	private void Death(bool hitNothing)
 	{

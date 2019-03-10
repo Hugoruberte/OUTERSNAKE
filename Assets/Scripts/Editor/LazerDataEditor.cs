@@ -1,10 +1,21 @@
 using UnityEngine;
 using UnityEditor;
+using Tools;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(LazerData))]
 public class LazerDataEditor : Editor
 {
 	private Vector2 temp;
+
+	private static string[] options = null;
+
+	void OnEnable()
+	{
+		if(options == null) {
+			options = LayerMaskExtension.GetAllUserLayerName();
+		}
+	}
 
 	public override void OnInspectorGUI()
 	{
@@ -13,8 +24,16 @@ public class LazerDataEditor : Editor
 		EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
 		script.speed = EditorGUILayout.Slider("Speed", script.speed, 0.1f, 100f);
 		script.lifetime = EditorGUILayout.Slider("Lifetime", script.lifetime, 0.1f, 100f);
-		script.bounce = EditorGUILayout.Toggle("Is bouncing", script.bounce);
 		script.mode = (LazerData.LazerMode)EditorGUILayout.EnumPopup("Lazer Mode", script.mode);
+		script.flatten = EditorGUILayout.Toggle("Flatten lazer on surface", script.flatten);
+		script.bounce = EditorGUILayout.Toggle("Is bouncing", script.bounce);
+
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Layer Mask", EditorStyles.boldLabel);
+		script.hitLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Hit Layer Mask", script.hitLayerMask);
+		if(script.bounce) {
+			script.bounceLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Bounce Layer Mask", script.bounceLayerMask);
+		}
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Cheat", EditorStyles.boldLabel);

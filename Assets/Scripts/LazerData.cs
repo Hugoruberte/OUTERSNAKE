@@ -10,18 +10,28 @@ public class LazerData : ScriptableObject
 		Continuous
 	}
 
+	// Parameters
 	public float speed;
 	public float lifetime;
 	public bool bounce;
+	public bool flatten;
 	public LazerMode mode = LazerMode.Shot;
 
+	// Layer Mask
+	public LayerMask hitLayerMask;
+	public LayerMask bounceLayerMask;
+
+	// Cheat
 	public bool easyAim;
 
+	// Length
 	public float length;
 	
+	// Width
 	public float width;
 	public float widthSpeed;
 
+	// Width Point
 	public float widthPointSpeed;
 	public Vector2 distancePerPointMinMax;
 }

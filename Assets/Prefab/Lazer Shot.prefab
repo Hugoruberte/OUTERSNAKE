@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 6496802672037794781}
   - component: {fileID: 6496802672037794782}
   m_Layer: 0
-  m_Name: Lazer Continuous
+  m_Name: Lazer Shot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,4 +255,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
-  lazerData: {fileID: 11400000, guid: 8e8d3ea6239b2b34abc5287960a8b7b3, type: 2}
+  lazerData: {fileID: 11400000, guid: 1e892a9173e8e68479f5305459b23e3a, type: 2}
