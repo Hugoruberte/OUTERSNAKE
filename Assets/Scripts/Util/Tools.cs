@@ -97,12 +97,12 @@ namespace Tools
 
 	public static class CoroutineExtension
 	{
-		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, System.Func<IEnumerator> coroutine)
+		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, IEnumerator coroutine)
 		{
 			if(handler != null) {
 				mono.StopCoroutine(handler);
 			}
-			handler = coroutine();
+			handler = coroutine;
 			mono.StartCoroutine(handler);
 		}
 	}

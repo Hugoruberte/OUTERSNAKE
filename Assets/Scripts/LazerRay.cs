@@ -29,10 +29,8 @@ public class LazerRay : Lazer
 		}
 	}
 
-	protected override void Update()
+	private void Update()
 	{
-		base.Update();
-
 		// Bounce
 		if(this.lazerData.bounce)
 		{
@@ -59,7 +57,7 @@ public class LazerRay : Lazer
 
 	public override void Hit(Collision other)
 	{
-		this.hitSomething = true;
+		this.hiting = true;
 
 		// Callback
 		this.onLazerHit(new LazerHit(other));
@@ -68,7 +66,7 @@ public class LazerRay : Lazer
 		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
 			this.direction = Vector3.Reflect(this.direction, LazerHit.GetContactNormalSum(other));
 			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
-			this.hitSomething = false;
+			this.hiting = false;
 			this.hitPoints.Add(other.contacts[0].point);
 
 			return;
@@ -76,14 +74,14 @@ public class LazerRay : Lazer
 
 		this.trailRigidbody.velocity = Vector3.zero;
 			
-		this.Death(false);
+		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}
 
 	private void Intersect(RaycastHit hit)
 	{
 		// Debug.Log("Intersect with " + hit.transform.name, hit.transform);
 
-		// this.hitSomething = true;
+		// this.hiting = true;
 
 		// // Callback
 		// this.onLazerHit(new LazerHit(hit));
@@ -117,7 +115,7 @@ public class LazerRay : Lazer
 
 		// // bounce junk work
 		// this.direction = Vector3.Reflect(this.direction, hit.normal);
-		// this.hitSomething = false;
+		// this.hiting = false;
 
 		// // check bounce recalculation
 		// for(int i = 0; i < pos.Length; i++) {

@@ -49,8 +49,10 @@ public abstract class Lazer : PoolableEntity
 
 	protected AnimationCurve curve = new AnimationCurve();
 
-	private bool dying;
-	protected bool hitSomething;
+	protected IEnumerator behaviourCoroutine = null;
+
+	protected bool dying;
+	protected bool hiting;
 
 	protected float startTime;
 
@@ -80,24 +82,23 @@ public abstract class Lazer : PoolableEntity
 
 		this.startTime = Time.time;
 		this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+
+		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.LifeCoroutine());
 	}
 
-	protected virtual void Update()
+	private IEnumerator LifeCoroutine()
 	{
-		// Lifetime
-		if((Time.time > this.startTime + this.lazerData.lifetime) && this.dying == false && this.hitSomething == false) {
-			this.Death(true);
+		float clock = 0f;
+
+		while((clock >= this.lazerData.lifetime && !this.dying && !this.hiting) == false) {
+			clock += Time.deltaTime;
+			yield return null;
 		}
+
+		yield return this.DeathCoroutine(true);
 	}
 
 	public abstract void Hit(Collision other);
-
-	protected void Death(bool hitNothing)
-	{
-		this.dying = true;
-
-		this.StartCoroutine(this.DeathCoroutine(hitNothing));
-	}
 
 	protected abstract IEnumerator DeathCoroutine(bool hitNothing);
 
@@ -130,10 +131,11 @@ public abstract class Lazer : PoolableEntity
 		this.onLazerHit = null;
 
 		// boolean
-		this.hitSomething = false;
+		this.hiting = false;
 		this.dying = false;
 		
 		// rigidbody
+		this.direction = Vector3.zero;
 		this.trailRigidbody.velocity = Vector3.zero;
 		this.trailRigidbody.transform.localPosition = Vector3.zero;
 

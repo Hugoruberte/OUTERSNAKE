@@ -9,7 +9,7 @@ public class LazerShot : Lazer
 {
 	public override void Hit(Collision other)
 	{
-		this.hitSomething = true;
+		this.hiting = true;
 
 		// Callback
 		this.onLazerHit(new LazerHit(other));
@@ -18,17 +18,19 @@ public class LazerShot : Lazer
 		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
 			this.direction = Vector3.Reflect(this.direction, LazerHit.GetContactNormalSum(other));
 			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
-			this.hitSomething = false;
+			this.hiting = false;
 			return;
 		}
 
 		this.trailRigidbody.velocity = Vector3.zero;
-			
-		this.Death(false);
+
+		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}
 
 	protected override IEnumerator DeathCoroutine(bool hitNothing)
 	{
+		this.dying = true;
+
 		if(hitNothing) {
 			yield return this.WidthCoroutine();
 		} else {
