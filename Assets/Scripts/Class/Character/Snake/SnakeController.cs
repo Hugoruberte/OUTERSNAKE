@@ -4,25 +4,24 @@ using System.Collections.Generic;
 using Tools;
 using Snakes;
 
+[RequireComponent(typeof(Rigidbody))]
 public class SnakeController : MonoBehaviour 
 {
-	private SnakeData snakeData;
-
 	private Transform myTransform;
+	private Rigidbody myRigidbody;
 	private _Transform heart;
 
 	private IEnumerator moveCoroutine = null;
 	
-	private Vector3 targetPosition = Vector3.zero;
+	private Vector3 targetPosition;
+	private Vector3 direction;
 
 	private int right = 0;
 	private int forward = 0;
-	private int forwardStored = 0;
-	private int rightStored = 0;
-
+	private int forward_cache = 0;
+	private int right_cache = 0;
 	private const int WALL_DELAY = 2;
 	private const int LEDGE_DELAY = 5;
-
 	private int targetMask;
 
 	private FaceSwitcher faceswitcher = new FaceSwitcher(true);
@@ -30,19 +29,31 @@ public class SnakeController : MonoBehaviour
 	private SnakeMovementEvents events;
 
 
+
+
+	[Header("Motion")]
+	[Range(0.0f, 100.0f)] public float speed = 10f;
+	[Range(0.01f, 0.2f)] public float positionAccuracy = 0.1f;
+	
+	[HideInInspector] public bool cancelInput = false;
+
+	[Header("States")]
+	public SnakeMoveState state = SnakeMoveState.Idle;
+
+
 	void Awake()
 	{
-		myTransform = transform;
-		targetPosition = myTransform.AbsolutePosition();
+		this.myTransform = transform;
+		this.myRigidbody = GetComponent<Rigidbody>();
+		this.targetPosition = this.myTransform.AbsolutePosition();
 
-		targetMask = (1 << LayerMask.NameToLayer("Ground"));
+		this.targetMask = (1 << LayerMask.NameToLayer("Ground"));
 	}
 
 	void Start()
 	{
-		snakeData = SnakeManager.instance.snakeData;
-		events = SnakeManager.instance.events;
-		heart = HeartManager.instance.heart;
+		this.events = SnakeManager.instance.events;
+		this.heart = HeartManager.instance.heart;
 
 		this.StartSnakeMovement();
 	}
@@ -69,17 +80,17 @@ public class SnakeController : MonoBehaviour
 	public void StartSnakeMovement()
 	{
 		StopAllCoroutines();
-		moveCoroutine = UpdateSnakeMovementCoroutine();
-		StartCoroutine(moveCoroutine);
+		this.moveCoroutine = UpdateSnakeMovementCoroutine();
+		StartCoroutine(this.moveCoroutine);
 	}
 
 	public void StopSnakeMovement()
 	{
-		snakeData.cancelInput = true;
+		this.cancelInput = true;
 
 		StopAllCoroutines();
-		moveCoroutine = StopSnakeMovementCoroutine();
-		StartCoroutine(moveCoroutine);
+		this.moveCoroutine = StopSnakeMovementCoroutine();
+		StartCoroutine(this.moveCoroutine);
 	}
 
 	
@@ -101,85 +112,78 @@ public class SnakeController : MonoBehaviour
 	/* --------------------------------------------------------------------------------------------*/
 	private void GetInputs()
 	{
-		if(snakeData.cancelInput) {
+		if(this.cancelInput) {
 			return;
 		}
 			
 		int vertical = (int)Input.GetAxisRaw("Vertical");
 		int horizontal = (int)Input.GetAxisRaw("Horizontal");
 			
-		if(horizontal != 0 && right == 0)
-		{
-			rightStored = horizontal;
-			forwardStored = 0;
-		}	
-		else if(vertical != 0 && forward == 0)
-		{
-			forwardStored = vertical;
-			rightStored = 0;
+		if(horizontal != 0 && this.right == 0) {
+			this.right_cache = horizontal;
+			this.forward_cache = 0;
+		} else if(vertical != 0 && this.forward == 0) {
+			this.forward_cache = vertical;
+			this.right_cache = 0;
 		}
 		
-		if(snakeData.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
+		if(this.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
 		{
 			if(vertical == -1) {
-				myTransform.rotation = heart.rotation * Quaternion.Euler(0, 180, 0);
+				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, 180, 0);
 			} else if(horizontal != 0) {
-				myTransform.rotation = heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
+				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
 			}
 				
-			snakeData.state = SnakeMoveState.Run;
+			this.state = SnakeMoveState.Run;
 		}
 	}
 
 	private IEnumerator UpdateSnakeMovementCoroutine()
 	{
-		Vector3 direction;
-
 		while(true)
 		{
-			if(snakeData.state != SnakeMoveState.Run) {
+			if(this.state != SnakeMoveState.Run) {
 				yield return null;
 				continue;
 			}
 
 			// We are not switching faces and/or the switching is done : get inputs + snake rotation
-			ApplyInputs();
+			this.ApplyInputs();
 
-			// Calcul direction vector
-			direction = forward * heart.forward + right * heart.right;
+			// Calcul this.direction vector
+			this.direction = this.forward * this.heart.forward + this.right * this.heart.right;
 			
 			// Calcul next position
-			targetPosition = targetPosition + direction;
+			this.targetPosition = this.targetPosition + this.direction;
 
 			// If we are not currently changing faces :
-			if(faceswitcher.switching == false) {
+			if(this.faceswitcher.switching == false) {
 				// Search for possible new faces
-				SearchForNewFace(direction);
+				this.SearchForNewFace(this.direction);
 			}
 
 			// If found a new face :
-			if(faceswitcher.switching == true) {
+			if(this.faceswitcher.switching == true) {
 				// Rotate snake over face + adapt target position
-				targetPosition = ManageFaceRotationAndAdaptTargetPosition(direction);
+				this.targetPosition = this.ManageFaceRotationAndAdaptTargetPosition(this.direction);
 			}
 			
 			// Move snake according to previous calculated target position
-			if(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy) {
+			if(Vector3.Distance(this.myTransform.position, this.targetPosition) > this.positionAccuracy) {
 				// Events -> will reserve next cell + optional callback
-				events.onStartStep.Invoke(targetPosition, myTransform.up);
+				this.events.onStartStep.Invoke(this.targetPosition, this.myTransform.up);
 
-				while(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy)
-				{
-					myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, snakeData.speed * Time.deltaTime);
+				while(Vector3.Distance(this.myTransform.position, this.targetPosition) > this.positionAccuracy) {
+					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
 					yield return null;
 				}
 
-				myTransform.position = targetPosition;
+				this.myRigidbody.position = this.targetPosition;
 
 				// Event -> reserved cell become current cell + optional callback 
-				events.onEndStep.Invoke();
-			}
-			else {
+				this.events.onEndStep.Invoke();
+			} else {
 				// skip frame to avoid freeze
 				yield return null;
 			}
@@ -188,18 +192,17 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator StopSnakeMovementCoroutine()
 	{
-		while(Vector3.Distance(myTransform.position, targetPosition) > snakeData.positionAccuracy)
-		{
-			myTransform.position = Vector3.MoveTowards(myTransform.position, targetPosition, snakeData.speed * Time.deltaTime);
+		while(Vector3.Distance(this.myTransform.position, this.targetPosition) > this.positionAccuracy) {
+			this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
 			yield return null;
 		}
 
-		myTransform.position = targetPosition;
+		this.myRigidbody.position = this.targetPosition;
 
 		// Event
-		events.onEndStep.Invoke();
+		this.events.onEndStep.Invoke();
 
-		snakeData.cancelInput = false;
+		this.cancelInput = false;
 	}
 
 
@@ -220,20 +223,21 @@ public class SnakeController : MonoBehaviour
 	/* -------------------------------------------------------------------------------------------*/
 	private void ApplyInputs()
 	{
-		if(!faceswitcher.switching)
+		// If we are not switching faces
+		if(!this.faceswitcher.switching)
 		{
 			// Pass input value to direction values + rotate snake
-			if(forwardStored != 0 || rightStored != 0)
+			if(this.forward_cache != 0 || this.right_cache != 0)
 			{
-				forward = forwardStored;
-				right = rightStored;
-				forwardStored = 0;
-				rightStored = 0;
+				this.forward = this.forward_cache;
+				this.right = this.right_cache;
+				this.forward_cache = 0;
+				this.right_cache = 0;
 
-				if(right == 0) {
-					myTransform.rotation = heart.rotation * Quaternion.Euler(0, (1 - forward) * 90, 0);
+				if(this.right == 0) {
+					this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, (1 - this.forward) * 90, 0);
 				} else {
-					myTransform.rotation = heart.rotation * Quaternion.Euler(0, (right) * 90, 0);
+					this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, (this.right) * 90, 0);
 				}
 			}
 		}
@@ -242,16 +246,12 @@ public class SnakeController : MonoBehaviour
 	private void SearchForNewFace(Vector3 dir)
 	{
 		// Wall
-		if(Physics.Raycast(myTransform.position, dir, 1f, targetMask))
-		{
-			Debug.DrawRay(myTransform.position, dir, Color.red);
-			faceswitcher.SetFaceSwitching(WALL_DELAY, -dir, myTransform.position);
-		}
+		if(Physics.Raycast(this.myTransform.position, dir, 1f, this.targetMask)) {
+			this.faceswitcher.SetFaceSwitching(WALL_DELAY, -dir, this.myTransform.position);
+
 		// Ledge
-		else if(!Physics.Raycast(targetPosition, -heart.up, 1f, targetMask))
-		{
-			Debug.DrawRay(targetPosition, -heart.up, Color.red);
-			faceswitcher.SetFaceSwitching(LEDGE_DELAY, dir, targetPosition);
+		} else if(!Physics.Raycast(this.targetPosition, -this.heart.up, 1f, this.targetMask)) {
+			this.faceswitcher.SetFaceSwitching(LEDGE_DELAY, dir, this.targetPosition);
 		}
 	}
 
@@ -259,18 +259,20 @@ public class SnakeController : MonoBehaviour
 	{
 		Vector3 target;
 
-		if(Vector3.Distance(myTransform.position, faceswitcher.destination) < snakeData.positionAccuracy)
+		if(Vector3.Distance(this.myTransform.position, this.faceswitcher.destination) < this.positionAccuracy)
 		{
+			dir.Normalize();
+
 			// snake rotation
-			myTransform.rotation = SnakeRotationOverFace(dir);
-			// heart rotation
-			heart.rotation = HeartRotationOverFace(dir);
+			this.myRigidbody.rotation = this.SnakeRotationOverFace(dir);
+			// this.heart rotation
+			this.heart.rotation = this.HeartRotationOverFace(dir);
 			// recalculate target position
-			target = myTransform.position + (forward * heart.forward + right * heart.right);
+			target = this.myTransform.position + (this.forward * this.heart.forward + this.right * this.heart.right);
 		}
 		else
 		{
-			target = targetPosition;
+			target = this.targetPosition;
 		}
 
 		return target;
@@ -284,12 +286,12 @@ public class SnakeController : MonoBehaviour
 		float rightDot;
 		float dirDot;
 
-		axis = Vector3Extension.RoundToInt(myTransform.right);
-		forwardDot = Vector3.Dot(heart.forward, axis);
-		rightDot = Vector3.Dot(heart.right, axis);
-		dirDot = Vector3.Dot(dir, faceswitcher.normal);
+		axis = Vector3Extension.RoundToInt(this.myTransform.right);
+		forwardDot = Vector3.Dot(this.heart.forward, axis);
+		rightDot = Vector3.Dot(this.heart.right, axis);
+		dirDot = Vector3.Dot(dir, this.faceswitcher.normal);
 
-		newRotation = heart.rotation;
+		newRotation = this.heart.rotation;
 		newRotation *= Quaternion.Euler(90 * rightDot * dirDot, 0, 90 * forwardDot * dirDot);
 		newRotation = newRotation.AbsoluteRotation();
 
@@ -302,9 +304,9 @@ public class SnakeController : MonoBehaviour
 		Quaternion rotator;
 		Quaternion newRotation;
 
-		dot = Vector3.Dot(dir, faceswitcher.normal);
+		dot = Vector3.Dot(dir, this.faceswitcher.normal);
 		rotator = Quaternion.Euler(dot * 90, 0, 0);
-		newRotation = myTransform.AbsoluteRotation() * rotator;
+		newRotation = this.myTransform.AbsoluteRotation() * rotator;
 
 		return newRotation;
 	}

@@ -155,10 +155,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!65 &5858356031097560461
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.95, y: 0.95, z: 0.95}
+  m_Size: {x: 0.99, y: 0.99, z: 0.99}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5858356031097560463
 MonoBehaviour:
@@ -184,6 +184,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c941d6d924e82489246d4cc368e3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 30
+  positionAccuracy: 0.05
+  cancelInput: 0
+  state: 2
 --- !u!114 &288344288
 MonoBehaviour:
   m_ObjectHideFlags: 0
