@@ -1,0 +1,214 @@
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Tools;
+using Lazers;
+
+public class LazerRay : Lazer
+{
+	private List<Vector3> hitPoints;
+
+	private bool[] widthPoints;
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		if(this.lazerData.bounce) {
+			this.hitPoints = new List<Vector3>();
+		}
+	}
+
+	public override void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
+	{
+		base.Initialize(from, towards, callback);
+
+		if(this.lazerData.bounce) {
+			this.hitPoints.Add(from + towards);
+		}
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		// Bounce
+		if(this.lazerData.bounce)
+		{
+			// RaycastHit hit;
+			// for(int i = 0; i < this.hitPoints.Count - 1; i++) {
+			// 	Vector3 dir = (this.hitPoints[i+1] - this.hitPoints[i]).normalized;
+
+			// 	if(Physics.Linecast(this.hitPoints[i] + dir, this.hitPoints[i+1] - dir, out hit, this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
+			// 		this.Intersect(hit);
+			// 	}
+
+			// 	Debug.DrawLine(this.hitPoints[i] + dir, this.hitPoints[i+1] - dir, Color.white);
+			// }
+
+			// Vector3 last = this.hitPoints[this.hitPoints.Count - 1] + direction;
+			// if(Physics.Raycast(last, this.direction, out hit, Vector3.Distance(last, this.trailRigidbody.position - this.direction), this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
+
+			// 	this.Intersect(hit);
+			// }
+
+			// Debug.DrawRay(last, this.direction * Vector3.Distance(last, this.trailRigidbody.position - this.direction), Color.white);
+		}
+	}
+
+	public override void Hit(Collision other)
+	{
+		this.hitSomething = true;
+
+		// Callback
+		this.onLazerHit(new LazerHit(other));
+
+		// Bounce
+		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
+			this.direction = Vector3.Reflect(this.direction, LazerHit.GetContactNormalSum(other));
+			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+			this.hitSomething = false;
+			this.hitPoints.Add(other.contacts[0].point);
+
+			return;
+		}
+
+		this.trailRigidbody.velocity = Vector3.zero;
+			
+		this.Death(false);
+	}
+
+	private void Intersect(RaycastHit hit)
+	{
+		// Debug.Log("Intersect with " + hit.transform.name, hit.transform);
+
+		// this.hitSomething = true;
+
+		// // Callback
+		// this.onLazerHit(new LazerHit(hit));
+
+		// // Bounce
+		// if(lazerData.bounceLayerMask.IsInLayerMask(hit.transform.gameObject.layer)) {
+		// 	this.BounceOnIntersect(hit);
+		// 	return;
+		// }
+
+		// this.trailRigidbody.velocity = Vector3.zero;
+			
+		// this.Death(false);
+	}
+
+	private void BounceOnIntersect(RaycastHit hit)
+	{
+		// Debug.Log("Bounce on intersect with " + hit.transform.name);
+
+		// // declaration
+		// int index, hitpointindex;
+		// Vector3[] pos;
+		// Vector3 hitpoint;
+
+		// // initialization
+		// index = 0;
+		// pos = new Vector3[this.trailRenderer.positionCount];
+		// this.trailRenderer.GetPositions(pos);
+		// hitpointindex = 0;
+		// hitpoint = this.hitPoints[hitpointindex];
+
+		// // bounce junk work
+		// this.direction = Vector3.Reflect(this.direction, hit.normal);
+		// this.hitSomething = false;
+
+		// // check bounce recalculation
+		// for(int i = 0; i < pos.Length; i++) {
+
+		// 	// check still valid hitpoints
+		// 	if(Vector3.Distance(pos[i], hitpoint) <= this.trailRenderer.minVertexDistance) {
+		// 		hitpoint = this.hitPoints[++ hitpointindex];
+		// 	}
+
+		// 	// check intersect point on trail
+		// 	if(Vector3.Distance(pos[i], hit.point) <= this.trailRenderer.minVertexDistance) {
+		// 		index = i;
+		// 		break;
+		// 	}
+		// }
+
+		// // hit points recalculation
+		// this.hitPoints.RemoveRange(hitpointindex, this.hitPoints.Count - hitpointindex);
+		// this.hitPoints.Add(hit.point);
+
+		// // trail recalculation
+		// this.trailRenderer.Clear();
+		// pos = pos.Take(index).ToArray();
+		// this.trailRenderer.SetPositions(pos);
+		// this.trailRigidbody.position = hit.point;
+	}
+
+	protected override IEnumerator DeathCoroutine(bool hitNothing)
+	{
+		this.trailRigidbody.velocity = Vector3.zero;
+
+		// width point
+		this.InitializeWidthPoint();
+		this.StartCoroutine(this.WidthPointCoroutine());
+		yield return this.WidthCoroutine();
+
+		// stow
+		this.poolingManager.Stow(this);
+	}
+
+	public override void Reset()
+	{
+		// time
+		this.trailRenderer.time = float.MaxValue;
+
+		base.Reset();
+	}
+
+	private void InitializeWidthPoint()
+	{
+		float time, distancePerPoint, instantLength;
+		int nbOfPoint;
+
+		this.ClearWidthPoint();
+
+		instantLength = (Time.time - this.startTime) * this.lazerData.speed;
+		distancePerPoint = Random.Range(this.lazerData.distancePerPointMinMax[0], this.lazerData.distancePerPointMinMax[1]);
+		nbOfPoint = Mathf.CeilToInt(instantLength / distancePerPoint) + 1;
+		this.widthPoints = new bool[nbOfPoint];
+
+		for(int i = 0; i < nbOfPoint; i++) {
+			time = Mathf.Min(i * distancePerPoint / instantLength, 1f);
+
+			this.widthPoints[i] = (Random.Range(0, 100) < 75);
+			this.curve.AddKey(time, 1f);
+		}
+	}
+
+	private IEnumerator WidthPointCoroutine()
+	{
+		float time, value;
+		float step = 0f;
+		int length = this.curve.length;
+
+		while(step < 1f) {
+			step += this.lazerData.widthPointSpeed * Time.deltaTime;
+			value = Mathf.Lerp(1f, 0f, step);
+
+			for(int i = 0; i < length; i++) {
+				if(i >= this.widthPoints.Length) {
+					break;
+				}
+				if(!this.widthPoints[i]) {
+					continue;
+				}
+				time = this.curve[i].time;
+				this.curve.MoveKey(i, new Keyframe(time, value));
+			}
+
+			this.trailRenderer.widthCurve = curve;
+			yield return null;
+		}
+	}
+}

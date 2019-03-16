@@ -5,13 +5,13 @@ using Tools;
 
 public class LazerCollisionController : MonoBehaviour
 {
-	private LazerController lazer;
+	private Lazer lazer;
 
 	void Awake()
 	{
-		this.lazer = GetComponentInParent<LazerController>();
+		this.lazer = GetComponentInParent<Lazer>();
 
-		this.GetComponent<SphereCollider>().radius = Mathf.Max(this.lazer.lazerData.width / 2f, 0.15f);
+		this.GetComponent<BoxCollider>().size = Mathf.Max(this.lazer.lazerData.width / 2f, 0.15f) * Vector3.one;
 	}
 
 	void OnCollisionEnter(Collision other)

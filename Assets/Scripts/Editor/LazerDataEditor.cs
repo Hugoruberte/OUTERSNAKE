@@ -8,24 +8,18 @@ public class LazerDataEditor : Editor
 {
 	private Vector2 temp;
 
-	private static string[] options = null;
-
-	void OnEnable()
-	{
-		if(options == null) {
-			options = LayerMaskExtension.GetAllUserLayerName();
-		}
-	}
-
 	public override void OnInspectorGUI()
 	{
 		LazerData script = target as LazerData;
 
+		EditorGUILayout.LabelField("Mode", EditorStyles.boldLabel);
+		script.mode = (LazerData.LazerMode)EditorGUILayout.EnumPopup("Lazer Mode", script.mode);
+
+		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
 		script.speed = EditorGUILayout.Slider("Speed", script.speed, 0.1f, 100f);
 		script.lifetime = EditorGUILayout.Slider("Lifetime", script.lifetime, 0.1f, 100f);
-		script.mode = (LazerData.LazerMode)EditorGUILayout.EnumPopup("Lazer Mode", script.mode);
-		script.flatten = EditorGUILayout.Toggle("Flatten lazer on surface", script.flatten);
+		script.flatten = EditorGUILayout.Toggle("Flatten", script.flatten);
 		script.bounce = EditorGUILayout.Toggle("Is bouncing", script.bounce);
 
 		EditorGUILayout.Space();
@@ -48,9 +42,7 @@ public class LazerDataEditor : Editor
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Length", EditorStyles.boldLabel);
 			script.length = EditorGUILayout.Slider("Length", script.length, 0.1f, 20f);
-
 		} else {
-
 			script.widthPointSpeed = EditorGUILayout.Slider("Width Point Decrease Speed", script.widthPointSpeed, 0.01f, 10f);
 
 			temp = script.distancePerPointMinMax;

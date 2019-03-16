@@ -4824,7 +4824,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!65 &8149796537758200509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4857,7 +4857,6 @@ MonoBehaviour:
   isHungry: 0
   isScared: 0
   behaviour: {fileID: 0}
-  snakeBodyManager: {fileID: 0}
 --- !u!1 &8149796538873247765
 GameObject:
   m_ObjectHideFlags: 0

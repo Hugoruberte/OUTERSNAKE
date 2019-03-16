@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6496802670921910480}
   - component: {fileID: 6496802670921910321}
-  - component: {fileID: 6496802670921910320}
+  - component: {fileID: 4230221290560717953}
   - component: {fileID: 6496802670921910481}
   - component: {fileID: 4644992602464404436}
   m_Layer: 0
@@ -50,8 +50,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!135 &6496802670921910320
-SphereCollider:
+--- !u!65 &4230221290560717953
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -61,7 +61,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &6496802670921910481
 TrailRenderer:
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6496802672037794780}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16798f0013ea5a044b26e9cda9b09ff7, type: 3}
+  m_Script: {fileID: 11500000, guid: 1aa88f0427551a04fb87536f19748c7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0

@@ -18,10 +18,10 @@ public class PoolingManager : Singleton<PoolingManager>
 		this.poolingData.CreatePool(this.folder);
 	}
 
-	public T Get<T>() where T : PoolableEntity
+	public T Get<T>(string name) where T : PoolableEntity
 	{
 		PoolableEntity entity = null;
-		PoolingData.Pool pool = this.poolingData.pools.Find(x => x.prefab is T);
+		PoolingData.Pool pool = this.poolingData.pools.Find(x => x.prefab is T && x.prefab.name == name);
 
 		if(pool.prefab != null) {
 			foreach(PoolableEntity e in pool.objects) {

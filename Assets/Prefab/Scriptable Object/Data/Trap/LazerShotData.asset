@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52717885cbb89d04dbfe4757775883e7, type: 3}
-  m_Name: LazerTrapContinuousData
+  m_Name: LazerShotData
   m_EditorClassIdentifier: 
-  speed: 75
-  lifetime: 10
+  speed: 40
+  lifetime: 5
   bounce: 1
-  mode: 1
+  flatten: 0
+  mode: 0
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   bounceLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   easyAim: 0
   length: 5
   width: 0.2
-  widthSpeed: 1
-  widthPointSpeed: 4
-  distancePerPointMinMax: {x: 2, y: 5}
+  widthSpeed: 2
+  widthPointSpeed: 5
+  distancePerPointMinMax: {x: 1, y: 3}

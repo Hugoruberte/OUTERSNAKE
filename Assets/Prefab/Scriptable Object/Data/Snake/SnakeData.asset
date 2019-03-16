@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   positionAccuracy: 0.1
-  cancelInput: 0
   state: 2

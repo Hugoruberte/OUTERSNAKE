@@ -7,7 +7,7 @@ using Interactive.Engine;
 
 public class SnakePartCharacter : SnakeEntity
 {
-	public SnakeBodyManager snakeBodyManager;
+	private SnakeBodyManager snakeBodyManager;
 
 	private IEnumerator behaviourCoroutine = null;
 	private ParticleSystem explosion;
@@ -23,6 +23,13 @@ public class SnakePartCharacter : SnakeEntity
 		snakePartState = SnakePartState.Alive;
 
 		explosion = GetComponentInChildren<ParticleSystem>();
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+
+		snakeBodyManager = SnakeBodyManager.instance;
 	}
 
 

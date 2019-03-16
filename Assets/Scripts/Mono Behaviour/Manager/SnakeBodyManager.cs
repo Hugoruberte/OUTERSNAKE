@@ -7,17 +7,17 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 {
 	public SnakeBodyData snakeBodyData;
 
-	private SnakeData snakeData;
-
-	[HideInInspector]
 	public Transform snakeBody { get; private set; }
 
 	private Transform snake;
+
+	private SnakeData snakeData;
 
 	private Dictionary<Transform, SnakePartCharacter> snakePartInteracts = new Dictionary<Transform, SnakePartCharacter>();
 
 	private const int SNAKE_TAIL_MARGIN = 2;
 	public const int SNAKE_MINIMAL_LENGTH = 2;
+	
 	private float reduceSpeed;
 
 	

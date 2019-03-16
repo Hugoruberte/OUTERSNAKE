@@ -24,7 +24,7 @@ public class LazerTrap : TrapEntity
 
 	private void Attack()
 	{
-		LazerController lazer = poolingManager.Get<LazerController>();
+		Lazer lazer = poolingManager.Get<Lazer>("Lazer Shot");
 
 		if(lazer == null) {
 			return;
