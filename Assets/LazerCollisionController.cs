@@ -11,14 +11,14 @@ public class LazerCollisionController : MonoBehaviour
 	{
 		this.lazer = GetComponentInParent<Lazer>();
 
-		this.GetComponent<BoxCollider>().size = Mathf.Max(this.lazer.lazerData.width / 2f, 0.15f) * Vector3.one;
+		this.GetComponent<SphereCollider>().radius = Mathf.Max(this.lazer.lazerData.width / 2f, 0.1f);
 	}
 
 	void OnCollisionEnter(Collision other)
 	{
 		if(this.lazer.lazerData.hitLayerMask.IsInLayerMask(other.gameObject.layer)) {
 
-			lazer.Hit(other);
+			this.lazer.Hit(other);
 		}
 	}
 }

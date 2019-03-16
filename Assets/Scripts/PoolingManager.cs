@@ -35,7 +35,7 @@ public class PoolingManager : Singleton<PoolingManager>
 
 		if(entity != null) {
 			entity.isActive = true;
-			entity.transform.parent = null;
+			entity.transform.parent = pool.activeFolder;
 		}
 		
 		return entity as T;
@@ -44,8 +44,9 @@ public class PoolingManager : Singleton<PoolingManager>
 	public void Stow(PoolableEntity entity)
 	{
 		Transform folder;
+		Type t = entity.GetType();
 
-		folder = this.poolingData.pools.Find(x => x.prefab.GetType() == entity.GetType()).folder;
+		folder = this.poolingData.pools.Find(x => x.prefab.GetType() == t && Array.IndexOf(x.objects, entity) > -1).inactiveFolder;
 		
 		entity.Reset();
 		entity.transform.parent = folder;

@@ -30,7 +30,7 @@ public class LazerTrap : TrapEntity
 			return;
 		}
 
-		lazer.Initialize(muzzle.position, muzzle.forward, OnHit);
+		lazer.Initialize(this.muzzle.position, this.muzzle.forward, this.OnHit);
 
 		lazer.Launch();
 	}

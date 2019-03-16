@@ -14,21 +14,26 @@ public class PoolingData : ScriptableObject
 		public PoolableEntity[] objects;
 
 		[System.NonSerialized]
-		public Transform folder;
+		public Transform activeFolder;
+		[System.NonSerialized]
+		public Transform inactiveFolder;
 
 		public Pool(PoolableEntity p, int s) {
 			this.prefab = p;
 			this.size = s;
+
 			this.objects = null;
-			this.folder = null;
+			this.activeFolder = null;
+			this.inactiveFolder = null;
 		}
 
-		public Pool(Pool p, PoolableEntity[] a, Transform f) {
+		public Pool(Pool p, PoolableEntity[] a, Transform af, Transform iaf) {
 			this.prefab = p.prefab;
 			this.size = p.size;
 
 			this.objects = a;
-			this.folder = f;
+			this.activeFolder = af;
+			this.inactiveFolder = iaf;
 		}
 	}
 
@@ -41,6 +46,8 @@ public class PoolingData : ScriptableObject
 		Pool pp;
 		GameObject g;
 		Transform folder;
+		Transform activeFolder;
+		Transform inactiveFolder;
 		PoolableEntity p;
 		PoolableEntity[] objs;
 
@@ -55,17 +62,27 @@ public class PoolingData : ScriptableObject
 			folder = g.transform;
 			folder.parent = f;
 
+			g = new GameObject();
+			g.name = pp.prefab.gameObject.name + " (Active)";
+			activeFolder = g.transform;
+			activeFolder.parent = folder;
+
+			g = new GameObject();
+			g.name = pp.prefab.gameObject.name + " (Inactive)";
+			inactiveFolder = g.transform;
+			inactiveFolder.parent = folder;
+
 			for(int i = 0; i < pp.size; i++) {
 				p = Instantiate(pp.prefab);
 
 				// initialize
-				p.transform.parent = folder;
+				p.transform.parent = inactiveFolder;
 				p.Reset();
 
 				objs[i] = p;
 			}
 
-			this.pools[k] = new Pool(pp, objs, folder);
+			this.pools[k] = new Pool(pp, objs, activeFolder, inactiveFolder);
 		}
 	}
 }

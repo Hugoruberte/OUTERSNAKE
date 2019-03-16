@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6496802670921910480}
   - component: {fileID: 6496802670921910321}
-  - component: {fileID: 4230221290560717953}
+  - component: {fileID: 2242884544037266407}
   - component: {fileID: 6496802670921910481}
-  - component: {fileID: 4644992602464404436}
-  m_Layer: 0
+  - component: {fileID: 7837076627139217460}
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,8 +50,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!65 &4230221290560717953
-BoxCollider:
+--- !u!135 &2242884544037266407
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -61,7 +61,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &6496802670921910481
 TrailRenderer:
@@ -155,7 +155,7 @@ TrailRenderer:
       atime5: 0
       atime6: 0
       atime7: 0
-      m_Mode: 0
+      m_Mode: 1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -167,7 +167,7 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &4644992602464404436
+--- !u!114 &7837076627139217460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6496802671469813420}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6496802672037794781}
   - component: {fileID: 6496802672037794782}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Lazer Shot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
