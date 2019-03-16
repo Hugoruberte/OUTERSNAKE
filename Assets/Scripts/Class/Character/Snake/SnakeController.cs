@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Tools;
 using Snakes;
 
-[RequireComponent(typeof(Rigidbody))]
 public class SnakeController : MonoBehaviour 
 {
 	private Transform myTransform;

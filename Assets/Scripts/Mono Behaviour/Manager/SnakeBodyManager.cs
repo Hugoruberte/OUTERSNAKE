@@ -11,9 +11,9 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 
 	private Transform snake;
 
-	private SnakeData snakeData;
-
 	private Dictionary<Transform, SnakePartCharacter> snakePartInteracts = new Dictionary<Transform, SnakePartCharacter>();
+
+	private SnakeController snakeController;
 
 	private const int SNAKE_TAIL_MARGIN = 2;
 	public const int SNAKE_MINIMAL_LENGTH = 2;
@@ -23,9 +23,9 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	
 	void Start()
 	{
-		snakeData = SnakeManager.instance.snakeData;
-
 		snake = SnakeManager.instance.snake.transform;
+
+		snakeController = SnakeManager.instance.snakeController;
 
 		SnakeManager.instance.events.onStartStep.AddListener(UpdateSnakeTail);
 		SnakeManager.instance.events.onEndStep.AddListener(UpdateSnakeHead);
@@ -52,7 +52,7 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 			return;
 		}
 
-		reduceSpeed = 0.333f * snakeData.speed + 1.667f;
+		reduceSpeed = 0.333f * this.snakeController.speed + 1.667f;
 		snakeBodyScript = snakePartInteracts[snakeBody.GetChild(snakeBodyData.bodyLength - 1)];
 		snakeBodyScript.ReduceSnakePart(reduceSpeed);
 	}
