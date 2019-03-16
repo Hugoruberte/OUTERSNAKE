@@ -8,7 +8,6 @@ using Snakes;
 public class SnakeController : MonoBehaviour 
 {
 	private Transform myTransform;
-	private Rigidbody myRigidbody;
 	private _Transform heart;
 
 	private IEnumerator moveCoroutine = null;
@@ -44,7 +43,6 @@ public class SnakeController : MonoBehaviour
 	void Awake()
 	{
 		this.myTransform = transform;
-		this.myRigidbody = GetComponent<Rigidbody>();
 		this.targetPosition = this.myTransform.AbsolutePosition();
 
 		this.targetMask = (1 << LayerMask.NameToLayer("Ground"));
@@ -130,9 +128,9 @@ public class SnakeController : MonoBehaviour
 		if(this.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
 		{
 			if(vertical == -1) {
-				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, 180, 0);
+				this.myTransform.rotation = this.heart.rotation * Quaternion.Euler(0, 180, 0);
 			} else if(horizontal != 0) {
-				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
+				this.myTransform.rotation = this.heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
 			}
 				
 			this.state = SnakeMoveState.Run;
@@ -175,11 +173,11 @@ public class SnakeController : MonoBehaviour
 				this.events.onStartStep.Invoke(this.targetPosition, this.myTransform.up);
 
 				while(Vector3.Distance(this.myTransform.position, this.targetPosition) > this.positionAccuracy) {
-					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
+					this.myTransform.position = Vector3.MoveTowards(this.myTransform.position, this.targetPosition, this.speed * Time.deltaTime);
 					yield return null;
 				}
 
-				this.myRigidbody.position = this.targetPosition;
+				this.myTransform.position = this.targetPosition;
 
 				// Event -> reserved cell become current cell + optional callback 
 				this.events.onEndStep.Invoke();
@@ -193,11 +191,11 @@ public class SnakeController : MonoBehaviour
 	private IEnumerator StopSnakeMovementCoroutine()
 	{
 		while(Vector3.Distance(this.myTransform.position, this.targetPosition) > this.positionAccuracy) {
-			this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
+			this.myTransform.position = Vector3.MoveTowards(this.myTransform.position, this.targetPosition, this.speed * Time.deltaTime);
 			yield return null;
 		}
 
-		this.myRigidbody.position = this.targetPosition;
+		this.myTransform.position = this.targetPosition;
 
 		// Event
 		this.events.onEndStep.Invoke();
@@ -235,9 +233,9 @@ public class SnakeController : MonoBehaviour
 				this.right_cache = 0;
 
 				if(this.right == 0) {
-					this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, (1 - this.forward) * 90, 0);
+					this.myTransform.rotation = this.heart.rotation * Quaternion.Euler(0, (1 - this.forward) * 90, 0);
 				} else {
-					this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, (this.right) * 90, 0);
+					this.myTransform.rotation = this.heart.rotation * Quaternion.Euler(0, (this.right) * 90, 0);
 				}
 			}
 		}
@@ -264,7 +262,7 @@ public class SnakeController : MonoBehaviour
 			dir.Normalize();
 
 			// snake rotation
-			this.myRigidbody.rotation = this.SnakeRotationOverFace(dir);
+			this.myTransform.rotation = this.SnakeRotationOverFace(dir);
 			// this.heart rotation
 			this.heart.rotation = this.HeartRotationOverFace(dir);
 			// recalculate target position
