@@ -10,6 +10,8 @@ public class LazerTrap : TrapEntity
 
 	private Transform muzzle;
 
+	public GameObject lazerPrefab;
+
 	protected override void Start()
 	{
 		base.Start();
@@ -24,7 +26,7 @@ public class LazerTrap : TrapEntity
 
 	private void Attack()
 	{
-		Lazer lazer = poolingManager.Get<Lazer>("Lazer Shot");
+		Lazer lazer = poolingManager.Get<Lazer>(lazerPrefab);
 
 		if(lazer == null) {
 			return;

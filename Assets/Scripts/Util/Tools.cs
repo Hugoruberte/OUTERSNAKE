@@ -42,58 +42,87 @@ namespace Tools
 		}
 	}
 
+
+
 	public static class LayerMaskExtension
 	{
-		public static bool IsInLayerMask(this int layerMask, int layer)
+		public static bool IsInLayerMask(this int layerMask, int layer) => (layerMask == (layerMask | (1 << layer)));
+
+		public static bool IsInLayerMask(this LayerMask layerMask, int layer) => layerMask.value.IsInLayerMask(layer);
+
+		public static LayerMask Create(params string[] layerNames) => NamesToMask(layerNames);
+	 
+		public static LayerMask Create(params int[] layerNumbers) => LayerNumbersToMask(layerNumbers);
+	 
+		public static LayerMask NamesToMask(params string[] layerNames)
 		{
-			return (layerMask == (layerMask | (1 << layer)));
+			LayerMask ret = (LayerMask)0;
+			foreach(var name in layerNames) {
+				ret |= (1 << LayerMask.NameToLayer(name));
+			}
+			return ret;
 		}
-		public static bool IsInLayerMask(this LayerMask layerMask, int layer)
+	 
+		public static LayerMask LayerNumbersToMask(params int[] layerNumbers)
 		{
-			return layerMask.value.IsInLayerMask(layer);
+			LayerMask ret = (LayerMask)0;
+			foreach(var layer in layerNumbers) {
+				ret |= (1 << layer);
+			}
+			return ret;
+		}
+	 
+		public static LayerMask Inverse(this LayerMask original) => ~original;
+	 
+		public static LayerMask AddToMask(this LayerMask original, params string[] layerNames) => original | NamesToMask(layerNames);
+	 
+		public static LayerMask RemoveFromMask(this LayerMask original, params string[] layerNames)
+		{
+			LayerMask invertedOriginal = ~original;
+			return ~(invertedOriginal | NamesToMask(layerNames));
 		}
 
-		public static string[] GetAllLayerName()
+		public static string[] MaskToNames(this LayerMask original)
 		{
-			List<string> layerNames = new List<string>();
-			string layerN;
+			string layerName;
+			int shifted;
+			List<string> output = new List<string>();
 
-			for(int i = 0; i < 32; i++) {
-				layerN = LayerMask.LayerToName(i);
-
-				if(layerN.Length > 0) {
-					layerNames.Add(layerN);
+			for (int i = 0; i < 32; ++i)
+			{
+				shifted = 1 << i;
+				if((original & shifted) == shifted) {
+					layerName = LayerMask.LayerToName(i);
+					if(!string.IsNullOrEmpty(layerName)) {
+						output.Add(layerName);
+					}
 				}
 			}
 
-			return layerNames.ToArray();
+			return output.ToArray();
 		}
 
-		public static string[] GetAllUserLayerName()
-		{
-			List<string> layerNames = new List<string>();
-			string layerN;
-
-			for(int i = 8; i < 32; i++) {
-				layerN = LayerMask.LayerToName(i);
-
-				if(layerN.Length > 0) {
-					layerNames.Add(layerN);
-				}
-			}
-
-			return layerNames.ToArray();
-		}
+		public static string MaskToString(this LayerMask original) => MaskToString(original, ", ");
+ 
+		public static string MaskToString(this LayerMask original, string delimiter) => string.Join(delimiter, MaskToNames(original));
 	}
+
+
 
 	public static class EditorGUILayoutExtension
 	{
-		public static LayerMask ConcatenatedMaskField(string name, LayerMask current)
+		public static LayerMask ConcatenatedMaskField(string name, LayerMask current, string[] options = null)
 		{
-			LayerMask tempMask = EditorGUILayout.MaskField(name, InternalEditorUtility.LayerMaskToConcatenatedLayersMask(current), InternalEditorUtility.layers);
+			if(options == null) {
+				options = InternalEditorUtility.layers;
+			}
+
+			LayerMask tempMask = EditorGUILayout.MaskField(name, InternalEditorUtility.LayerMaskToConcatenatedLayersMask(current), options);
 			return InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
 		}
 	}
+
+
 
 	public static class CoroutineExtension
 	{
@@ -106,6 +135,8 @@ namespace Tools
 			mono.StartCoroutine(handler);
 		}
 	}
+
+
 
 	public static class TransformExtension
 	{
@@ -299,6 +330,8 @@ namespace Tools
 		}
 	}
 
+
+
 	public static class Vector3Extension
 	{
 		public static Vector3 RoundToInt(Vector3 vect)
@@ -350,6 +383,8 @@ namespace Tools
 		}
 	}
 
+
+
 	public static class Vector2Extension
 	{
 		public static Vector2 RoundToInt(Vector2 vect)
@@ -362,6 +397,8 @@ namespace Tools
 			vect.Set(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y));
 		}
 	}
+
+
 
 	public static class ListExtension
 	{
@@ -377,6 +414,8 @@ namespace Tools
 			}
 		}
 	}
+
+
 
 	public static class ArrayExtension
 	{
@@ -400,6 +439,8 @@ namespace Tools
 			return a;
 		}
 	}
+
+
 
 	public static class ColorExtension
 	{
@@ -562,6 +603,8 @@ namespace Tools
 		}
 	}
 
+
+
 	public static class RectTransformExtension
 	{
 		public static RectTransform SetAnchoredPositionX(this RectTransform pAnchor, float pValue)
@@ -608,6 +651,18 @@ namespace Tools
 			lScale.y = pValue;
 			pAnchor.offsetMax = lScale;
 			return pAnchor;
+		}
+	}
+
+
+
+
+	public static class RendererExtensions
+	{
+		public static bool IsVisibleFrom(this Renderer renderer, Camera camera)
+		{
+			Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
+			return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
 		}
 	}
 }

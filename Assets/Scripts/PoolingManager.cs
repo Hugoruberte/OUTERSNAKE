@@ -41,6 +41,29 @@ public class PoolingManager : Singleton<PoolingManager>
 		return entity as T;
 	}
 
+	public T Get<T>(GameObject prefab) where T : PoolableEntity
+	{
+		PoolableEntity entity = null;
+		PoolingData.Pool pool = this.poolingData.pools.Find(x => x.prefab is T && x.prefab.name == prefab.name);
+
+		if(pool.prefab != null) {
+			foreach(PoolableEntity e in pool.objects) {
+				if(!e.isActive) {
+
+					entity = e;
+					break;
+				}
+			}
+		}
+
+		if(entity != null) {
+			entity.isActive = true;
+			entity.transform.parent = pool.activeFolder;
+		}
+		
+		return entity as T;
+	}
+
 	public void Stow(PoolableEntity entity)
 	{
 		Transform folder;

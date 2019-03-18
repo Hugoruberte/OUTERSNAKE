@@ -26,7 +26,7 @@ public class LazerDataEditor : Editor
 		EditorGUILayout.LabelField("Layer Mask", EditorStyles.boldLabel);
 		script.hitLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Hit Layer Mask", script.hitLayerMask);
 		if(script.bounce) {
-			script.bounceLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Bounce Layer Mask", script.bounceLayerMask);
+			script.bounceLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Bounce Layer Mask", script.bounceLayerMask, script.hitLayerMask.MaskToNames());
 		}
 
 		EditorGUILayout.Space();

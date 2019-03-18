@@ -178,6 +178,8 @@ MonoBehaviour:
   isHungry: 0
   isScared: 0
   behaviour: {fileID: 0}
+  lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
+    type: 3}
 --- !u!1 &12201069
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +565,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4f593306a53e84ebc90971da9b957d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snakeData: {fileID: 11400000, guid: ebcb4bcc62cf297478a5c77b2ce6fd06, type: 2}
 --- !u!114 &132121969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3939,7 +3940,7 @@ PrefabInstance:
     - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
       propertyPath: speed
-      value: 20
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7220b42464f40b419a98a157b96dcaa, type: 3}
