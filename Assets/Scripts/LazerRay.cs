@@ -55,7 +55,7 @@ public class LazerRay : Lazer
 		}
 	}
 
-	public override void Hit(Collision other)
+	/*public override void Hit(Collision other)
 	{
 		this.hiting = true;
 
@@ -75,6 +75,11 @@ public class LazerRay : Lazer
 		this.trailRigidbody.velocity = Vector3.zero;
 			
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
+	}*/
+
+	public override void Hit(RaycastHit[] others)
+	{
+		
 	}
 
 	private void Intersect(RaycastHit hit)

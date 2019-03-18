@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Lazers;
 
 [CreateAssetMenu(fileName = "LazerData", menuName = "Scriptable Object/Data/LazerData", order = 3)]
 public class LazerData : ScriptableObject
@@ -11,27 +12,35 @@ public class LazerData : ScriptableObject
 	}
 
 	// Parameters
-	public float speed;
-	public float lifetime;
-	public bool bounce;
-	public bool flatten;
-	public LazerMode mode = LazerMode.Shot;
+	[HideInInspector] public float speed;
+	[HideInInspector] public float lifetime;
+	[HideInInspector] public bool bounce;
+	[HideInInspector] public bool flatten;
+	[HideInInspector] public LazerMode mode = LazerMode.Shot;
 
 	// Layer Mask
-	public LayerMask hitLayerMask;
-	public LayerMask bounceLayerMask;
+	[HideInInspector] public LayerMask hitLayerMask;
+	[HideInInspector] public LayerMask bounceLayerMask;
 
-	// Cheat
-	public bool easyAim;
+	// Miscellaneous
+	[HideInInspector] public bool autoAim;
+
+	// Bounce
+	[HideInInspector] public int maxBounceCount;
+	[HideInInspector] public LastBounceMode lastBounceMode;
+	[HideInInspector] public float coneAngle = 45f;
+	[HideInInspector] public float gravityForceMultiplier = 10f;
+	[HideInInspector] public float forwardForceMultiplier = 10f;
+	[HideInInspector] public float forceDampling = 0.5f;
 
 	// Length
-	public float length;
+	[HideInInspector] public float length;
 	
 	// Width
-	public float width;
-	public float widthSpeed;
+	[HideInInspector] public float width;
+	[HideInInspector] public float widthSpeed;
 
 	// Width Point
-	public float widthPointSpeed;
-	public Vector2 distancePerPointMinMax;
+	[HideInInspector] public float widthPointSpeed;
+	[HideInInspector] public Vector2 distancePerPointMinMax;
 }

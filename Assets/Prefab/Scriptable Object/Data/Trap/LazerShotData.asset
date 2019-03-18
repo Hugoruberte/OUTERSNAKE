@@ -12,18 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52717885cbb89d04dbfe4757775883e7, type: 3}
   m_Name: LazerShotData
   m_EditorClassIdentifier: 
-  speed: 40
+  speed: 50
   lifetime: 5
   bounce: 1
   flatten: 0
   mode: 0
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1792
   bounceLayerMask:
     serializedVersion: 2
-    m_Bits: 0
-  easyAim: 0
+    m_Bits: 3895
+  autoAim: 0
+  maxBounceCount: 1
+  lastBounceMode: 0
+  gravityForceMultiplier: 10
+  forwardForceMultiplier: 10
+  coneAngle: 45
   length: 5
   width: 0.2
   widthSpeed: 2

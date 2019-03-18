@@ -16,60 +16,62 @@ public class LazerShot : Lazer
 		this.trailRenderer.widthCurve = curve;
 	}
 
-	/*public override void Hit(Collision other)
-	{
-		this.hiting = true;
-
-		// Callback
-		this.onLazerHit(new LazerHit(other));
-
-		// Bounce
-		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
-
-			Vector3 normal = LazerHit.GetContactNormalSum(other);
-			this.direction = Vector3.Reflect(this.direction, normal);
-
-			Debug.Log(other.gameObject.name, other.gameObject.transform);
-			Debug.DrawRay(other.contacts[0].point, normal * 5f, Color.yellow);
-			Debug.DrawRay(other.contacts[0].point, direction * 5f, Color.green);
-			Debug.Break();
-
-			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
-			this.hiting = false;
-			return;
-		}
-
-		this.trailRigidbody.velocity = Vector3.zero;
-
-		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
-	}*/
-
 	public override void Hit(RaycastHit[] others)
 	{
 		this.hiting = true;
 
 		// Callback
-		this.onLazerHit(new LazerHit(others));
+		LazerHit hit = new LazerHit(others);
+		this.onLazerHit(hit);
 
 		// Bounce
-		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
+		if(this.lazerData.bounce)
+		{
+			Vector3 normal = Vector3.zero;
+			foreach(RaycastHit other in others) {
+				if(lazerData.bounceLayerMask.IsInLayerMask(other.transform.gameObject.layer)) {
+					normal += other.normal;
+				}
+			}
 
-			Vector3 normal = LazerHit.GetContactNormalSum(other);
-			this.direction = Vector3.Reflect(this.direction, normal);
+			normal.Normalize();
 
-			Debug.Log(other.gameObject.name, other.gameObject.transform);
-			Debug.DrawRay(other.contacts[0].point, normal * 5f, Color.yellow);
-			Debug.DrawRay(other.contacts[0].point, direction * 5f, Color.green);
-			Debug.Break();
+			if(normal.magnitude > 0) {
 
-			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
-			this.hiting = false;
-			return;
+				this.bounceCount ++;
+
+				if(this.bounceCount < this.lazerData.maxBounceCount - 1)
+				{
+					this.direction = Vector3.Reflect(this.direction, normal).normalized;
+					this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+				}
+				else
+				{
+					this.trailCollider.enabled = false;
+
+					if(this.lazerData.lastBounceMode == LastBounceMode.Curve) {
+						this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
+					} else if(this.lazerData.lastBounceMode == LastBounceMode.Up) {
+						this.LastBounceUp(this.direction);
+					} else {
+						if(Random.Range(0, 2) == 0) {
+							this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
+						} else {
+							this.LastBounceUp(this.direction);
+						}
+					}
+				}
+
+				this.hiting = false;
+			}
 		}
+		else
+		{
+			this.trailRigidbody.velocity = Vector3.zero;
+			this.trailCollider.enabled = false;
 
-		this.trailRigidbody.velocity = Vector3.zero;
-
-		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
+			this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
+		}
 	}
 
 	protected override IEnumerator DeathCoroutine(bool hitNothing)

@@ -12,40 +12,40 @@ namespace Lazers
 	public struct LazerHit {
 		public Vector3 normal;
 		public Vector3 point;
-		public GameObject other;
+		public GameObject[] others;
 
-		public LazerHit(Collision c) {
-			this.normal = GetContactNormalSum(c);
-			this.point = c.contacts[0].point;
-			this.other = c.gameObject;
-		}
+		public LazerHit(RaycastHit[] hs) {
+			Vector3 n = Vector3.zero;
+			Vector3 p = Vector3.zero;
+			this.others = new GameObject[hs.Length];
 
-		public LazerHit(RaycastHit h) {
-			this.normal = h.normal;
-			this.point = h.point;
-			this.other = h.transform.gameObject;
-		}
-
-		public static Vector3 GetContactNormalSum(Collision c)
-		{
-			Vector3 sum = Vector3.zero;
-
-			foreach(ContactPoint p in c.contacts) {
-				sum.Set(sum.x + p.normal.x, sum.y + p.normal.y, sum.z + p.normal.z);
+			for(int i = 0; i < hs.Length; i++) {
+				n += hs[i].normal;
+				p += hs[i].point;
+				this.others[i] = hs[i].transform.gameObject;
 			}
 
-			return sum.normalized;
+			this.normal = n.normalized;
+			this.point = p / hs.Length;
 		}
 	}
+
+	public enum LastBounceMode {
+		Curve = 0,
+		Up,
+		Random
+	};
 }
 
 public abstract class Lazer : PoolableEntity
 {
+	protected Collider trailCollider;
 	protected Rigidbody trailRigidbody;
 
 	protected TrailRenderer trailRenderer;
-	
-	protected Vector3 direction;
+		
+	[HideInInspector]
+	public Vector3 direction;
 
 	protected AnimationCurve curve = new AnimationCurve();
 
@@ -53,6 +53,8 @@ public abstract class Lazer : PoolableEntity
 
 	protected bool dying;
 	protected bool hiting;
+
+	protected int bounceCount;
 
 	protected float startTime;
 
@@ -66,13 +68,14 @@ public abstract class Lazer : PoolableEntity
 		base.Awake();
 
 		this.trailRenderer = GetComponentInChildren<TrailRenderer>();
+		this.trailCollider = trailRenderer.GetComponent<Collider>();
 		this.trailRigidbody = trailRenderer.GetComponent<Rigidbody>();
 	}
 
 	public virtual void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
 	{
 		this.transform.position = from;
-		this.direction = towards;
+		this.direction = towards.normalized;
 		this.onLazerHit = callback;
 	}
 
@@ -98,7 +101,8 @@ public abstract class Lazer : PoolableEntity
 		yield return this.DeathCoroutine(true);
 	}
 
-	public abstract void Hit(Collision other);
+	// public abstract void Hit(Collision other);
+	public abstract void Hit(RaycastHit[] others);
 
 	protected abstract IEnumerator DeathCoroutine(bool hitNothing);
 
@@ -115,6 +119,52 @@ public abstract class Lazer : PoolableEntity
 		this.trailRenderer.widthMultiplier = 0f;
 	}
 
+	protected Vector3 LastBounceUp(Vector3 forward)
+	{
+		// declaration
+		Vector3 up, cross;
+
+		// initialize
+		up = this.trailRigidbody.transform.up;
+		cross = Vector3.Cross(up, forward);
+
+		// randomize 'up' with cone angle
+		up = (Quaternion.Euler(forward * Random.Range(-this.lazerData.coneAngle, this.lazerData.coneAngle)) * up).normalized;
+		up = (Quaternion.Euler(cross * Random.Range(-this.lazerData.coneAngle, this.lazerData.coneAngle)) * up).normalized;
+		
+		// movement
+		this.trailRigidbody.velocity = up * this.lazerData.speed;
+
+		return up;	
+	}
+
+	protected IEnumerator LastBounceCurveCoroutine(Vector3 forward)
+	{
+		// declaration
+		Vector3 up, fd, project;
+		WaitForFixedUpdate waitForFixedUpdate;
+		float forwardForce, gravityForce;
+
+		// initialize
+		up = this.LastBounceUp(forward);
+		fd = forward;
+		forwardForce = this.lazerData.forwardForceMultiplier * this.lazerData.speed * Random.Range(0.25f + this.lazerData.forceDampling * 0.75f, 1f);
+		gravityForce = this.lazerData.gravityForceMultiplier * this.lazerData.speed * Random.Range(-0.5f * this.lazerData.forceDampling + 1.5f, 1f);
+
+		// compute 'up' and 'forward' forces
+		project = Vector3.ProjectOnPlane(up, this.trailRigidbody.transform.up).normalized;
+		forward = Vector3.Cross(project, up).normalized;
+		if(forward.magnitude == 0) { forward = fd; }
+		waitForFixedUpdate = new WaitForFixedUpdate();
+
+		// movement
+		this.trailRigidbody.AddForce(forward * forwardForce, ForceMode.VelocityChange);
+		while(true) {
+			this.trailRigidbody.AddForce(-up * gravityForce, ForceMode.Acceleration);
+			yield return waitForFixedUpdate;
+		}
+	}
+
 	public override void Reset()
 	{
 		// coroutine
@@ -127,6 +177,9 @@ public abstract class Lazer : PoolableEntity
 		this.trailRenderer.widthCurve = curve;
 		this.trailRenderer.widthMultiplier = this.lazerData.width;
 
+		// parameter
+		this.bounceCount = 0;
+
 		// callback
 		this.onLazerHit = null;
 
@@ -134,10 +187,11 @@ public abstract class Lazer : PoolableEntity
 		this.hiting = false;
 		this.dying = false;
 		
-		// rigidbody
+		// rigidbody + collider
 		this.direction = Vector3.zero;
 		this.trailRigidbody.velocity = Vector3.zero;
 		this.trailRigidbody.transform.localPosition = Vector3.zero;
+		this.trailCollider.enabled = true;
 
 		// trail
 		this.trailRenderer.Clear();

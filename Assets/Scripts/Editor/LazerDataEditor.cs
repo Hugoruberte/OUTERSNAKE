@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using Tools;
 using System.Collections.Generic;
+using Lazers;
 
 [CustomEditor(typeof(LazerData))]
 public class LazerDataEditor : Editor
@@ -12,6 +13,9 @@ public class LazerDataEditor : Editor
 	{
 		LazerData script = target as LazerData;
 
+		DrawDefaultInspector();
+
+		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Mode", EditorStyles.boldLabel);
 		script.mode = (LazerData.LazerMode)EditorGUILayout.EnumPopup("Lazer Mode", script.mode);
 
@@ -30,10 +34,6 @@ public class LazerDataEditor : Editor
 		}
 
 		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Cheat", EditorStyles.boldLabel);
-		script.easyAim = EditorGUILayout.Toggle("Easy Aim", script.easyAim);
-
-		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Width", EditorStyles.boldLabel);
 		script.width = EditorGUILayout.Slider("Width", script.width, 0.01f, 10f);
 		script.widthSpeed = EditorGUILayout.Slider("Width Decrease Speed", script.widthSpeed, 0.01f, 10f);
@@ -49,5 +49,29 @@ public class LazerDataEditor : Editor
 			temp = EditorGUILayout.Vector2Field("Distance Per Point Interval", temp);
 			script.distancePerPointMinMax.Set(Mathf.RoundToInt(Mathf.Min(Mathf.Max(temp.x, 0f), temp.y)), Mathf.RoundToInt(Mathf.Max(temp.x, Mathf.Min(temp.y, 10f))));
 		}
+
+		if(script.bounce) {
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Bounce Parameters", EditorStyles.boldLabel);
+			script.maxBounceCount = EditorGUILayout.IntSlider("Max Bounce Count", script.maxBounceCount, 1, 200);
+		
+			script.lastBounceMode = (LastBounceMode)EditorGUILayout.EnumPopup("Last Bounce Mode", script.lastBounceMode);
+
+			EditorGUI.indentLevel ++;
+			script.coneAngle = EditorGUILayout.Slider("Cone Angle", script.coneAngle, 0f, 45f);
+
+			if(script.lastBounceMode == LastBounceMode.Curve || script.lastBounceMode == LastBounceMode.Random) {
+				script.gravityForceMultiplier = EditorGUILayout.Slider("Gravity Force Multiplier", script.gravityForceMultiplier, 0f, 10f);
+				script.forwardForceMultiplier = EditorGUILayout.Slider("Forward Force Multiplier", script.forwardForceMultiplier, 0f, 10f);
+
+				script.forceDampling = EditorGUILayout.Slider("Force Dampling", script.forceDampling, 0f, 1f);
+			}
+
+			EditorGUI.indentLevel --;
+		}
+
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Miscellaneous", EditorStyles.boldLabel);
+		script.autoAim = EditorGUILayout.Toggle("Easy Aim", script.autoAim);
 	}
 }
