@@ -45,8 +45,6 @@ public class UtilityAIBehaviourEditor : Editor
 	{
 		UtilityAIBehaviour script = target as UtilityAIBehaviour;
 
-		baserect = EditorGUILayout.GetControlRect(true, 0);
-
 		/*Rect n = new Rect();
 		n.x = baserect.x;
 		n.y += 500;
@@ -54,13 +52,18 @@ public class UtilityAIBehaviourEditor : Editor
 		n.height = 16;
 		val = EditorGUI.FloatField(n, "Val", val);*/
 
+		DrawDefaultInspector();
+
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Utility AI", EditorStyles.boldLabel);
+		baserect = EditorGUILayout.GetControlRect(true, 0);
 		baserect.height += 17;
 
-		GUI.enabled = false;
+		/*GUI.enabled = false;
 		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromScriptableObject(script), typeof(UtilityAIBehaviour), false);
-		GUI.enabled = true;
-
-		baserect.y += 20;
+		GUI.enabled = true;*/
+		
+		baserect.y += 0;
 		EditorGUI.LabelField(baserect, "Update Interval", EditorStyles.miniLabel);
 		baserect.x += 90;
 		baserect.width += -95;
@@ -191,8 +194,11 @@ public class UtilityAIBehaviourEditor : Editor
 				cacherect.height = 20;
 				if(EditorApplication.isPlaying){GUI.enabled = false;}
 				if(GUI.Button(cacherect, "BOOL")) {
-					if((scorerConditionMethodNames.Length + scorerConditionMethodNames.Length) == script.actions[act].scorers.Count) {
-						Debug.Log("No need to add another scorer, there is enough !");
+					int nb = this.NumberOfScorer(script.actions[act].scorers, true);
+					if(this.scorerConditionMethodNames.Length == nb) {
+						Debug.Log($"No need to add another condition scorer, there is enough ! (Number of scorer found: {nb})");
+					} else if(this.scorerConditionMethodNames.Length == 0) {
+						Debug.Log($"There is no condition scorer yet !");
 					} else {
 						script.actions[act].AddCondition(this.scorerConditionMethodNames[0]);
 						serializedObject.Update();
@@ -200,8 +206,11 @@ public class UtilityAIBehaviourEditor : Editor
 				}
 				cacherect.x = baserect.width + 76;
 				if(GUI.Button(cacherect, "FLOAT")) {
-					if((scorerConditionMethodNames.Length + scorerConditionMethodNames.Length) == script.actions[act].scorers.Count) {
-						Debug.Log("No need to add another scorer, there is enough !");
+					int nb = this.NumberOfScorer(script.actions[act].scorers, false);
+					if(this.scorerCurveMethodNames.Length == nb) {
+						Debug.Log($"No need to add another curve scorer, there is enough ! (Number of scorer found: {nb})");
+					} else if(this.scorerCurveMethodNames.Length == 0) {	
+						Debug.Log($"There is no curve scorer yet !");
 					} else {
 						script.actions[act].AddCurve(this.scorerCurveMethodNames[0]);
 						serializedObject.Update();
@@ -396,6 +405,23 @@ public class UtilityAIBehaviourEditor : Editor
 		}
 		
 		return candidateNames;
+	}
+
+
+
+
+
+	private int NumberOfScorer(List<UtilityScorer> scs, bool isCondition)
+	{
+		int res = 0;
+
+		foreach(UtilityScorer scorer in scs) {
+			if(scorer.isCondition == isCondition) {
+				res ++;
+			}
+		}
+
+		return res;
 	}
 }
 

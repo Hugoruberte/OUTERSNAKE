@@ -28,10 +28,10 @@ public class LazerData : ScriptableObject
 	// Bounce
 	[HideInInspector] public int maxBounceCount;
 	[HideInInspector] public LastBounceMode lastBounceMode;
-	[HideInInspector] public float coneAngle = 45f;
-	[HideInInspector] public float gravityForceMultiplier = 10f;
-	[HideInInspector] public float forwardForceMultiplier = 10f;
-	[HideInInspector] public float forceDampling = 0.5f;
+	[HideInInspector] public float coneAngle;
+	[HideInInspector] public float gravityForceMultiplier;
+	[HideInInspector] public float forwardForceMultiplier;
+	[HideInInspector] public float forceDampling;
 
 	// Length
 	[HideInInspector] public float length;

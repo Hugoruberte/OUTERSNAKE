@@ -20,12 +20,12 @@ public class LazerRay : Lazer
 		}
 	}
 
-	public override void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
+	public override void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
 	{
 		base.Initialize(from, towards, callback);
 
 		if(this.lazerData.bounce) {
-			this.hitPoints.Add(from + towards);
+			this.hitPoints.Add(from.position + towards);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class LazerRay : Lazer
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}*/
 
-	public override void Hit(RaycastHit[] others)
+	public override void Hit(Collider[] colliders, Vector3 pos)
 	{
 		
 	}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Snakes;
 
-[CreateAssetMenu(fileName = "SnakeBodyData", menuName = "Scriptable Object/Snake/SnakeBodyData", order = 3)]
+[CreateAssetMenu(fileName = "SnakeBodyData", menuName = "Scriptable Object/Data/SnakeBodyData", order = 3)]
 public class SnakeBodyData : ScriptableObject
 {
 	[Header("Body Prefab")]

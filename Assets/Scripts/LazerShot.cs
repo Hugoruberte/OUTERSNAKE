@@ -7,7 +7,7 @@ using Lazers;
 
 public class LazerShot : Lazer
 {
-	public override void Initialize(Vector3 from, Vector3 towards, OnLazerHit callback)
+	public override void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
 	{
 		base.Initialize(from, towards, callback);
 
@@ -16,62 +16,59 @@ public class LazerShot : Lazer
 		this.trailRenderer.widthCurve = curve;
 	}
 
-	public override void Hit(RaycastHit[] others)
+	public override void Hit(Collider[] colliders, Vector3 pos)
 	{
 		this.hiting = true;
 
+		LazerHit hit = new LazerHit(colliders, pos, this.lazerData.bounceLayerMask);
+
 		// Callback
-		LazerHit hit = new LazerHit(others);
 		this.onLazerHit(hit);
 
 		// Bounce
-		if(this.lazerData.bounce)
+		if(this.lazerData.bounce && this.bounceCount < this.lazerData.maxBounceCount)
 		{
-			Vector3 normal = Vector3.zero;
-			foreach(RaycastHit other in others) {
-				if(lazerData.bounceLayerMask.IsInLayerMask(other.transform.gameObject.layer)) {
-					normal += other.normal;
-				}
-			}
-
-			normal.Normalize();
-
-			if(normal.magnitude > 0) {
-
-				this.bounceCount ++;
-
-				if(this.bounceCount < this.lazerData.maxBounceCount - 1)
-				{
-					this.direction = Vector3.Reflect(this.direction, normal).normalized;
-					this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
-				}
-				else
-				{
-					this.trailCollider.enabled = false;
-
-					if(this.lazerData.lastBounceMode == LastBounceMode.Curve) {
-						this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
-					} else if(this.lazerData.lastBounceMode == LastBounceMode.Up) {
-						this.LastBounceUp(this.direction);
-					} else {
-						if(Random.Range(0, 2) == 0) {
-							this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
-						} else {
-							this.LastBounceUp(this.direction);
-						}
-					}
-				}
-
-				this.hiting = false;
+			if(hit.bounceNormal.magnitude > 0)
+			{
+				this.Bounce(ref hit, colliders);
 			}
 		}
 		else
-		{
-			this.trailRigidbody.velocity = Vector3.zero;
-			this.trailCollider.enabled = false;
-
-			this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
+		{			
+			this.Death();
 		}
+	}
+
+	private void Bounce(ref LazerHit hit, Collider[] colliders)
+	{
+		if(this.bounceCount < this.lazerData.maxBounceCount - 1)
+		{
+			this.direction = Vector3.Reflect(this.direction, hit.bounceNormal).normalized;
+			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+		}
+		else
+		{
+			// Physics
+			foreach(Collider c in colliders) {
+				this.ignoredCollider.Add(c);
+				Physics.IgnoreCollision(this.trailCollider, c);
+			}
+			
+			if(this.lazerData.lastBounceMode == LastBounceMode.Curve) {
+				this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
+			} else if(this.lazerData.lastBounceMode == LastBounceMode.Up) {
+				this.LastBounceUp(this.direction);
+			} else {
+				if(Random.Range(0, 2) == 0) {
+					this.StartCoroutine(this.LastBounceCurveCoroutine(this.direction));
+				} else {
+					this.LastBounceUp(this.direction);
+				}
+			}
+		}
+
+		this.bounceCount ++;
+		this.hiting = false;
 	}
 
 	protected override IEnumerator DeathCoroutine(bool hitNothing)

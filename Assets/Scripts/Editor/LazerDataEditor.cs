@@ -3,6 +3,8 @@ using UnityEditor;
 using Tools;
 using System.Collections.Generic;
 using Lazers;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(LazerData))]
 public class LazerDataEditor : Editor
@@ -62,7 +64,7 @@ public class LazerDataEditor : Editor
 
 			if(script.lastBounceMode == LastBounceMode.Curve || script.lastBounceMode == LastBounceMode.Random) {
 				script.gravityForceMultiplier = EditorGUILayout.Slider("Gravity Force Multiplier", script.gravityForceMultiplier, 0f, 10f);
-				script.forwardForceMultiplier = EditorGUILayout.Slider("Forward Force Multiplier", script.forwardForceMultiplier, 0f, 10f);
+				script.forwardForceMultiplier = EditorGUILayout.Slider("Forward Force Multiplier", script.forwardForceMultiplier, 0f, 2f);
 
 				script.forceDampling = EditorGUILayout.Slider("Force Dampling", script.forceDampling, 0f, 1f);
 			}
@@ -73,5 +75,12 @@ public class LazerDataEditor : Editor
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Miscellaneous", EditorStyles.boldLabel);
 		script.autoAim = EditorGUILayout.Toggle("Easy Aim", script.autoAim);
+
+
+		if(!EditorApplication.isPlaying && GUI.changed)
+		{
+			EditorUtility.SetDirty(script);
+			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+		}
 	}
 }

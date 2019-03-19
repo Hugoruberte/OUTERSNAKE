@@ -25,6 +25,7 @@ public class UtilityAIManager : Singleton<UtilityAIManager>
 	void Update()
 	{
 		foreach(UtilityAIBehaviour b in this.behaviours) {
+			b.OnUpdate();
 
 			if(Time.time - b.lastUpdate < b.updateRate) {
 				continue;

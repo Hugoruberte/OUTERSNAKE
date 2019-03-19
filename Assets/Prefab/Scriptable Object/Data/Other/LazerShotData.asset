@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52717885cbb89d04dbfe4757775883e7, type: 3}
   m_Name: LazerShotData
   m_EditorClassIdentifier: 
-  speed: 50
-  lifetime: 5
+  speed: 75
+  lifetime: 2
   bounce: 1
   flatten: 0
   mode: 0
@@ -25,11 +25,12 @@ MonoBehaviour:
     m_Bits: 3895
   autoAim: 0
   maxBounceCount: 1
-  lastBounceMode: 0
-  gravityForceMultiplier: 10
-  forwardForceMultiplier: 10
-  coneAngle: 45
-  length: 5
+  lastBounceMode: 2
+  coneAngle: 10
+  gravityForceMultiplier: 5
+  forwardForceMultiplier: 0.3
+  forceDampling: 0.7
+  length: 10
   width: 0.2
   widthSpeed: 2
   widthPointSpeed: 5

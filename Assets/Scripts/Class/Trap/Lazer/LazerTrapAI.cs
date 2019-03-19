@@ -8,7 +8,12 @@ using Snakes;
 [CreateAssetMenu(fileName = "LazerTrapAI", menuName = "Scriptable Object/AI/LazerTrapAI", order = 3)]
 public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 {
-	private Transform snake;
+	[System.NonSerialized] private Transform snake;
+	[System.NonSerialized] private Transform target;
+	[System.NonSerialized] private Collider[] results;
+
+	public LayerMask targetLayerMask;
+
 
 	public UtilityAIBehaviour Launch(LazerTrap lazer)
 	{
@@ -21,7 +26,8 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	{
 		base.OnStart();
 		
-		snake = SnakeManager.instance.snake.transform;
+		this.snake = SnakeManager.instance.snake.transform;
+		this.results = new Collider[5];
 	}
 
 
@@ -40,8 +46,27 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	/* --------------------------------------------------------------------------------------------*/
 	public float DistanceToNearestTarget(MovementController ctr)
 	{
-		Debug.Log("TO DO");
-		return 0f;
+		int count;
+		float dist, min;
+		Vector3 pos;
+
+		min = float.MaxValue;
+		pos = ctr.position;
+		count = Physics.OverlapSphereNonAlloc(pos, ctr.entity.rangeOfView, this.results, this.targetLayerMask);
+		
+		foreach(Collider c in this.results) {
+			if(c == null) {
+				continue;
+			}
+
+			dist = Vector3.Distance(pos, c.transform.position);
+			if(dist < min) {
+				min = dist;
+				this.target = c.transform;
+			}
+		}
+
+		return this.MapOnRangeOfView(min, ctr);
 	}
 
 
@@ -66,8 +91,12 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 
 	public IEnumerator Aim(MovementController ctr, UtilityAction act)
 	{
-		Debug.Log("TO DO");
 		act.isStoppable = true;
-		yield return null;
+
+		LazerTrapController ltr = ctr as LazerTrapController;
+
+		this.target = this.target ?? this.snake;
+
+		yield return ltr.AimAt(this.target);
 	}
 }

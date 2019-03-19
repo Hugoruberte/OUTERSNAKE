@@ -48,7 +48,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 	/* --------------------------------------------------------------------------------------------*/
 	public float DistanceToDanger(MovementController ctr)
 	{
-		float dist, min, res;
+		float dist, min;
 
 		min = float.MaxValue;
 
@@ -61,12 +61,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 			}
 		}
 
-		// mapping :
-		// min = 0 --> res = 1
-		// min >= rangeOfView --> res <= 0
-		res = (-1 / ctr.entity.rangeOfView) * min + 1f;
-
-		return res;
+		return this.MapOnRangeOfView(min, ctr);
 	}
 
 	public bool RabbitIsScared(MovementController ctr)

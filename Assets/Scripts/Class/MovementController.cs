@@ -6,6 +6,8 @@ using Tools;
 [System.Serializable]
 public abstract class MovementController
 {
+	private readonly int freePathLayerMask;
+
 	protected struct StepOver {
 		public Cell cell;
 		public Vector3 up;
@@ -20,7 +22,8 @@ public abstract class MovementController
 
 	public readonly LivingEntity entity;
 
-	private readonly int freePathLayerMask;
+	public Vector3 position { get { return this.entity.myTransform.position; } }
+	public Quaternion rotation { get { return this.entity.myTransform.rotation; } }
 
 	public MovementController(LivingEntity e)
 	{

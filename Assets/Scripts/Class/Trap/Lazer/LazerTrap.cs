@@ -12,12 +12,14 @@ public class LazerTrap : TrapEntity
 
 	public GameObject lazerPrefab;
 
+	public LazerTrapData lazerTrapData;
+
 	protected override void Start()
 	{
 		base.Start();
 
 		// Initialize AI behaviour (this will launch the AI)
-		// this.behaviour = LazerTrapAI.instance.Launch(this);
+		this.behaviour = LazerTrapAI.instance.Launch(this);
 
 		poolingManager = PoolingManager.instance;
 
@@ -32,7 +34,7 @@ public class LazerTrap : TrapEntity
 			return;
 		}
 
-		lazer.Initialize(this.muzzle.position, this.muzzle.forward, this.OnHit);
+		lazer.Initialize(this.muzzle, this.muzzle.forward, this.OnHit);
 
 		lazer.Launch();
 	}

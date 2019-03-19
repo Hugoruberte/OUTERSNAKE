@@ -15,10 +15,8 @@ public class LazerCollisionController : MonoBehaviour
 	private float lastImpactTime;
 	private const float MAX_IMPACT_TIME_INTERVAL = 0.0325f;
 
-	private List<RaycastHit> cache = new List<RaycastHit>();
-	private RaycastHit[] results = new RaycastHit[5];
-
-	private Vector3 dir;
+	private List<Collider> cache = new List<Collider>();
+	private Collider[] results = new Collider[5];
 
 	void Awake()
 	{
@@ -34,33 +32,19 @@ public class LazerCollisionController : MonoBehaviour
 			return;
 		}
 
-		this.dir = this.lazer.direction.normalized;
-		this.count = Physics.RaycastNonAlloc(this.myTransform.position,
-											 this.dir,
-											 this.results,
-											 this.radius + 0.1f,
-											 this.lazer.lazerData.hitLayerMask);
+		this.count =  Physics.OverlapSphereNonAlloc(this.myTransform.position, this.radius + 0.1f, this.results, this.lazer.lazerData.hitLayerMask);
 
 		if(this.count > 0) {
 			this.lastImpactTime = Time.time;
 
-			foreach(RaycastHit hit in this.results) {
-				if(hit.collider != null) {
-					this.cache.Add(hit);
+			foreach(Collider c in this.results) {
+				if(c != null) {
+					this.cache.Add(c);
 				}
 			}
-			this.lazer.Hit(this.cache.ToArray());
+
+			this.lazer.Hit(this.cache.ToArray(), this.myTransform.position);
 			this.cache.Clear();
 		}
 	}
-
-	/*void OnCollisionEnter(Collision other)
-	{
-		if(Time.time > this.lastImpactTime + MAX_IMPACT_TIME_INTERVAL
-			&& this.lazer.lazerData.hitLayerMask.IsInLayerMask(other.gameObject.layer)) {
-
-			this.lastImpactTime = Time.time;
-			this.lazer.Hit(other);
-		}
-	}*/
 }

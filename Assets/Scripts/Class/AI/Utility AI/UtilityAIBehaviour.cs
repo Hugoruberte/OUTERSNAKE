@@ -7,10 +7,10 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 {
 	private UtilityAI utilityAI = new UtilityAI();
 
-	public List<UtilityAction> actions = new List<UtilityAction>();
+	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 
-	public float lastUpdate = 0f;
-	public float updateRate = 0.02f;
+	[HideInInspector] public float lastUpdate = 0f;
+	[HideInInspector] public float updateRate = 0.02f;
 
 	[System.NonSerialized] private List<CAA> controllers = new List<CAA>();
 
@@ -46,19 +46,20 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 					}
 				}
 
-				// either current is unstoppable or a
-				// new best action has been launch or
+				// either current is unstoppable or
+				// a new best action has been launch or
 				// current action is the best action.
-				continue;
 			}
-
 			// if current is not running
-			// select best action by score
-			act = utilityAI.Select(ctr, this.actions);
+			else
+			{
+				// select best action by score
+				act = utilityAI.Select(ctr, this.actions);
 
-			// start selected action
-			act?.Start(ctr, manager);
-			this.controllers[i].act = act;
+				// start selected action
+				act?.Start(ctr, manager);
+				this.controllers[i].act = act;
+			}
 		}
 	}
 
@@ -71,6 +72,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	public virtual void OnStart() {
 		// empty
 	}
+	public virtual void OnUpdate() {
+		// empty
+	}
 
 	protected void AddController(MovementController ctr) {
 		CAA caa = new CAA(ctr, null);
@@ -79,6 +83,14 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	public void Remove(LivingEntity ent) {
 		// only does that
 		this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
+	}
+
+	protected float MapOnRangeOfView(float value, MovementController ctr)
+	{
+		// mapping :
+		// min = 0 --> res = 1
+		// min >= rangeOfView --> res <= 0
+		return (-1 / ctr.entity.rangeOfView) * value + 1f;
 	}
 
 

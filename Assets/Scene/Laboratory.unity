@@ -180,6 +180,7 @@ MonoBehaviour:
   behaviour: {fileID: 0}
   lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
     type: 3}
+  lazerTrapData: {fileID: 11400000, guid: eed27031b8cca4e4db384b3b4ac74ad3, type: 2}
 --- !u!1 &12201069
 GameObject:
   m_ObjectHideFlags: 0
@@ -3613,6 +3614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behaviours:
   - {fileID: 11400000, guid: 403d621a37a93b94088a2a7bd7e0e81d, type: 2}
+  - {fileID: 11400000, guid: 03bbcde5c3885584b993152ca9f4c698, type: 2}
 --- !u!1 &2098060163
 GameObject:
   m_ObjectHideFlags: 0

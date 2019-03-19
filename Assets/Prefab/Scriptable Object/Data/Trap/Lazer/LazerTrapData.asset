@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b88ca0cefb694474ea3c93a3b6da90ee, type: 3}
-  m_Name: PoolingData
+  m_Script: {fileID: 11500000, guid: 4cb50dd77f1be854fa7013fbc0ff7268, type: 3}
+  m_Name: LazerTrapData
   m_EditorClassIdentifier: 
-  pools:
-  - prefab: {fileID: 6496802672037794782, guid: fceecaf78b5fd3045b7bd968dff41b21,
-      type: 3}
-    size: 25
+  omega: 100

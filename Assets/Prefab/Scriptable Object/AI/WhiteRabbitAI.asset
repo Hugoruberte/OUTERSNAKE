@@ -30,7 +30,7 @@ MonoBehaviour:
     score: 0
     method: Wander
     active: 1
-  lastUpdate: 5.227258
+  lastUpdate: 1.8381107
   updateRate: 0.2
   actionCandidates:
   - EatFood
