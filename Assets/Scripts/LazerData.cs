@@ -22,9 +22,6 @@ public class LazerData : ScriptableObject
 	[HideInInspector] public LayerMask hitLayerMask;
 	[HideInInspector] public LayerMask bounceLayerMask;
 
-	// Miscellaneous
-	[HideInInspector] public bool autoAim;
-
 	// Bounce
 	[HideInInspector] public int maxBounceCount;
 	[HideInInspector] public LastBounceMode lastBounceMode;
@@ -43,4 +40,11 @@ public class LazerData : ScriptableObject
 	// Width Point
 	[HideInInspector] public float widthPointSpeed;
 	[HideInInspector] public Vector2 distancePerPointMinMax;
+
+	// Auto Aim
+	[HideInInspector] public bool autoAim;
+	[HideInInspector] public float autoAimRange;
+	[HideInInspector] public float autoAimThreshold;
+	[HideInInspector] public LayerMask autoAimLayerMask;
+	[HideInInspector] public Collider[] autoAimResults = new Collider[10];
 }

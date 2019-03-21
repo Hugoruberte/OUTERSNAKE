@@ -17,6 +17,7 @@ public class LazerCollisionController : MonoBehaviour
 
 	private List<Collider> cache = new List<Collider>();
 	private Collider[] results = new Collider[5];
+	private Collider coll;
 
 	void Awake()
 	{
@@ -32,14 +33,16 @@ public class LazerCollisionController : MonoBehaviour
 			return;
 		}
 
-		this.count =  Physics.OverlapSphereNonAlloc(this.myTransform.position, this.radius + 0.1f, this.results, this.lazer.lazerData.hitLayerMask);
+		this.count = Physics.OverlapSphereNonAlloc(this.myTransform.position, this.radius + 0.1f, this.results, this.lazer.lazerData.hitLayerMask);
 
 		if(this.count > 0) {
 			this.lastImpactTime = Time.time;
 
-			foreach(Collider c in this.results) {
-				if(c != null) {
-					this.cache.Add(c);
+			for(int i = 0; i < this.results.Length; i++) {
+				coll = this.results[i];
+				if(coll != null) {
+					this.cache.Add(coll);
+					this.results[i] = null;
 				}
 			}
 

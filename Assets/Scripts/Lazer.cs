@@ -64,7 +64,7 @@ public abstract class Lazer : PoolableEntity
 
 	protected TrailRenderer trailRenderer;
 		
-	public Vector3 direction;
+	protected Vector3 direction;
 
 	protected AnimationCurve curve = new AnimationCurve();
 

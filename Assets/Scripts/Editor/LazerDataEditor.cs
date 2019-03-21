@@ -1,15 +1,25 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Tools;
-using System.Collections.Generic;
-using Lazers;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+using Tools;
+using Lazers;
+
 
 [CustomEditor(typeof(LazerData))]
 public class LazerDataEditor : Editor
 {
 	private Vector2 temp;
+	private string[] users;
+	private string[] plus = new string[] {"Default"};
+
+	void OnEnable()
+	{
+		this.users = this.plus.Concat(LayerMaskExtension.UserLayerMask()).ToArray();
+	}
 
 	public override void OnInspectorGUI()
 	{
@@ -30,9 +40,9 @@ public class LazerDataEditor : Editor
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Layer Mask", EditorStyles.boldLabel);
-		script.hitLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Hit Layer Mask", script.hitLayerMask);
+		script.hitLayerMask = EditorGUILayoutExtension.MappedMaskField("Hit Layer Mask", script.hitLayerMask, this.users);
 		if(script.bounce) {
-			script.bounceLayerMask = EditorGUILayoutExtension.ConcatenatedMaskField("Bounce Layer Mask", script.bounceLayerMask, script.hitLayerMask.MaskToNames());
+			script.bounceLayerMask = EditorGUILayoutExtension.MappedMaskField("Bounce Layer Mask", script.bounceLayerMask, script.hitLayerMask);
 		}
 
 		EditorGUILayout.Space();
@@ -73,9 +83,14 @@ public class LazerDataEditor : Editor
 		}
 
 		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Miscellaneous", EditorStyles.boldLabel);
-		script.autoAim = EditorGUILayout.Toggle("Easy Aim", script.autoAim);
-
+		EditorGUILayout.LabelField("Auto Aim", EditorStyles.boldLabel);
+		script.autoAim = EditorGUILayout.Toggle("Auto Aim", script.autoAim);
+		if(script.autoAim) {
+			script.autoAimRange = EditorGUILayout.Slider("Target Detection Radius", script.autoAimRange, 0f, 50f);
+			script.autoAimThreshold = EditorGUILayout.Slider("Target Alignment Threshold", script.autoAimThreshold, 0f, 1f);
+			script.autoAimLayerMask = EditorGUILayoutExtension.MappedMaskField("Target Layer Mask", script.autoAimLayerMask, script.hitLayerMask);
+		}
+		
 
 		if(!EditorApplication.isPlaying && GUI.changed)
 		{

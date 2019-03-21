@@ -71,6 +71,21 @@ namespace Tools
 			}
 			return ret;
 		}
+
+		public static string[] UserLayerMask()
+		{
+			string name;
+			List<string> output = new List<string>();
+
+			for(int i = 8; i < 32; i++) {
+				name = LayerMask.LayerToName(i);
+				if(name.Length > 0) {
+					output.Add(name);
+				}
+			}
+
+			return output.ToArray();
+		}
 	 
 		public static LayerMask Inverse(this LayerMask original) => ~original;
 	 
@@ -102,23 +117,95 @@ namespace Tools
 			return output.ToArray();
 		}
 
+		public static string[] MaskToNames(this LayerMask layers, string[] from)
+		{
+			string layerName;
+			int shifted;
+			List<string> output = new List<string>();
+
+			for (int i = 0; i < from.Length; ++i)
+			{
+				shifted = 1 << i;
+				if((layers & shifted) == shifted) {
+					layerName = from[i];
+					if(!string.IsNullOrEmpty(layerName)) {
+						output.Add(layerName);
+					}
+				}
+			}
+
+			return output.ToArray();
+		}
+
 		public static string MaskToString(this LayerMask original) => MaskToString(original, ", ");
  
 		public static string MaskToString(this LayerMask original, string delimiter) => string.Join(delimiter, MaskToNames(original));
+
+		public static string[] AllLayerNames()
+		{
+			string[] all = new string[32];
+			for(int i = 0; i < 32; i++) {
+				all[i] = LayerMask.LayerToName(i);
+			}
+			return all;
+		}
+
+		public static LayerMask CastTo(this LayerMask current, string[] from, string[] to)
+		{
+			string[] masks;
+			LayerMask result;
+
+			masks = current.MaskToNames(from);
+			result = (LayerMask)0;
+
+			for(int i = 0; i < masks.Length; i++) {
+				result |= (1 << System.Array.IndexOf(to, masks[i]));
+			}
+
+			return result;
+		}
 	}
 
 
 
 	public static class EditorGUILayoutExtension
 	{
-		public static LayerMask ConcatenatedMaskField(string name, LayerMask current, string[] options = null)
+		public static LayerMask UserMaskField(string label, LayerMask current)
 		{
-			if(options == null) {
-				options = InternalEditorUtility.layers;
+			string[] users;
+
+			users = LayerMaskExtension.UserLayerMask();
+
+			return EditorGUILayoutExtension.MappedMaskField(label, current, users);
+		}
+
+		public static LayerMask MappedMaskField(string label, LayerMask current, string[] map)
+		{
+			string[] all;
+			LayerMask mask;
+
+			if(map.Length == 0) {
+				return (LayerMask)0;
 			}
 
-			LayerMask tempMask = EditorGUILayout.MaskField(name, InternalEditorUtility.LayerMaskToConcatenatedLayersMask(current), options);
-			return InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
+			all = LayerMaskExtension.AllLayerNames();
+
+			// "current" comes from all existing layers -> 'casted' to map specified layers
+			mask = current.CastTo(all, map);
+			// display map specified layers, can select them
+			mask = EditorGUILayout.MaskField(label, mask, map);
+			// "mask" is on map layers -> 'cast' it on all existing layers
+			mask = mask.CastTo(map, all);
+
+			return mask;
+		}
+		public static LayerMask MappedMaskField(string label, LayerMask current, LayerMask layers)
+		{
+			string[] map;
+
+			map = layers.MaskToNames(LayerMaskExtension.AllLayerNames());
+
+			return EditorGUILayoutExtension.MappedMaskField(label, current, map);
 		}
 	}
 
