@@ -19,11 +19,11 @@ MonoBehaviour:
   mode: 0
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1793
   bounceLayerMask:
     serializedVersion: 2
-    m_Bits: 1
-  maxBounceCount: 2
+    m_Bits: 1793
+  maxBounceCount: 3
   lastBounceMode: 2
   coneAngle: 10
   gravityForceMultiplier: 5
@@ -35,11 +35,11 @@ MonoBehaviour:
   widthPointSpeed: 5
   distancePerPointMinMax: {x: 1, y: 3}
   autoAim: 1
-  autoAimRange: 50
-  autoAimThreshold: 0
+  autoAimRange: 15
+  autoAimThreshold: 0.95
   autoAimLayerMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1537
   autoAimResults:
   - {fileID: 0}
   - {fileID: 0}
