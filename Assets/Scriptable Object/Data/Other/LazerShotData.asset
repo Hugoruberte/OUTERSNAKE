@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52717885cbb89d04dbfe4757775883e7, type: 3}
+  m_Name: LazerShotData
+  m_EditorClassIdentifier: 
+  speed: 75
+  lifetime: 2
+  bounce: 1
+  flatten: 0
+  mode: 0
+  lazerImpactPrefab: {fileID: 8336235860199268992, guid: b3009b19c6455f742a52e308660368a5,
+    type: 3}
+  groundImpactPrefab: {fileID: 4102156173478112985, guid: 913098a1600ef1a49ad2d82a9910b18b,
+    type: 3}
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 1793
+  bounceLayerMask:
+    serializedVersion: 2
+    m_Bits: 1793
+  maxBounceCount: 3
+  lastBounceMode: 0
+  coneAngle: 10
+  gravityForceMultiplier: 5
+  forwardForceMultiplier: 0.3
+  forceDampling: 0.7
+  length: 10
+  width: 0.2
+  widthSpeed: 2
+  widthPointSpeed: 5
+  distancePerPointMinMax: {x: 1, y: 3}
+  autoAim: 1
+  autoAimRange: 15
+  autoAimThreshold: 0.89
+  autoAimLayerMask:
+    serializedVersion: 2
+    m_Bits: 1537
+  autoAimResults:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

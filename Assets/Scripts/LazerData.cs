@@ -17,6 +17,8 @@ public class LazerData : ScriptableObject
 	[HideInInspector] public bool bounce;
 	[HideInInspector] public bool flatten;
 	[HideInInspector] public LazerMode mode = LazerMode.Shot;
+	[HideInInspector] public GameObject lazerImpactPrefab;
+	[HideInInspector] public GameObject groundImpactPrefab;
 
 	// Layer Mask
 	[HideInInspector] public LayerMask hitLayerMask;

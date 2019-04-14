@@ -57,30 +57,20 @@ namespace Lazers
 
 public abstract class Lazer : PoolableEntity
 {
-	protected Collider trailCollider;
-	[HideInInspector] public Rigidbody trailRigidbody;
-
+	protected Collider headCollider;
 	protected List<Collider> ignoredCollider = new List<Collider>();
-
-	protected TrailRenderer trailRenderer;
-		
+	protected TrailRenderer headRenderer;
 	protected Vector3 direction;
-
 	protected AnimationCurve curve = new AnimationCurve();
-
 	protected IEnumerator behaviourCoroutine = null;
-
 	protected bool dying;
 	protected bool hiting;
-
 	protected LazerCollisionController lazerCollisionController;
-
 	protected int bounceCount;
-
 	protected float startTime;
-
 	protected OnLazerHit onLazerHit = null;
 
+	[HideInInspector] public Rigidbody headRigidbody;
 	public LazerData lazerData;
 
 
@@ -88,10 +78,10 @@ public abstract class Lazer : PoolableEntity
 	{
 		base.Awake();
 
-		this.trailRenderer = GetComponentInChildren<TrailRenderer>();
-		this.trailCollider = trailRenderer.GetComponent<Collider>();
-		this.trailRigidbody = trailRenderer.GetComponent<Rigidbody>();
-		this.lazerCollisionController = trailRenderer.GetComponent<LazerCollisionController>();
+		this.headRenderer = GetComponentInChildren<TrailRenderer>();
+		this.headCollider = headRenderer.GetComponent<Collider>();
+		this.headRigidbody = headRenderer.GetComponent<Rigidbody>();
+		this.lazerCollisionController = headRenderer.GetComponent<LazerCollisionController>();
 	}
 
 	public virtual void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
@@ -106,7 +96,7 @@ public abstract class Lazer : PoolableEntity
 		base.Launch();
 
 		this.startTime = Time.time;
-		this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+		this.headRigidbody.velocity = this.direction * this.lazerData.speed;
 
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.LifeCoroutine());
 	}
@@ -125,16 +115,16 @@ public abstract class Lazer : PoolableEntity
 
 	public abstract void Hit(Collider[] colliders, Vector3 pos);
 
-	protected void Death()
+	protected virtual void Kill()
 	{
 		this.lazerCollisionController.enabled = false;
-		this.trailCollider.enabled = false;
-		this.trailRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+		this.headCollider.enabled = false;
+		this.headRigidbody.constraints = RigidbodyConstraints.FreezeAll;
 
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}
 
-	protected abstract IEnumerator DeathCoroutine(bool hitNothing);
+	protected abstract IEnumerator DeathCoroutine(bool deathOfOldAge);
 
 	protected IEnumerator WidthCoroutine()
 	{
@@ -142,11 +132,11 @@ public abstract class Lazer : PoolableEntity
 
 		while(step < 1f) {
 			step += this.lazerData.widthSpeed * Time.deltaTime;
-			this.trailRenderer.widthMultiplier = Mathf.Lerp(lazerData.width, 0f, step);
+			this.headRenderer.widthMultiplier = Mathf.Lerp(lazerData.width, 0f, step);
 			yield return null;
 		}
 
-		this.trailRenderer.widthMultiplier = 0f;
+		this.headRenderer.widthMultiplier = 0f;
 	}
 
 	protected Vector3 LastBounceUp(Vector3 forward)
@@ -155,7 +145,7 @@ public abstract class Lazer : PoolableEntity
 		Vector3 up, cross;
 
 		// initialize
-		up = this.trailRigidbody.transform.up;
+		up = this.headRigidbody.transform.up;
 		cross = Vector3.Cross(up, forward);
 
 		// randomize 'up' with cone angle
@@ -163,7 +153,7 @@ public abstract class Lazer : PoolableEntity
 		up = (Quaternion.Euler(cross * Random.Range(-this.lazerData.coneAngle, this.lazerData.coneAngle)) * up).normalized;
 		
 		// movement
-		this.trailRigidbody.velocity = up * this.lazerData.speed;
+		this.headRigidbody.velocity = up * this.lazerData.speed;
 
 		return up;	
 	}
@@ -172,7 +162,6 @@ public abstract class Lazer : PoolableEntity
 	{
 		// declaration
 		Vector3 up, fd, project;
-		WaitForFixedUpdate waitForFixedUpdate;
 		float forwardForce, gravityForce;
 
 		// initialize
@@ -182,16 +171,15 @@ public abstract class Lazer : PoolableEntity
 		gravityForce = this.lazerData.gravityForceMultiplier * this.lazerData.speed * Random.Range(-0.5f * this.lazerData.forceDampling + 1.5f, 1f);
 
 		// compute 'up' and 'forward' forces
-		project = Vector3.ProjectOnPlane(up, this.trailRigidbody.transform.up).normalized;
+		project = Vector3.ProjectOnPlane(up, this.headRigidbody.transform.up).normalized;
 		forward = Vector3.Cross(project, up).normalized * (2 * Random.Range(0, 2) - 1);
 		if(forward.magnitude == 0) { forward = fd; }
-		waitForFixedUpdate = new WaitForFixedUpdate();
 
 		// movement
-		this.trailRigidbody.AddForce(forward * forwardForce, ForceMode.VelocityChange);
-		while(this.trailCollider.enabled) {
-			this.trailRigidbody.AddForce(-up * gravityForce, ForceMode.Acceleration);
-			yield return waitForFixedUpdate;
+		this.headRigidbody.AddForce(forward * forwardForce, ForceMode.VelocityChange);
+		while(this.headCollider.enabled) {
+			this.headRigidbody.AddForce(-up * gravityForce, ForceMode.Acceleration);
+			yield return Yielders.fixedUpdate;
 		}
 	}
 
@@ -204,8 +192,8 @@ public abstract class Lazer : PoolableEntity
 		this.ClearWidthPoint();
 		this.curve.AddKey(0f, 1f);
 		this.curve.AddKey(1f, 1f);
-		this.trailRenderer.widthCurve = curve;
-		this.trailRenderer.widthMultiplier = this.lazerData.width;
+		this.headRenderer.widthCurve = curve;
+		this.headRenderer.widthMultiplier = this.lazerData.width;
 
 		// parameter
 		this.bounceCount = 0;
@@ -219,17 +207,17 @@ public abstract class Lazer : PoolableEntity
 		this.dying = false;
 		
 		// rigidbody
-		this.trailRigidbody.velocity = Vector3.zero;
-		this.trailRigidbody.transform.localPosition = Vector3.zero;
-		this.trailRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+		this.headRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.transform.localPosition = Vector3.zero;
+		this.headRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 		// collider
-		this.trailCollider.enabled = true;
-		foreach(Collider c in this.ignoredCollider) { Physics.IgnoreCollision(this.trailCollider, c, false); }
+		this.headCollider.enabled = true;
+		foreach(Collider c in this.ignoredCollider) { Physics.IgnoreCollision(this.headCollider, c, false); }
 		this.ignoredCollider.Clear();
 
-		// trail
-		this.trailRenderer.Clear();
+		// head
+		this.headRenderer.Clear();
 		this.lazerCollisionController.enabled = true;
 
 		base.Reset();
@@ -245,6 +233,6 @@ public abstract class Lazer : PoolableEntity
 			this.curve.RemoveKey(i);
 		}
 
-		this.trailRenderer.widthCurve = curve;
+		this.headRenderer.widthCurve = curve;
 	}
 }

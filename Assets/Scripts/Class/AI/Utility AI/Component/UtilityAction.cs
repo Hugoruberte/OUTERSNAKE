@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using UnityEngine;
+using Tools;
 
 [System.Serializable]
 public class UtilityAction
@@ -59,11 +60,6 @@ public class UtilityAction
 			this.isRunning = false;
 			this.action(ctr);
 		} else {
-			if(this.coroutine != null) {
-				Debug.Log("Ddhdhzdqnioufsdjjjjjjjjjjjjjjjjjjjj");
-			} else {
-				Debug.Log("Need to remove this...");
-			}
 			this.coroutine = this.CoroutineManager(ctr);
 			main.StartCoroutine(this.coroutine);
 		}
@@ -76,8 +72,7 @@ public class UtilityAction
 			return;
 		}
 
-		main.StopCoroutine(this.coroutine);
-		this.coroutine = null;
+		main.TryStopCoroutine(ref this.coroutine);
 	}
 
 

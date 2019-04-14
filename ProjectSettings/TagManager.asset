@@ -7,6 +7,7 @@ TagManager:
   - Planet
   - Snake Part
   - Planet Element
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Snake
   - Snake Part
   - Lazer
-  - 
+  - Projector
   - 
   - 
   - 

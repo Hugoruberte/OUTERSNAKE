@@ -89,11 +89,9 @@ public abstract class RabbitEntity : CharacterEntity
 
 	private IEnumerator FireLightCoroutine(Light l)
 	{
-		WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
-
 		while(true) {
 			l.intensity = Random.Range(2f, 4f);
-			yield return waitForSeconds;
+			yield return Yielders.Wait(0.1f);
 		}
 	}
 }

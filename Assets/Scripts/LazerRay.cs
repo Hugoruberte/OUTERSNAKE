@@ -46,12 +46,12 @@ public class LazerRay : Lazer
 			// }
 
 			// Vector3 last = this.hitPoints[this.hitPoints.Count - 1] + direction;
-			// if(Physics.Raycast(last, this.direction, out hit, Vector3.Distance(last, this.trailRigidbody.position - this.direction), this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
+			// if(Physics.Raycast(last, this.direction, out hit, Vector3.Distance(last, this.headRigidbody.position - this.direction), this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
 
 			// 	this.Intersect(hit);
 			// }
 
-			// Debug.DrawRay(last, this.direction * Vector3.Distance(last, this.trailRigidbody.position - this.direction), Color.white);
+			// Debug.DrawRay(last, this.direction * Vector3.Distance(last, this.headRigidbody.position - this.direction), Color.white);
 		}
 	}
 
@@ -65,14 +65,14 @@ public class LazerRay : Lazer
 		// Bounce
 		if(this.lazerData.bounce && lazerData.bounceLayerMask.IsInLayerMask(other.gameObject.layer)) {
 			this.direction = Vector3.Reflect(this.direction, LazerHit.GetContactNormalSum(other));
-			this.trailRigidbody.velocity = this.direction * this.lazerData.speed;
+			this.headRigidbody.velocity = this.direction * this.lazerData.speed;
 			this.hiting = false;
 			this.hitPoints.Add(other.contacts[0].point);
 
 			return;
 		}
 
-		this.trailRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.velocity = Vector3.zero;
 			
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}*/
@@ -97,7 +97,7 @@ public class LazerRay : Lazer
 		// 	return;
 		// }
 
-		// this.trailRigidbody.velocity = Vector3.zero;
+		// this.headRigidbody.velocity = Vector3.zero;
 			
 		// this.Death(false);
 	}
@@ -113,8 +113,8 @@ public class LazerRay : Lazer
 
 		// // initialization
 		// index = 0;
-		// pos = new Vector3[this.trailRenderer.positionCount];
-		// this.trailRenderer.GetPositions(pos);
+		// pos = new Vector3[this.headRenderer.positionCount];
+		// this.headRenderer.GetPositions(pos);
 		// hitpointindex = 0;
 		// hitpoint = this.hitPoints[hitpointindex];
 
@@ -126,12 +126,12 @@ public class LazerRay : Lazer
 		// for(int i = 0; i < pos.Length; i++) {
 
 		// 	// check still valid hitpoints
-		// 	if(Vector3.Distance(pos[i], hitpoint) <= this.trailRenderer.minVertexDistance) {
+		// 	if(Vector3.Distance(pos[i], hitpoint) <= this.headRenderer.minVertexDistance) {
 		// 		hitpoint = this.hitPoints[++ hitpointindex];
 		// 	}
 
-		// 	// check intersect point on trail
-		// 	if(Vector3.Distance(pos[i], hit.point) <= this.trailRenderer.minVertexDistance) {
+		// 	// check intersect point on head
+		// 	if(Vector3.Distance(pos[i], hit.point) <= this.headRenderer.minVertexDistance) {
 		// 		index = i;
 		// 		break;
 		// 	}
@@ -141,16 +141,16 @@ public class LazerRay : Lazer
 		// this.hitPoints.RemoveRange(hitpointindex, this.hitPoints.Count - hitpointindex);
 		// this.hitPoints.Add(hit.point);
 
-		// // trail recalculation
-		// this.trailRenderer.Clear();
+		// // head recalculation
+		// this.headRenderer.Clear();
 		// pos = pos.Take(index).ToArray();
-		// this.trailRenderer.SetPositions(pos);
-		// this.trailRigidbody.position = hit.point;
+		// this.headRenderer.SetPositions(pos);
+		// this.headRigidbody.position = hit.point;
 	}
 
-	protected override IEnumerator DeathCoroutine(bool hitNothing)
+	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)
 	{
-		this.trailRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.velocity = Vector3.zero;
 
 		// width point
 		this.InitializeWidthPoint();
@@ -164,7 +164,7 @@ public class LazerRay : Lazer
 	public override void Reset()
 	{
 		// time
-		this.trailRenderer.time = float.MaxValue;
+		this.headRenderer.time = float.MaxValue;
 
 		base.Reset();
 	}
@@ -210,7 +210,7 @@ public class LazerRay : Lazer
 				this.curve.MoveKey(i, new Keyframe(time, value));
 			}
 
-			this.trailRenderer.widthCurve = curve;
+			this.headRenderer.widthCurve = curve;
 			yield return null;
 		}
 	}

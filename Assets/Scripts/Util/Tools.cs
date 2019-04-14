@@ -211,6 +211,23 @@ namespace Tools
 
 
 
+	public static class LayerExtension
+	{
+		public static void SetLayerWithChildren(this GameObject root, int layer)
+		{
+			Transform[] trs = root.GetComponentsInChildren<Transform>();
+
+			foreach(Transform tr in trs) {
+				tr.gameObject.layer = layer;
+			}
+		}
+
+		public static void SetLayerWithChildren(this GameObject root, string layer)
+		{
+			root.SetLayerWithChildren(LayerMask.NameToLayer(layer));
+		}
+	}
+
 	public static class CoroutineExtension
 	{
 		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, IEnumerator coroutine)
@@ -220,6 +237,58 @@ namespace Tools
 			}
 			handler = coroutine;
 			mono.StartCoroutine(handler);
+		}
+
+		public static void TryStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler)
+		{
+			if(handler != null) {
+				mono.StopCoroutine(handler);
+				handler = null;
+			}
+		}
+	}
+
+	public static class ParticleSystemExtension
+	{
+		public static IEnumerator PlayParticleSystemBackwards(this MonoBehaviour mono, ParticleSystem particle, float simulationSpeedScale = 1.0f, float startTime = 2.0f)
+		{
+			IEnumerator co = mono.PlayParticleSystemBackwardsCoroutine(particle, simulationSpeedScale, startTime);
+			mono.StartCoroutine(co);
+			return co;
+		}
+
+		private static IEnumerator PlayParticleSystemBackwardsCoroutine(this MonoBehaviour mono, ParticleSystem particle, float simulationSpeedScale, float startTime)
+		{
+			bool useAutoRandomSeed;
+			float deltaTime, currentSimulationTime, simulationTime;
+
+			simulationTime = 0f;
+			useAutoRandomSeed = particle.useAutoRandomSeed;
+			deltaTime = particle.main.useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+
+			particle.Simulate(startTime, true, false, true);
+			particle.useAutoRandomSeed = false;
+
+			while(true)
+			{
+				particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+				particle.Play(false);
+
+				simulationTime -= (deltaTime * particle.main.simulationSpeed) * simulationSpeedScale;
+
+				currentSimulationTime = startTime + simulationTime;
+				particle.Simulate(currentSimulationTime, false, false, true);
+
+				if(currentSimulationTime < 0.0f) {
+					particle.Play(false);
+					particle.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
+					break;
+				}
+
+				yield return null;
+			}
+
+			particle.useAutoRandomSeed = useAutoRandomSeed;
 		}
 	}
 
@@ -251,6 +320,32 @@ namespace Tools
 			foreach(T c in components) {
 				if(c.gameObject.name == n) {
 					return c.transform;
+				}
+			}
+
+			return null;
+		}
+
+		public static T[] GetComponentsInChildrenWithName<T>(this MonoBehaviour root, string n) where T : Component
+		{
+			List<T> list = new List<T>();
+			T[] components = root.GetComponentsInChildren<T>();
+
+			foreach(T c in components) {
+				if(c.transform.name == n) {
+					list.Add(c);
+				}
+			}
+
+			return list.ToArray();
+		}
+		public static T GetComponentInChildrenWithName<T>(this MonoBehaviour root, string n) where T : Component
+		{
+			T[] components = root.GetComponentsInChildren<T>();
+
+			foreach(T c in components) {
+				if(c.transform.name == n) {
+					return c;
 				}
 			}
 
@@ -750,6 +845,63 @@ namespace Tools
 		{
 			Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
 			return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+		}
+	}
+
+
+
+	public static class DebugExtension
+	{
+		public static void DrawArrowGizmo(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+		{
+			Gizmos.DrawRay(pos, direction);
+	 
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180+arrowHeadAngle,0) * new Vector3(0,0,1);
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180-arrowHeadAngle,0) * new Vector3(0,0,1);
+			Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
+			Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+		}
+	 
+		public static void DrawArrowGizmo(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+		{
+			Gizmos.color = color;
+			Gizmos.DrawRay(pos, direction);
+	 
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180+arrowHeadAngle,0) * new Vector3(0,0,1);
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180-arrowHeadAngle,0) * new Vector3(0,0,1);
+			Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
+			Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+		}
+
+		public static void DrawArrowLineGizmo(Vector3 from, Vector3 to, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+		{
+			Gizmos.color = color;
+			Gizmos.DrawLine(from, to);
+			Vector3 direction = to - from;
+	 
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Vector3.forward;
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Vector3.forward;
+			Gizmos.DrawRay(to, right * arrowHeadLength);
+			Gizmos.DrawRay(to, left * arrowHeadLength);
+		}
+	 
+		public static void DrawArrowDebug(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+		{
+			Debug.DrawRay(pos, direction);
+	 
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180+arrowHeadAngle,0) * new Vector3(0,0,1);
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180-arrowHeadAngle,0) * new Vector3(0,0,1);
+			Debug.DrawRay(pos + direction, right * arrowHeadLength);
+			Debug.DrawRay(pos + direction, left * arrowHeadLength);
+		}
+		public static void DrawArrowDebug(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+		{
+			Debug.DrawRay(pos, direction, color);
+	 
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180+arrowHeadAngle,0) * new Vector3(0,0,1);
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180-arrowHeadAngle,0) * new Vector3(0,0,1);
+			Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
+			Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
 		}
 	}
 }

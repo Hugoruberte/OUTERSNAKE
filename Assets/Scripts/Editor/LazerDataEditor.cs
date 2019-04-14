@@ -39,6 +39,11 @@ public class LazerDataEditor : Editor
 		script.bounce = EditorGUILayout.Toggle("Bounce", script.bounce);
 
 		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Effects", EditorStyles.boldLabel);
+		script.lazerImpactPrefab = EditorGUILayout.ObjectField("Lazer Impact Prefab", script.lazerImpactPrefab, typeof(GameObject), false) as GameObject;
+		script.groundImpactPrefab = EditorGUILayout.ObjectField("Ground Impact Prefab", script.groundImpactPrefab, typeof(GameObject), false) as GameObject;
+
+		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Layer Mask", EditorStyles.boldLabel);
 		script.hitLayerMask = EditorGUILayoutExtension.MappedMaskField("Hit Layer Mask", script.hitLayerMask, this.users);
 		if(script.bounce) {

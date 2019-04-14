@@ -33,6 +33,8 @@ public class PoolableEntity : MonoBehaviour
 	{
 		this.isActive = false;
 
+		this.StopAllCoroutines();
+
 		this.myGameObject.SetActive(false);
 	}
 }

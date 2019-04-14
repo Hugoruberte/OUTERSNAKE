@@ -54,7 +54,7 @@ public abstract class RabbitController : MovementController
 
 		duration = Random.Range(this.rabbit.minAfterJumpTempo, this.rabbit.maxAfterJumpTempo);
 
-		yield return new WaitForSeconds(duration);
+		yield return Yielders.Wait(duration);
 	}
 
 	public virtual IEnumerator RunAway(Transform from)

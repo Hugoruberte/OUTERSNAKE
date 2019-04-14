@@ -7,12 +7,18 @@ using Lazers;
 public class LazerTrap : TrapEntity
 {
 	private PoolingManager poolingManager;
-
 	private Transform muzzle;
 
 	public GameObject lazerPrefab;
-
 	public LazerTrapData lazerTrapData;
+
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		this.muzzle = transform.DeepFind("Muzzle");
+	}
 
 	protected override void Start()
 	{
@@ -22,8 +28,6 @@ public class LazerTrap : TrapEntity
 		this.behaviour = LazerTrapAI.instance.Launch(this);
 
 		poolingManager = PoolingManager.instance;
-
-		this.muzzle = transform.DeepFind("Muzzle");
 	}
 
 	private void Attack()

@@ -7,22 +7,20 @@ public class PoolingData : ScriptableObject
 {
 	[System.Serializable]
 	public struct Pool {
-		public PoolableEntity prefab;
+		public GameObject prefab;
 		public int size;
+		[HideInInspector] public PoolableEntity entity;
 
-		[System.NonSerialized]
-		public PoolableEntity[] objects;
+		[System.NonSerialized] public PoolableEntity[] entities;
+		[System.NonSerialized] public Transform activeFolder;
+		[System.NonSerialized] public Transform inactiveFolder;
 
-		[System.NonSerialized]
-		public Transform activeFolder;
-		[System.NonSerialized]
-		public Transform inactiveFolder;
-
-		public Pool(PoolableEntity p, int s) {
+		public Pool(GameObject p, int s) {
 			this.prefab = p;
 			this.size = s;
+			this.entity = p.GetComponent<PoolableEntity>();
 
-			this.objects = null;
+			this.entities = null;
 			this.activeFolder = null;
 			this.inactiveFolder = null;
 		}
@@ -30,8 +28,9 @@ public class PoolingData : ScriptableObject
 		public Pool(Pool p, PoolableEntity[] a, Transform af, Transform iaf) {
 			this.prefab = p.prefab;
 			this.size = p.size;
+			this.entity = this.prefab.GetComponent<PoolableEntity>();
 
-			this.objects = a;
+			this.entities = a;
 			this.activeFolder = af;
 			this.inactiveFolder = iaf;
 		}
@@ -56,24 +55,25 @@ public class PoolingData : ScriptableObject
 			pp = this.pools[k];
 			objs = new PoolableEntity[pp.size];
 
-			// folder
+			// folders
 			g = new GameObject();
-			g.name = pp.prefab.gameObject.name;
+			g.name = pp.prefab.name;
 			folder = g.transform;
 			folder.parent = f;
 
 			g = new GameObject();
-			g.name = pp.prefab.gameObject.name + " (Active)";
+			g.name = pp.prefab.name + " (Active)";
 			activeFolder = g.transform;
 			activeFolder.parent = folder;
 
 			g = new GameObject();
-			g.name = pp.prefab.gameObject.name + " (Inactive)";
+			g.name = pp.prefab.name + " (Inactive)";
 			inactiveFolder = g.transform;
 			inactiveFolder.parent = folder;
 
 			for(int i = 0; i < pp.size; i++) {
-				p = Instantiate(pp.prefab);
+				g = Instantiate(pp.prefab);
+				p = g.GetComponent<PoolableEntity>();
 
 				// initialize
 				p.transform.parent = inactiveFolder;
