@@ -48,7 +48,7 @@ MonoBehaviour:
     score: 0
     method: Aim
     active: 1
-  lastUpdate: 1.6706132
+  lastUpdate: 27.454685
   updateRate: 0.2
   actionCandidates:
   - Wander

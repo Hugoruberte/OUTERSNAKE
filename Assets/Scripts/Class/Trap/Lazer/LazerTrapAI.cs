@@ -12,7 +12,9 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	[System.NonSerialized] private Transform target;
 	[System.NonSerialized] private Collider[] results;
 
-	public LayerMask targetLayerMask;
+
+	[Header("Parameters")]
+	[SerializeField] private LayerMask targetLayerMask;
 
 
 	public UtilityAIBehaviour Launch(LazerTrap lazer)

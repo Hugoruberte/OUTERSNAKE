@@ -24,7 +24,7 @@ public class UtilityAIBehaviourEditor : Editor
 	private readonly Color actionColor = new Color32(170, 170, 170, 255);
 	private readonly Color scorerColor = new Color32(147, 147, 147, 255);
 
-	// float val = 0f;
+	float val = 0f;
 
 
 	void OnEnable()
@@ -45,12 +45,12 @@ public class UtilityAIBehaviourEditor : Editor
 	{
 		UtilityAIBehaviour script = target as UtilityAIBehaviour;
 
-		/*Rect n = new Rect();
-		n.x = baserect.x;
+		Rect n = new Rect();
+		n.x = baserect.x + 50;
 		n.y += 500;
 		n.width = 200;
 		n.height = 16;
-		val = EditorGUI.FloatField(n, "Val", val);*/
+		val = EditorGUI.FloatField(n, "Val", val);
 
 		DrawDefaultInspector();
 
@@ -89,7 +89,10 @@ public class UtilityAIBehaviourEditor : Editor
 			baserect.y += 7;
 			baserect.width += -15;
 			baserect.height += -38;
-			this.ActionMethodField(baserect, actionRef);
+
+			cacherect = baserect;
+			// cacherect.x += val;
+			this.ActionMethodField(cacherect, actionRef);
 
 			baserect.x += 12;
 			baserect.y += 19;
@@ -98,9 +101,11 @@ public class UtilityAIBehaviourEditor : Editor
 			script.displayScorers[act] = EditorGUI.Foldout(cacherect, script.displayScorers[act], "Scorers");
 			
 			cacherect = baserect;
-			cacherect.x = baserect.width + -91;
+			// cacherect.x = baserect.width + -89;
+			// cacherect.x = baserect.width + -95;
+			cacherect.x += 117;
 			cacherect.y += -2;
-			cacherect.width = 108;
+			cacherect.width += -128;
 			cacherect.height = 17;
 			if(EditorApplication.isPlaying){GUI.enabled = false;}
 			if(GUI.Button(cacherect, "REMOVE")) {
@@ -142,7 +147,7 @@ public class UtilityAIBehaviourEditor : Editor
 					baserect.height += -2;
 
 					cacherect = baserect;
-					cacherect.y += 20;
+					cacherect.y += 18;
 					cacherect.height = 16;
 
 					scoreRef = scorers.GetArrayElementAtIndex(sco);
@@ -152,11 +157,15 @@ public class UtilityAIBehaviourEditor : Editor
 						this.ScorerConditionMethodField(baserect, scoreRef);
 						script.actions[act].scorers[sco].score = EditorGUI.IntField(cacherect, "Score", script.actions[act].scorers[sco].score);
 
-						cacherect.x += 82;
-						cacherect.y += -21;
-						cacherect.width = 39;
+						GUIStyle notButtonStyle;
+						notButtonStyle = new GUIStyle("Button");
+						notButtonStyle.fontSize = 10;
+
+						cacherect.x += 87;
+						cacherect.y += -18;
+						cacherect.width = 31;
 						cacherect.height = 15;
-						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not");
+						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not", notButtonStyle);
 					}
 					else
 					{
@@ -269,11 +278,12 @@ public class UtilityAIBehaviourEditor : Editor
 		SerializedProperty activeProperty = properties.FindPropertyRelative("active");
 
 		float w = pos.width;
-		pos.width = 14;
+		pos.width = 15;
 		activeProperty.boolValue = EditorGUI.Toggle(pos, activeProperty.boolValue);
 
 		pos.x += 15;
 		pos.width += w - 29;
+		pos.height = 15;
 
 		// place holder when no candidates are available
 		if(actionMethodNames.Length == 0) {
@@ -281,8 +291,13 @@ public class UtilityAIBehaviourEditor : Editor
 			return;
 		}
 
+		EditorGUI.LabelField(pos, "Action");
+
+		pos.x += 114;
+		pos.width += -114;
+
 		// select method from candidates
-		indexProperty.intValue = EditorGUI.Popup(pos, "Action", indexProperty.intValue, actionMethodNames);
+		indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, actionMethodNames);
 		if(indexProperty.intValue < actionMethodNames.Length) {
 			methodNameProperty.stringValue = actionMethodNames[indexProperty.intValue];
 		} else {
