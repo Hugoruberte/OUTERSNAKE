@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SceneManagement;
+// using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(UtilityAIBehaviour), true)]
 public class UtilityAIBehaviourEditor : Editor
@@ -14,17 +15,22 @@ public class UtilityAIBehaviourEditor : Editor
 	private SerializedProperty scorers;
 	private SerializedProperty scoreRef;
 
+	private string scorer;
+
 	private string[] actionMethodNames;
+	private string[] scorerMethodNames;
 	private string[] scorerConditionMethodNames;
 	private string[] scorerCurveMethodNames;
 
 	private Rect baserect;
 	private Rect cacherect;
 
+	private bool isCond;
+
 	private readonly Color actionColor = new Color32(170, 170, 170, 255);
 	private readonly Color scorerColor = new Color32(147, 147, 147, 255);
 
-	float val = 0f;
+	// float val = 0f;
 
 
 	void OnEnable()
@@ -35,22 +41,24 @@ public class UtilityAIBehaviourEditor : Editor
 		SerializedProperty scorerConditionCandidateNamesProperty = serializedObject.FindProperty("scorerConditionCandidates");
 		SerializedProperty scorerCurveCandidateNamesProperty = serializedObject.FindProperty("scorerCurveCandidates");
 
-		actionMethodNames = InitializeActionCandidateList(serializedObject.targetObject.GetType(), actionCandidateNamesProperty);
+		this.actionMethodNames = InitializeActionCandidateList(serializedObject.targetObject.GetType(), actionCandidateNamesProperty);
 
-		scorerConditionMethodNames = InitializeScorerCandidateList<bool>(serializedObject.targetObject.GetType(), scorerConditionCandidateNamesProperty);
-		scorerCurveMethodNames = InitializeScorerCandidateList<float>(serializedObject.targetObject.GetType(), scorerCurveCandidateNamesProperty);
+		this.scorerConditionMethodNames = InitializeScorerCandidateList<bool>(serializedObject.targetObject.GetType(), scorerConditionCandidateNamesProperty);
+		this.scorerCurveMethodNames = InitializeScorerCandidateList<float>(serializedObject.targetObject.GetType(), scorerCurveCandidateNamesProperty);
+
+		this.scorerMethodNames = this.scorerConditionMethodNames.Concat(this.scorerCurveMethodNames).ToArray();
 	}
 
 	public sealed override void OnInspectorGUI()
 	{
 		UtilityAIBehaviour script = target as UtilityAIBehaviour;
 
-		Rect n = new Rect();
+		/*Rect n = new Rect();
 		n.x = baserect.x + 50;
 		n.y += 500;
 		n.width = 200;
 		n.height = 16;
-		val = EditorGUI.FloatField(n, "Val", val);
+		val = EditorGUI.FloatField(n, "Val", val);*/
 
 		DrawDefaultInspector();
 
@@ -101,8 +109,6 @@ public class UtilityAIBehaviourEditor : Editor
 			script.displayScorers[act] = EditorGUI.Foldout(cacherect, script.displayScorers[act], "Scorers");
 			
 			cacherect = baserect;
-			// cacherect.x = baserect.width + -89;
-			// cacherect.x = baserect.width + -95;
 			cacherect.x += 117;
 			cacherect.y += -2;
 			cacherect.width += -128;
@@ -152,11 +158,18 @@ public class UtilityAIBehaviourEditor : Editor
 
 					scoreRef = scorers.GetArrayElementAtIndex(sco);
 
-					if(script.actions[act].scorers[sco].isCondition)
+					// Select scorer
+					scorer = this.ScorerMethodField(baserect, scoreRef);
+					isCond = this.IsScorerCondition(scorer);
+
+					script.actions[act].scorers[sco].isCondition = isCond;
+
+					// Display condition parameters
+					if(isCond)
 					{
-						this.ScorerConditionMethodField(baserect, scoreRef);
 						script.actions[act].scorers[sco].score = EditorGUI.IntField(cacherect, "Score", script.actions[act].scorers[sco].score);
 
+						// Not option
 						GUIStyle notButtonStyle;
 						notButtonStyle = new GUIStyle("Button");
 						notButtonStyle.fontSize = 10;
@@ -167,9 +180,9 @@ public class UtilityAIBehaviourEditor : Editor
 						cacherect.height = 15;
 						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not", notButtonStyle);
 					}
+					// Display curve parameters
 					else
 					{
-						this.ScorerCurveMethodField(baserect, scoreRef);
 						script.actions[act].scorers[sco].curve = EditorGUI.CurveField(cacherect, "Curve", script.actions[act].scorers[sco].curve);
 					}
 
@@ -197,42 +210,31 @@ public class UtilityAIBehaviourEditor : Editor
 				}
 
 				cacherect = baserect;
-				cacherect.x = baserect.width + 14;
+				cacherect.x += 127;
 				cacherect.y += -7;
-				cacherect.width = 61;
+				cacherect.width = Mathf.Max(cacherect.width + 2, 123);
 				cacherect.height = 20;
 				if(EditorApplication.isPlaying){GUI.enabled = false;}
-				if(GUI.Button(cacherect, "BOOL")) {
-					int nb = this.NumberOfScorer(script.actions[act].scorers, true);
-					if(this.scorerConditionMethodNames.Length == nb) {
-						Debug.Log($"No need to add another condition scorer, there is enough ! (Number of scorer found: {nb})");
-					} else if(this.scorerConditionMethodNames.Length == 0) {
-						Debug.Log($"There is no condition scorer yet !");
+				if(GUI.Button(cacherect, "ADD NEW SCORER"))
+				{
+					int nb = script.actions[act].scorers.Count;
+
+					if(this.scorerMethodNames.Length == nb) {
+						Debug.Log($"No need to add another scorer, there is enough ! (Number of scorer found: {nb})");
+					} else if(this.scorerMethodNames.Length == 0) {
+						Debug.Log($"There is no scorer yet !");
 					} else {
-						script.actions[act].AddCondition(this.scorerConditionMethodNames[0]);
-						serializedObject.Update();
-					}
-				}
-				cacherect.x = baserect.width + 76;
-				if(GUI.Button(cacherect, "FLOAT")) {
-					int nb = this.NumberOfScorer(script.actions[act].scorers, false);
-					if(this.scorerCurveMethodNames.Length == nb) {
-						Debug.Log($"No need to add another curve scorer, there is enough ! (Number of scorer found: {nb})");
-					} else if(this.scorerCurveMethodNames.Length == 0) {	
-						Debug.Log($"There is no curve scorer yet !");
-					} else {
-						script.actions[act].AddCurve(this.scorerCurveMethodNames[0]);
+						int scorerIndex = this.GetNextAvailableScorer(script.actions[act].scorers);
+						script.actions[act].AddScorer(this.scorerMethodNames[scorerIndex], this.IsScorerCondition(scorer), scorerIndex);
+						
 						serializedObject.Update();
 					}
 				}
 				if(EditorApplication.isPlaying){GUI.enabled = true;}
 
-				baserect.x += 10;
-				baserect.y += -7;
-
 				// reset
-				baserect.x += -5;
-				baserect.y += 20;
+				baserect.x += 5;
+				baserect.y += 13;
 				baserect.width += 135;
 				baserect.height += -17;
 			}
@@ -305,45 +307,29 @@ public class UtilityAIBehaviourEditor : Editor
 		}
 	}
 
-	private void ScorerConditionMethodField(Rect pos, SerializedProperty properties)
+	private string ScorerMethodField(Rect pos, SerializedProperty properties)
 	{
 		SerializedProperty methodNameProperty = properties.FindPropertyRelative("method");
 		SerializedProperty indexProperty = properties.FindPropertyRelative("index");
 
-		// place holder when no candidates are available
-		if(scorerConditionMethodNames.Length == 0) {
-			EditorGUI.LabelField(pos, "Condition", "No condition found !");
-			return;
+		if(this.IsScorerCondition(methodNameProperty.stringValue)) {
+			indexProperty.intValue = EditorGUI.Popup(pos, "Condition", indexProperty.intValue, this.scorerMethodNames);
+		} else {
+			indexProperty.intValue = EditorGUI.Popup(pos, "Mapper", indexProperty.intValue, this.scorerMethodNames);
 		}
 
-		// select method from candidates
-		indexProperty.intValue = EditorGUI.Popup(pos, "Condition", indexProperty.intValue, scorerConditionMethodNames);
-		if(indexProperty.intValue < scorerConditionMethodNames.Length) {
-			methodNameProperty.stringValue = scorerConditionMethodNames[indexProperty.intValue];
+		if(indexProperty.intValue < this.scorerMethodNames.Length) {
+			methodNameProperty.stringValue = this.scorerMethodNames[indexProperty.intValue];
 		} else {
-			indexProperty.intValue = Array.IndexOf(scorerConditionMethodNames, methodNameProperty.stringValue);
+			indexProperty.intValue = Array.IndexOf(this.scorerMethodNames, methodNameProperty.stringValue);
 		}
+
+		return methodNameProperty.stringValue;
 	}
 
-	private void ScorerCurveMethodField(Rect pos, SerializedProperty properties)
-	{
-		SerializedProperty methodNameProperty = properties.FindPropertyRelative("method");
-		SerializedProperty indexProperty = properties.FindPropertyRelative("index");
 
-		// place holder when no candidates are available
-		if(scorerCurveMethodNames.Length == 0){
-			EditorGUI.LabelField(pos, "Mapper", "No mapper found !" );
-			return;
-		}
 
-		// select method from candidates
-		indexProperty.intValue = EditorGUI.Popup(pos, "Mapper", indexProperty.intValue, scorerCurveMethodNames);
-		if(indexProperty.intValue < scorerCurveMethodNames.Length) {
-			methodNameProperty.stringValue = scorerCurveMethodNames[indexProperty.intValue];
-		} else {
-			indexProperty.intValue = Array.IndexOf(scorerCurveMethodNames, methodNameProperty.stringValue);
-		}
-	}
+
 
 	private string[] InitializeActionCandidateList(System.Type type, SerializedProperty candidateNamesProperty)
 	{
@@ -424,19 +410,26 @@ public class UtilityAIBehaviourEditor : Editor
 
 
 
-
-
-	private int NumberOfScorer(List<UtilityScorer> scs, bool isCondition)
+	private int GetNextAvailableScorer(List<UtilityScorer> ls)
 	{
-		int res = 0;
-
-		foreach(UtilityScorer scorer in scs) {
-			if(scorer.isCondition == isCondition) {
-				res ++;
+		for(int i = 0; i < this.scorerMethodNames.Length; i++) {
+			if(!ls.Exists(x => x.method.Equals(this.scorerMethodNames[i]))) {
+				return i;
 			}
 		}
 
-		return res;
+		return 0;
+	}
+
+	private bool IsScorerCondition(string name)
+	{
+		for(int i = 0; i < this.scorerConditionMethodNames.Length; i++) {
+			if(this.scorerConditionMethodNames[i].Equals(name)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
 

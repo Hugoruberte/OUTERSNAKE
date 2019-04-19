@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions:
   - scorers:
-    - isCondition: 1
+    - isCondition: 0
       not: 0
       score: 0
       curve:
@@ -23,20 +23,21 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 0
-      method: RabbitIsScared
-      index: 0
+      _max: 2147483647
+      method: DistanceToDanger
+      index: 5
     index: 2
     score: 0
     method: Wander
     active: 1
-  lastUpdate: 1.8381107
+  lastUpdate: 27.454685
   updateRate: 0.2
   actionCandidates:
   - EatFood
   - GoToFood
   - Wander
   - RunAway
+  scorerCandidates: []
   scorerConditionCandidates:
   - RabbitIsScared
   - RabbitIsHungry

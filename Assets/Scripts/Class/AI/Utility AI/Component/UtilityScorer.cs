@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// I am forced to use an 'isCondition' variable instead of create
+// I am obligated to use an 'isCondition' variable instead of create
 // two subclass like it was done below because of Unity serialization
 // which do not manage polymorphism and inheritance...
 // I am as sad as you.
@@ -27,10 +27,11 @@ public class UtilityScorer
 	private System.Func<MovementController, float> mapper;
 
 
-	public UtilityScorer(bool c, string method)
+	public UtilityScorer(bool c, string m, int i)
 	{
 		this.isCondition = c;
-		this.method = method;
+		this.method = m;
+		this.index = i;
 	}
 
 	public int Score(MovementController ctr)

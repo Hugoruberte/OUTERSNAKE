@@ -14,7 +14,7 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 
 
 	[Header("Parameters")]
-	[SerializeField] private LayerMask targetLayerMask;
+	[SerializeField] private LayerMask targetLayerMask = 0;
 
 
 	public UtilityAIBehaviour Launch(LazerTrap lazer)

@@ -109,6 +109,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	/* -------------------------------------------------------------------------------------------*/
 	// inspector cache //
 	[HideInInspector] public string[] actionCandidates = {};
+	[HideInInspector] public string[] scorerCandidates = {};
 	[HideInInspector] public string[] scorerConditionCandidates = {};
 	[HideInInspector] public string[] scorerCurveCandidates = {};
 	[HideInInspector] public List<bool> displayScorers = new List<bool>();

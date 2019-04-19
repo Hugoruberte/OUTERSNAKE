@@ -143,15 +143,9 @@ public class UtilityAction
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public void AddCondition(string method)
+	public void AddScorer(string m, bool ic, int i)
 	{
-		UtilityScorer scorer = new UtilityScorer(true, method);
-		this.scorers.Add(scorer);
-	}
-
-	public void AddCurve(string method)
-	{
-		UtilityScorer scorer = new UtilityScorer(false, method);
+		UtilityScorer scorer = new UtilityScorer(ic, m, i);
 		this.scorers.Add(scorer);
 	}
 
