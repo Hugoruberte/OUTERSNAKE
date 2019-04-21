@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class UtilityAIManager : Singleton<UtilityAIManager>
 {
-	public UtilityAIBehaviour[] behaviours;
+	[Header("Utility AI Behaviours")]
+	[SerializeField] private UtilityAIBehaviour[] behaviours = null;
 
 	protected override void Awake()
 	{
@@ -33,7 +34,7 @@ public class UtilityAIManager : Singleton<UtilityAIManager>
 
 			b.lastUpdate = Time.time;
 
-			b.UpdateUtilityActions(this);
+			b.UpdateUtilityActions();
 		}
 	}
 }

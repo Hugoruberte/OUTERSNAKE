@@ -34,6 +34,8 @@ MonoBehaviour:
   forwardForceMultiplier: 0.3
   forceDampling: 0.7
   length: 10
+  tailWidthPointLength: 0
+  tailWidthPointSpacing: 0.33
   width: 0.2
   widthSpeed: 2
   widthPointSpeed: 5

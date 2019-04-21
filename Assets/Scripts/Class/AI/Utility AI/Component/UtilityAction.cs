@@ -54,25 +54,25 @@ public class UtilityAction
 		return this.score;
 	}
 
-	public void Start(MovementController ctr, UtilityAIManager main)
+	public void Start(MovementController ctr, MonoBehaviour handler)
 	{
 		if(this.action != null) {
 			this.isRunning = false;
 			this.action(ctr);
 		} else {
-			this.coroutine = this.CoroutineManager(ctr);
-			main.StartCoroutine(this.coroutine);
+			this.coroutine = this.HandlerCoroutine(ctr);
+			handler.StartCoroutine(this.coroutine);
 		}
 	}
 
-	public void Stop(UtilityAIManager main)
+	public void Stop(MonoBehaviour handler)
 	{
 		if(this.action != null) {
-			Debug.LogError("ERROR: Could not stop this UtilityAction because it is not a coroutine !");
+			Debug.LogWarning("Warning: Could not stop this UtilityAction because it is not a coroutine !");
 			return;
 		}
 
-		main.TryStopCoroutine(ref this.coroutine);
+		handler.TryStopCoroutine(ref this.coroutine);
 	}
 
 
@@ -120,7 +120,7 @@ public class UtilityAction
 		return max;
 	}
 
-	private IEnumerator CoroutineManager(MovementController ctr)
+	private IEnumerator HandlerCoroutine(MovementController ctr)
 	{
 		this.isRunning = true;
 

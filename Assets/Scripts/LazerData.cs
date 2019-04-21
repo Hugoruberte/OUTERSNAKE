@@ -34,6 +34,8 @@ public class LazerData : ScriptableObject
 
 	// Length
 	[HideInInspector] public float length;
+	// [HideInInspector] public float tailWidthPointLength;
+	// [HideInInspector] public float tailWidthPointSpacing;
 	
 	// Width
 	[HideInInspector] public float width;

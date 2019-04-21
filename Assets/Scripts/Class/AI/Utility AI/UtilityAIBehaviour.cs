@@ -15,7 +15,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[System.NonSerialized] private List<CAA> controllers = new List<CAA>();
 
 
-	public void UpdateUtilityActions(UtilityAIManager manager) {
+	public void UpdateUtilityActions() {
 		UtilityAction act;
 		UtilityAction current;
 		MovementController ctr;
@@ -26,7 +26,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			ctr = this.controllers[i].ctr;
 			current = this.controllers[i].act;
 
-			// if current is running
+			// if current is running (i.e. it is a coroutine)
 			if(current != null && current.isRunning)
 			{
 				// if current is stoppable
@@ -38,10 +38,10 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 					// if best action is not the current action
 					if(current != act) {
 						// stop current
-						current.Stop(manager);
+						current.Stop(ctr.entity);
 
 						// start selected action
-						act.Start(ctr, manager);
+						act.Start(ctr, ctr.entity);
 						this.controllers[i].act = act;
 					}
 				}
@@ -57,7 +57,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 				act = utilityAI.Select(ctr, this.actions);
 
 				// start selected action
-				act?.Start(ctr, manager);
+				act?.Start(ctr, ctr.entity);
 				this.controllers[i].act = act;
 			}
 		}
@@ -80,10 +80,24 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		CAA caa = new CAA(ctr, null);
 		this.controllers.Add(caa);
 	}
+
 	public void Remove(LivingEntity ent) {
-		// only does that
-		this.controllers.RemoveAll(caa => caa.ctr.entity == ent);
+		CAA caa = this.controllers.Find(x => x.ctr.entity == ent);
+
+		// Remove from registred controllers
+		this.controllers.Remove(caa);
+
+		// Stop current action
+		caa.act.Stop(caa.ctr.entity);
 	}
+
+
+
+
+
+
+
+
 
 	protected float MapOnRangeOfView(float value, MovementController ctr)
 	{

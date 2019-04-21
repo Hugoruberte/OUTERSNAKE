@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tools;
 
-public abstract class RabbitController : MovementController
+public abstract class RabbitController : CellableMovementController
 {
 	protected RabbitEntity rabbit;
 

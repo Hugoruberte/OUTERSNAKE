@@ -3,8 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 using Tools;
 using Lazers;
 
@@ -59,6 +59,11 @@ public class LazerDataEditor : Editor
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Length", EditorStyles.boldLabel);
 			script.length = EditorGUILayout.Slider("Length", script.length, 0.1f, 20f);
+			// script.tailWidthPointLength = EditorGUILayout.Slider("Tail Width Point Length", script.tailWidthPointLength, 0f, script.length - 0.1f);
+
+			// if(script.tailWidthPointLength > 0f) {
+			// 	script.tailWidthPointSpacing = EditorGUILayout.Slider("Tail Width Point Spacing", script.tailWidthPointSpacing, 0f, script.tailWidthPointLength);
+			// }
 		} else {
 			script.widthPointSpeed = EditorGUILayout.Slider("Width Point Decrease Speed", script.widthPointSpeed, 0.01f, 10f);
 

@@ -48,15 +48,38 @@ MonoBehaviour:
     score: 0
     method: Aim
     active: 1
+  - scorers:
+    - isCondition: 0
+      not: 0
+      score: 0
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 2147483647
+      method: DistanceToNearestTarget
+      index: 0
+    index: 0
+    score: 0
+    method: Wander
+    active: 0
+  - scorers: []
+    index: 2
+    score: 0
+    method: Shoot
+    active: 0
   lastUpdate: 27.454685
   updateRate: 0.2
   actionCandidates:
   - Wander
   - Aim
+  scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates:
   - DistanceToNearestTarget
-  displayScorers: 01
+  displayScorers: 010000
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 512

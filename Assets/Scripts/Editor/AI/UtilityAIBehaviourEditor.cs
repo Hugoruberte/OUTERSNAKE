@@ -15,6 +15,8 @@ public class UtilityAIBehaviourEditor : Editor
 	private SerializedProperty scorers;
 	private SerializedProperty scoreRef;
 
+	private GUIStyle buttonStyle;
+
 	private string scorer;
 
 	private string[] actionMethodNames;
@@ -83,6 +85,8 @@ public class UtilityAIBehaviourEditor : Editor
 		baserect.width += 95;
 		baserect.height += -17;
 
+		buttonStyle = new GUIStyle("Button");
+
 		for(int act = 0; act < actions.arraySize; act++)
 		{
 			actionRef = actions.GetArrayElementAtIndex(act);
@@ -114,7 +118,8 @@ public class UtilityAIBehaviourEditor : Editor
 			cacherect.width += -128;
 			cacherect.height = 17;
 			if(EditorApplication.isPlaying){GUI.enabled = false;}
-			if(GUI.Button(cacherect, "REMOVE")) {
+			buttonStyle.fontSize = 10;
+			if(GUI.Button(cacherect, "REMOVE", buttonStyle)) {
 				script.displayScorers.RemoveAt(act);
 				script.RemoveActionAt(act);
 				serializedObject.Update();
@@ -170,15 +175,13 @@ public class UtilityAIBehaviourEditor : Editor
 						script.actions[act].scorers[sco].score = EditorGUI.IntField(cacherect, "Score", script.actions[act].scorers[sco].score);
 
 						// Not option
-						GUIStyle notButtonStyle;
-						notButtonStyle = new GUIStyle("Button");
-						notButtonStyle.fontSize = 10;
+						buttonStyle.fontSize = 10;
 
 						cacherect.x += 87;
 						cacherect.y += -18;
 						cacherect.width = 31;
 						cacherect.height = 15;
-						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not", notButtonStyle);
+						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not", buttonStyle);
 					}
 					// Display curve parameters
 					else
@@ -192,7 +195,8 @@ public class UtilityAIBehaviourEditor : Editor
 					cacherect.width = 59;
 					cacherect.height = 15;
 					if(EditorApplication.isPlaying){GUI.enabled = false;}
-					if(GUI.Button(cacherect, "REMOVE")) {
+					buttonStyle.fontSize = 9;
+					if(GUI.Button(cacherect, "REMOVE", buttonStyle)) {
 						script.actions[act].RemoveScorerAt(sco);
 						serializedObject.Update();
 						return;
@@ -215,7 +219,8 @@ public class UtilityAIBehaviourEditor : Editor
 				cacherect.width = Mathf.Max(cacherect.width + 2, 123);
 				cacherect.height = 20;
 				if(EditorApplication.isPlaying){GUI.enabled = false;}
-				if(GUI.Button(cacherect, "ADD NEW SCORER"))
+				buttonStyle.fontSize = 10;
+				if(GUI.Button(cacherect, "ADD NEW SCORER", buttonStyle))
 				{
 					int nb = script.actions[act].scorers.Count;
 

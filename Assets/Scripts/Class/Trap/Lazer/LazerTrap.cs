@@ -6,11 +6,10 @@ using Lazers;
 
 public class LazerTrap : TrapEntity
 {
-	private PoolingManager poolingManager;
-	private Transform muzzle;
-
-	public GameObject lazerPrefab;
-	public LazerTrapData lazerTrapData;
+	public Transform muzzle { get; private set; }
+	[SerializeField] private GameObject lazerPrefab = null;
+	
+	public LazerTrapData lazerTrapData = null;
 
 
 	protected override void Awake()
@@ -26,13 +25,11 @@ public class LazerTrap : TrapEntity
 
 		// Initialize AI behaviour (this will launch the AI)
 		this.behaviour = LazerTrapAI.instance.Launch(this);
-
-		poolingManager = PoolingManager.instance;
 	}
 
-	private void Attack()
+	public void Shoot()
 	{
-		Lazer lazer = poolingManager.Get<Lazer>(lazerPrefab);
+		Lazer lazer = PoolingManager.instance.Get<Lazer>(lazerPrefab);
 
 		if(lazer == null) {
 			return;
@@ -51,7 +48,7 @@ public class LazerTrap : TrapEntity
 	void Update()
 	{
 		if(Input.GetButtonDown("Space")) {
-			this.Attack();
+			this.Shoot();
 		}
 	}
 }

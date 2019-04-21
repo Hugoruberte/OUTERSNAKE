@@ -13,3 +13,11 @@ MonoBehaviour:
   m_Name: LazerTrapData
   m_EditorClassIdentifier: 
   omega: 100
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 1536
+  wanderRotationDurationInterval:
+  - 0
+  - 1
+  wanderMaxPauseQuarter: 3
+  shootDelay: 0.1

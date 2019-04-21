@@ -10,17 +10,20 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 {
 	[System.NonSerialized] private Transform snake;
 	[System.NonSerialized] private Transform target;
-	[System.NonSerialized] private Collider[] results;
-
-
-	[Header("Parameters")]
-	[SerializeField] private LayerMask targetLayerMask = 0;
+	[System.NonSerialized] private Collider[] colliderResults;
+	[System.NonSerialized] private RaycastHit[] raycastResults;
+	[System.NonSerialized] private LazerTrapData lazerTrapData;
 
 
 	public UtilityAIBehaviour Launch(LazerTrap lazer)
 	{
 		MovementController ctr = new LazerTrapController(lazer);
 		this.AddController(ctr);
+
+		if(this.lazerTrapData == null) {
+			this.lazerTrapData = lazer.lazerTrapData;
+		}
+		
 		return this;
 	}
 
@@ -29,7 +32,8 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 		base.OnStart();
 		
 		this.snake = SnakeManager.instance.snake.transform;
-		this.results = new Collider[5];
+		this.colliderResults = new Collider[10];
+		this.raycastResults = new RaycastHit[10];
 	}
 
 
@@ -54,9 +58,10 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 
 		min = float.MaxValue;
 		pos = ctr.position;
-		count = Physics.OverlapSphereNonAlloc(pos, ctr.entity.rangeOfView, this.results, this.targetLayerMask);
+		LazerTrapController ltr = ctr as LazerTrapController;
+		count = Physics.OverlapSphereNonAlloc(pos, ctr.entity.rangeOfView, this.colliderResults, this.lazerTrapData.targetLayerMask);
 		
-		foreach(Collider c in this.results) {
+		foreach(Collider c in this.colliderResults) {
 			if(c == null) {
 				continue;
 			}
@@ -69,6 +74,24 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 		}
 
 		return this.MapOnRangeOfView(min, ctr);
+	}
+
+	public bool IsTargetInSight(MovementController ctr)
+	{
+		LazerTrapController ltr;
+		Vector3 origin, dir;
+		float radius, dist;
+		int count;
+		
+		ltr = ctr as LazerTrapController;		
+		origin = ltr.lazerTrap.muzzle.position;
+		dir = ltr.lazerTrap.muzzle.forward;
+		dist = ctr.entity.rangeOfView + 1f;
+		radius = 0.457f;
+		
+		count = Physics.SphereCastNonAlloc(origin, radius, dir, this.raycastResults, dist, this.lazerTrapData.targetLayerMask);
+
+		return (count > 0);
 	}
 
 
@@ -86,8 +109,8 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	/* --------------------------------------------------------------------------------------------*/
 	public IEnumerator Wander(MovementController ctr, UtilityAction act)
 	{
-		Debug.Log("TO DO");
 		act.isStoppable = true;
+
 		yield return ctr.Wander();
 	}
 
@@ -100,5 +123,14 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 		this.target = this.target ?? this.snake;
 
 		yield return ltr.AimAt(this.target);
+	}
+
+	public IEnumerator Shoot(MovementController ctr, UtilityAction act)
+	{
+		act.isStoppable = false;
+
+		LazerTrapController ltr = ctr as LazerTrapController;
+
+		yield return ltr.Shoot();
 	}
 }
