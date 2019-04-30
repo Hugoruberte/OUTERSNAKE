@@ -16,6 +16,7 @@ public class UtilityAIBehaviourEditor : Editor
 	private SerializedProperty scoreRef;
 
 	private GUIStyle buttonStyle;
+	private Texture trashTexture;
 
 	private string scorer;
 
@@ -25,12 +26,13 @@ public class UtilityAIBehaviourEditor : Editor
 	private string[] scorerCurveMethodNames;
 
 	private Rect baserect;
-	private Rect cacherect;
+	private Rect actionrect;
+	private Rect scorerect;
 
 	private bool isCond;
 
 	private readonly Color actionColor = new Color32(170, 170, 170, 255);
-	private readonly Color scorerColor = new Color32(147, 147, 147, 255);
+	private readonly Color scorerColor = new Color32(140, 140, 140, 255);
 
 	// private float val = 0f;
 
@@ -49,6 +51,8 @@ public class UtilityAIBehaviourEditor : Editor
 		this.scorerCurveMethodNames = InitializeScorerCandidateList<float>(serializedObject.targetObject.GetType(), scorerCurveCandidateNamesProperty);
 
 		this.scorerMethodNames = this.scorerConditionMethodNames.Concat(this.scorerCurveMethodNames).ToArray();
+
+		this.trashTexture = EditorGUIUtility.FindTexture("d_TreeEditor.Trash");
 	}
 
 	public sealed override void OnInspectorGUI()
@@ -67,163 +71,164 @@ public class UtilityAIBehaviourEditor : Editor
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Utility AI", EditorStyles.boldLabel);
 		baserect = EditorGUILayout.GetControlRect(true, 0);
-		baserect.height += 17;
 
-		/*GUI.enabled = false;
-		EditorGUI.ObjectField(baserect, "Script", MonoScript.FromScriptableObject(script), typeof(UtilityAIBehaviour), false);
-		GUI.enabled = true;*/
-		
-		baserect.y += 0;
-		EditorGUI.LabelField(baserect, "Update Interval", EditorStyles.miniLabel);
-		baserect.x += 90;
-		baserect.width += -95;
-		script.updateRate = EditorGUI.Slider(baserect, script.updateRate, 0.02f, 1f); 
+		actionrect = baserect;
+		actionrect.height += 17;
+		EditorGUI.LabelField(actionrect, "Update Interval", EditorStyles.miniLabel);
 
-		// reset
-		baserect.y += 10;
-		baserect.x += -90;
-		baserect.width += 95;
-		baserect.height += -17;
+		actionrect.x += 90;
+		actionrect.width += -95;
+		script.updateRate = EditorGUI.Slider(actionrect, script.updateRate, 0.02f, 1f); 
 
 		buttonStyle = new GUIStyle("Button");
 
+		// First action position
+		baserect.y += 39;
+		baserect.width += -5;
+		baserect.height += 49;
+
+		// Actions field
 		for(int act = 0; act < actions.arraySize; act++)
 		{
 			actionRef = actions.GetArrayElementAtIndex(act);
 			scorers = actionRef.FindPropertyRelative("scorers");
 
-			baserect.x += -5;
-			baserect.y += 11;
-			baserect.height += 50;
-			EditorGUI.DrawRect(baserect, actionColor);
-
-			baserect.x += 8;
-			baserect.y += 7;
-			baserect.width += -15;
-			baserect.height += -38;
-
-			cacherect = baserect;
-			this.ActionMethodField(cacherect, actionRef);
-
-			baserect.x += 12;
-			baserect.y += 19;
-			cacherect = baserect;
-			cacherect.width = 60;
-			script.displayScorers[act] = EditorGUI.Foldout(cacherect, script.displayScorers[act], "Scorers");
+			// Background
+			actionrect = baserect;
+			actionrect.y += -18;
+			actionrect.height += -1;
+			EditorGUI.DrawRect(actionrect, actionColor);
 			
-			cacherect = baserect;
-			cacherect.x += 117;
-			cacherect.y += -2;
-			cacherect.width += -128;
-			cacherect.height = 17;
+			// Action field
+			actionrect = baserect;
+			actionrect.x += 8;
+			actionrect.y += -12;
+			actionrect.width += -35;
+			actionrect.height = 14;
+			this.ActionMethodField(actionrect, actionRef);
+
+			// Trash field
+			actionrect = baserect;
+			actionrect.width = 16;
+			actionrect.height = 16;
+			actionrect.x += baserect.width + -23;
+			actionrect.y += -13;
 			if(EditorApplication.isPlaying){GUI.enabled = false;}
-			buttonStyle.fontSize = 10;
-			if(GUI.Button(cacherect, "REMOVE", buttonStyle)) {
+			if(GUI.Button(actionrect, this.trashTexture, GUIStyle.none)) {
 				script.displayScorers.RemoveAt(act);
 				script.RemoveActionAt(act);
 				serializedObject.Update();
 				return;
 			}
+
+			// Arrow scorers field
+			actionrect = baserect;
+			actionrect.x += 19;
+			actionrect.y += 8;
+			actionrect.width = 0;
+			script.displayScorers[act] = EditorGUI.Foldout(actionrect, script.displayScorers[act], "Scorers");
+
+			// Parameters fields
+			buttonStyle.fontSize = 9;
+			actionrect.height = 15;
+
+			actionrect.width = 75;
+			actionrect.x += baserect.width + -192;
+			script.actions[act].isStoppable = GUI.Toggle(actionrect, script.actions[act].isStoppable, "Is stoppable", buttonStyle);
+
+			actionrect.width = 90;
+			actionrect.x += 76;
+			script.actions[act].isParallelizable = GUI.Toggle(actionrect, script.actions[act].isParallelizable, "Is parallelizable", buttonStyle);
 			if(EditorApplication.isPlaying){GUI.enabled = true;}
-			// reset
-			baserect.x += 108;
-			baserect.y += -2;
-			baserect.width += -120;
-			baserect.height += 5;
 			
+			// Scorers fields
 			if(script.displayScorers[act])
 			{
-				baserect.x += -128;
-				baserect.y += 26;
-				cacherect = baserect;
-				cacherect.width += 135;
-				cacherect.height = (scorers.arraySize > 0) ? 68 * scorers.arraySize + 25 : 20;
-				EditorGUI.DrawRect(cacherect, actionColor);
+				actionrect = baserect;
 
+				// Background
+				actionrect.y += 30;
+				actionrect.height = (scorers.arraySize > 0) ? 49 * scorers.arraySize + 25 : 22;
+				EditorGUI.DrawRect(actionrect, actionColor);
 
+				// Display scorers fields
 				for(int sco = 0; sco < scorers.arraySize; sco++)
 				{
-					baserect.x += 11;
-					baserect.y += -4;
-					cacherect = baserect;
-					cacherect.width += 118;
-					cacherect.height = 65;
-					EditorGUI.DrawRect(cacherect, scorerColor);
-
-
-					baserect.x += 6;
-					baserect.y += 6;
-					baserect.width += 106;
-					baserect.height += -2;
-
-					cacherect = baserect;
-					cacherect.y += 18;
-					cacherect.height = 16;
-
+					scorerect = actionrect;
 					scoreRef = scorers.GetArrayElementAtIndex(sco);
 
-					// Select scorer
-					scorer = this.ScorerMethodField(baserect, scoreRef);
-					isCond = this.IsScorerCondition(scorer);
+					// Background
+					scorerect.x += 8;
+					scorerect.y += -2;
+					scorerect.width += -15;
+					scorerect.height = 46;
+					EditorGUI.DrawRect(scorerect, scorerColor);
 
+					// Select scorer field
+					scorerect.x += 4;
+					scorerect.y += 5;
+					scorerect.width += -27;
+					scorerect.height = 15;
+					scorer = this.ScorerMethodField(scorerect, scoreRef);
+					isCond = this.IsScorerCondition(scorer);
 					script.actions[act].scorers[sco].isCondition = isCond;
 
-					// Display condition parameters
+					scorerect.y += 21;
+
+					// Display condition parameters field
 					if(isCond)
 					{
-						script.actions[act].scorers[sco].score = EditorGUI.IntField(cacherect, "Score", script.actions[act].scorers[sco].score);
+						EditorGUI.LabelField(scorerect, "Score");
+						scorerect.x += 66;
+						scorerect.width += -48;
+						script.actions[act].scorers[sco].score = EditorGUI.IntField(scorerect, script.actions[act].scorers[sco].score);
 
-						// Not option
+						// 'Not' option field
 						buttonStyle.fontSize = 10;
-
-						cacherect.x += 87;
-						cacherect.y += -18;
-						cacherect.width = 31;
-						cacherect.height = 15;
-						script.actions[act].scorers[sco].not = GUI.Toggle(cacherect, script.actions[act].scorers[sco].not, "Not", buttonStyle);
+						scorerect.y += -21;
+						scorerect.width = 31;
+						scorerect.height = 15;
+						script.actions[act].scorers[sco].not = GUI.Toggle(scorerect, script.actions[act].scorers[sco].not, "Not", buttonStyle);
 					}
-					// Display curve parameters
+					// Display curve parameters field
 					else
 					{
+						EditorGUI.LabelField(scorerect, "Curve");
+						scorerect.x += 66;
+						scorerect.width += -48;
+
 						if(script.actions[act].scorers[sco].curve == null) {
 							script.actions[act].scorers[sco].curve = new AnimationCurve();
 						}
 
-						script.actions[act].scorers[sco].curve = EditorGUI.CurveField(cacherect, "Curve", script.actions[act].scorers[sco].curve);
+						script.actions[act].scorers[sco].curve = EditorGUI.CurveField(scorerect, script.actions[act].scorers[sco].curve);
+						scorerect.y += -21;
 					}
 
-					baserect.x += 2;
-					baserect.y += 37;
-					cacherect = baserect;
-					cacherect.width = 59;
-					cacherect.height = 15;
+					// Trash button field
+					scorerect.x = actionrect.width + -13;
+					scorerect.width = 15;
+					scorerect.height = 15;
 					if(EditorApplication.isPlaying){GUI.enabled = false;}
-					buttonStyle.fontSize = 9;
-					if(GUI.Button(cacherect, "REMOVE", buttonStyle)) {
+					if(GUI.Button(scorerect, this.trashTexture, GUIStyle.none)) {
 						script.actions[act].RemoveScorerAt(sco);
 						serializedObject.Update();
 						return;
 					}
 					if(EditorApplication.isPlaying){GUI.enabled = true;}
 
-					baserect.x += -19;
-					baserect.y += 29;
-					baserect.width += -106;
-					baserect.height += 2;
+					// Set position for next scorer
+					actionrect.y += 49;
 				}
 
-				if(scorers.arraySize > 0) {
-					baserect.y += 5;
-				}
-
-				cacherect = baserect;
-				cacherect.x += 123;
-				cacherect.y += -7;
-				cacherect.width = cacherect.width + 6;
-				cacherect.height = 20;
+				// Add scorer button field
+				actionrect.x += 8;
+				actionrect.y += (scorers.arraySize > 0) ? 0 : -2;
+				actionrect.width = baserect.width + -15;
+				actionrect.height = 18;
 				if(EditorApplication.isPlaying){GUI.enabled = false;}
 				buttonStyle.fontSize = 10;
-				if(GUI.Button(cacherect, "ADD NEW SCORER", buttonStyle))
+				if(GUI.Button(actionrect, "ADD NEW SCORER", buttonStyle))
 				{
 					int nb = script.actions[act].scorers.Count;
 
@@ -240,24 +245,15 @@ public class UtilityAIBehaviourEditor : Editor
 				}
 				if(EditorApplication.isPlaying){GUI.enabled = true;}
 
-				// reset
-				baserect.x += 5;
-				baserect.y += 13;
-				baserect.width += 135;
-				baserect.height += -17;
+				// Set position for next action with scorers displayed
+				baserect.y += (scorers.arraySize > 0) ? scorers.arraySize * 49 + 25 : 22;
 			}
-			else
-			{
-				// loop reset
-				baserect.x += -123;
-				baserect.y += 19;
-				baserect.width += 135;
-				baserect.height += -17;
-			}
+
+			// Set position for next action
+			baserect.y += 52;
 		}
 
-		baserect.x += -5;
-		baserect.y += 14;
+		baserect.y += -16;
 		baserect.width += 1;
 		baserect.height = 23;
 		if(EditorApplication.isPlaying){GUI.enabled = false;}
@@ -271,8 +267,6 @@ public class UtilityAIBehaviourEditor : Editor
 			}
 		}
 		if(EditorApplication.isPlaying){GUI.enabled = true;}
-
-		GUILayout.Space(baserect.y + 25);
 		
 		serializedObject.ApplyModifiedProperties();
 	}
@@ -295,16 +289,16 @@ public class UtilityAIBehaviourEditor : Editor
 		pos.width += w - 29;
 		pos.height = 15;
 
+		EditorGUI.LabelField(pos, "Action");
+
 		// place holder when no candidates are available
 		if(actionMethodNames.Length == 0) {
-			EditorGUI.LabelField(pos, "Action", "No action found !");
+			EditorGUI.LabelField(pos, "No action found !");
 			return;
 		}
 
-		EditorGUI.LabelField(pos, "Action");
-
-		pos.x += 114;
-		pos.width += -114;
+		pos.x += 55;
+		pos.width += -55;
 
 		// select method from candidates
 		indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, actionMethodNames);
@@ -321,9 +315,15 @@ public class UtilityAIBehaviourEditor : Editor
 		SerializedProperty indexProperty = properties.FindPropertyRelative("index");
 
 		if(this.IsScorerCondition(methodNameProperty.stringValue)) {
-			indexProperty.intValue = EditorGUI.Popup(pos, "Condition", indexProperty.intValue, this.scorerMethodNames);
+			EditorGUI.LabelField(pos, "Condition");
+			pos.x += 98;
+			pos.width += -98;
+			indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, this.scorerMethodNames);
 		} else {
-			indexProperty.intValue = EditorGUI.Popup(pos, "Mapper", indexProperty.intValue, this.scorerMethodNames);
+			EditorGUI.LabelField(pos, "Mapper");
+			pos.x += 98;
+			pos.width += -98;
+			indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, this.scorerMethodNames);
 		}
 
 		if(indexProperty.intValue < this.scorerMethodNames.Length) {

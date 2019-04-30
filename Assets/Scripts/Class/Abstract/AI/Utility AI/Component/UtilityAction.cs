@@ -31,8 +31,8 @@ public class UtilityAction
 	private IEnumerator coroutine = null;
 
 	// state
-	[System.NonSerialized]
-	public bool isStoppable = false; // to be changed by the coroutine launched by this UtilityAction !
+	public bool isStoppable = false;
+	public bool isParallelizable = false;
 	public bool isRunning { get; private set; } = false;
 	
 
