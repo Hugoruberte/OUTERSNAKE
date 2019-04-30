@@ -321,8 +321,8 @@ public class UtilityAIBehaviourEditor : Editor
 			indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, this.scorerMethodNames);
 		} else {
 			EditorGUI.LabelField(pos, "Mapper");
-			pos.x += 98;
-			pos.width += -98;
+			pos.x += 65;
+			pos.width += -65;
 			indexProperty.intValue = EditorGUI.Popup(pos, indexProperty.intValue, this.scorerMethodNames);
 		}
 
@@ -353,9 +353,10 @@ public class UtilityAIBehaviourEditor : Editor
 			BindingFlags.Instance | BindingFlags.Public,
 			(member, criteria) => {
 				MethodInfo method;
-				if(((method = type.GetMethod(member.Name, paramTypes_1)) != null || (method = type.GetMethod(member.Name, paramTypes_2)) != null)
-					&& (method.ReturnType == typeof(void) || method.ReturnType == typeof(IEnumerator))
-					&& Array.IndexOf(blacklist, method.Name) == -1) {
+				if((((method = type.GetMethod(member.Name, paramTypes_1)) != null) || ((method = type.GetMethod(member.Name, paramTypes_2)) != null))
+				&& (method.ReturnType == typeof(void) || method.ReturnType == typeof(IEnumerator))
+				&& Array.IndexOf(blacklist, method.Name) == -1)
+				{
 					candidateList.Add(method);
 					return true;
 				}

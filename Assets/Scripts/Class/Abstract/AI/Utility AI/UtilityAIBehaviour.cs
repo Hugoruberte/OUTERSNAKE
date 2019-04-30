@@ -5,15 +5,15 @@ using Utility.AI;
 
 public abstract class UtilityAIBehaviour : ScriptableObject
 {
+	[System.NonSerialized]
+	private List<CAA> controllers = new List<CAA>();
 	private UtilityAI utilityAI = new UtilityAI();
-
+	
 	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
-
 	[HideInInspector] public float lastUpdate = 0f;
 	[HideInInspector] public float updateRate = 0.02f;
 
-	[System.NonSerialized] private List<CAA> controllers = new List<CAA>();
-
+	
 
 	public void UpdateUtilityActions() {
 		UtilityAction act;
@@ -76,12 +76,25 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		// empty
 	}
 
-	protected void AddController(MovementController ctr) {
+
+
+	protected void AddController(MovementController ctr)
+	{
 		CAA caa = new CAA(ctr, null);
 		this.controllers.Add(caa);
 	}
+	protected float MapOnRangeOfView(MovementController ctr, float value, float range)
+	{
+		// mapping :
+		// min = 0 --> res = 1
+		// min >= rangeOfView --> res <= 0
+		return (-1 / range) * value + 1f;
+	}
 
-	public void Remove(LivingEntity ent) {
+
+
+	public void Remove(LivingEntity ent)
+	{
 		CAA caa = this.controllers.Find(x => x.ctr.entity == ent);
 
 		// Remove from registred controllers
@@ -99,17 +112,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 
 
-	protected float MapOnRangeOfView(MovementController ctr, float value, float range)
-	{
-		// mapping :
-		// min = 0 --> res = 1
-		// min >= rangeOfView --> res <= 0
-		return (-1 / range) * value + 1f;
-	}
-
-
-
-
+	
 
 
 

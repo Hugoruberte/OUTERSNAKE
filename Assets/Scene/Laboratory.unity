@@ -172,15 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabc9723f35852441946c7cd79dc3737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  maxStepDistance: 2
-  rangeOfView: 5
-  isTired: 0
-  isHungry: 0
-  isScared: 0
   behaviour: {fileID: 0}
-  lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
-    type: 3}
   lazerTrapData: {fileID: 11400000, guid: eed27031b8cca4e4db384b3b4ac74ad3, type: 2}
 --- !u!1 &12201069
 GameObject:
@@ -2544,7 +2536,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a7274c3bcf9454e949e36ad51c7d3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameData: {fileID: 11400000, guid: a894c81c60245084aaa49d82360d3738, type: 2}
 --- !u!114 &1092589564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4199,12 +4190,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
       propertyPath: speed
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
       propertyPath: state
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: test.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []

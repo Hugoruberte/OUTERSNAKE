@@ -106,17 +106,13 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public IEnumerator Wander(MovementController ctr, UtilityAction act)
+	public IEnumerator Wander(MovementController ctr)
 	{
-		act.isStoppable = true;
-
 		yield return ctr.Wander();
 	}
 
-	public IEnumerator Aim(MovementController ctr, UtilityAction act)
+	public IEnumerator Aim(MovementController ctr)
 	{
-		act.isStoppable = true;
-
 		LazerTrapController ltr = ctr as LazerTrapController;
 
 		this.target = this.target ?? this.snake;
@@ -124,10 +120,8 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 		yield return ltr.AimAt(this.target);
 	}
 
-	public IEnumerator Shoot(MovementController ctr, UtilityAction act)
+	public IEnumerator Shoot(MovementController ctr)
 	{
-		act.isStoppable = false;
-
 		LazerTrapController ltr = ctr as LazerTrapController;
 
 		yield return ltr.Shoot();

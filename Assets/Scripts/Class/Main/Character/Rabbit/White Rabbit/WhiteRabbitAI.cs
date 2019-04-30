@@ -109,9 +109,8 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 		// to do
 	}
 
-	public IEnumerator GoToFood(MovementController ctr, UtilityAction act)
+	public IEnumerator GoToFood(MovementController ctr)
 	{
-		act.isStoppable = false;
 		// yield return ctr.StepToFood();
 
 		// do stuff with ctr...
@@ -120,20 +119,18 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 
 	public IEnumerator Wander(MovementController ctr, UtilityAction act)
 	{
-		act.isStoppable = false;
 		yield return ctr.Wander();
 
 		act.isStoppable = true;
 		yield return ctr.Rest();
 	}
 
-	public IEnumerator RunAway(MovementController ctr, UtilityAction act)
+	public IEnumerator RunAway(MovementController ctr)
 	{
 		RabbitController rtr = ctr as RabbitController;
-		
-		act.isStoppable = false;
 
 		Transform from = this.danger ?? this.snake;
+
 		yield return rtr.RunAway(from);
 	}
 }

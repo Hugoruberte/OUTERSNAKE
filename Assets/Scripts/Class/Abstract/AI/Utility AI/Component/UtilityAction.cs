@@ -26,8 +26,9 @@ public class UtilityAction
 	public bool active = true;
 
 	// invocation
-	public System.Action<MovementController> action = null;
-	public System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory = null;
+	private System.Action<MovementController> action = null;
+	private System.Func<MovementController, IEnumerator> coroutineFactory_1 = null;
+	private System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory_2 = null;
 	private IEnumerator coroutine = null;
 
 	// state
@@ -100,7 +101,11 @@ public class UtilityAction
 		if(methodInfo.ReturnType == typeof(void)) {
 			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
 		} else {
-			this.coroutineFactory = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+			if(methodInfo.GetGenericArguments().Length == 2) {
+				this.coroutineFactory_1 = System.Func<MovementController, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, IEnumerator>), t, methodInfo) as System.Func<MovementController, IEnumerator>;
+			} else {
+				this.coroutineFactory_2 = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+			}
 		}
 
 		foreach(UtilityScorer sc in this.scorers) {
@@ -124,7 +129,8 @@ public class UtilityAction
 	{
 		this.isRunning = true;
 
-		yield return this.coroutineFactory(ctr, this);
+		IEnumerator co = (this.coroutineFactory_2 == null) ? this.coroutineFactory_1(ctr) : this.coroutineFactory_2(ctr, this);
+		yield return co;
 
 		this.isRunning = false;
 	}
