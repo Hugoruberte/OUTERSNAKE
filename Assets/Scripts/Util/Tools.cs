@@ -207,6 +207,25 @@ namespace Tools
 
 			return EditorGUILayoutExtension.MappedMaskField(label, current, map);
 		}
+
+		public static float[] IntervalField(string label, float[] current, float[] magnitude = null)
+		{
+			Vector2 temp;
+
+			temp = Vector2.zero;
+			temp.Set(current[0], current[1]);
+			temp = EditorGUILayout.Vector2Field(label, temp);
+
+			if(magnitude != null) {
+				current[0] = Mathf.Min(Mathf.Max(temp.x, magnitude[0]), temp.y);
+				current[1] = Mathf.Max(temp.x, Mathf.Min(temp.y, magnitude[1]));
+			} else {
+				current[0] = Mathf.Min(temp[0], temp[1]);
+				current[1] = Mathf.Max(temp[0], temp[1]);
+			}
+
+			return current;
+		}
 	}
 
 
