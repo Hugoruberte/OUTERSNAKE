@@ -21,8 +21,9 @@ public class UtilityScorer
 	// inspector
 	public string method;
 	public int index = 0;
+	private string targetRunningAction;
 
-	// action
+	// scorer
 	private System.Func<MovementController, bool> condition;
 	private System.Func<MovementController, float> mapper;
 
@@ -77,10 +78,30 @@ public class UtilityScorer
 
 	public void Initialize(UtilityAIBehaviour target)
 	{
-		if(this.isCondition) {
-			this.condition = System.Func<MovementController, bool>.CreateDelegate(typeof(System.Func<MovementController, bool>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, bool>;
-		} else {
+		if(this.isCondition)
+		{
+			if(this.method.Contains(" ")) {
+				this.targetRunningAction = this.method.Split(' ')[0];
+				this.condition = this.IsRunningConditionScorer;
+			} else {
+				this.condition = System.Func<MovementController, bool>.CreateDelegate(typeof(System.Func<MovementController, bool>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, bool>;
+			}
+		}
+		else
+		{
 			this.mapper = System.Func<MovementController, float>.CreateDelegate(typeof(System.Func<MovementController, float>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, float>;
 		}
+	}
+
+	private bool IsRunningConditionScorer(MovementController ctr)
+	{
+		UtilityAction[] acts = ctr.entity.behaviour.GetCurrentActions(ctr.entity);
+		foreach(UtilityAction a in acts) {
+			if(a.method.Equals(this.targetRunningAction)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

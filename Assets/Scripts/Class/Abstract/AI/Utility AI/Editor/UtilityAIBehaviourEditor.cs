@@ -47,10 +47,21 @@ public class UtilityAIBehaviourEditor : Editor
 
 		this.actionMethodNames = InitializeActionCandidateList(serializedObject.targetObject.GetType(), actionCandidateNamesProperty);
 
-		this.scorerConditionMethodNames = InitializeScorerCandidateList<bool>(serializedObject.targetObject.GetType(), scorerConditionCandidateNamesProperty);
 		this.scorerCurveMethodNames = InitializeScorerCandidateList<float>(serializedObject.targetObject.GetType(), scorerCurveCandidateNamesProperty);
+		this.scorerConditionMethodNames = InitializeScorerCandidateList<bool>(serializedObject.targetObject.GetType(), scorerConditionCandidateNamesProperty);
 
-		this.scorerMethodNames = this.scorerConditionMethodNames.Concat(this.scorerCurveMethodNames).ToArray();
+		List<string> temp = new List<string>();
+		temp.AddRange(this.scorerConditionMethodNames);
+		foreach(string s in this.actionMethodNames) {
+			temp.Add(s + " is running");
+		}
+		
+		this.scorerConditionMethodNames = temp.ToArray();
+		temp.Clear();
+		temp.AddRange(this.scorerCurveMethodNames);
+		temp.AddRange(this.scorerConditionMethodNames);
+		
+		this.scorerMethodNames = temp.ToArray();
 
 		this.trashTexture = EditorGUIUtility.FindTexture("d_TreeEditor.Trash");
 	}
@@ -59,12 +70,12 @@ public class UtilityAIBehaviourEditor : Editor
 	{
 		UtilityAIBehaviour script = target as UtilityAIBehaviour;
 
-		/*Rect n = new Rect();
-		n.x = baserect.x + 50;
-		n.y += 500;
-		n.width = 200;
-		n.height = 16;
-		val = EditorGUI.FloatField(n, "Val", val);*/
+		// Rect n = new Rect();
+		// n.x = baserect.x + 50;
+		// n.y += 500;
+		// n.width = 200;
+		// n.height = 16;
+		// val = EditorGUI.FloatField(n, "Val", val);
 
 		DrawDefaultInspector();
 
@@ -116,10 +127,12 @@ public class UtilityAIBehaviourEditor : Editor
 			if(EditorApplication.isPlaying){GUI.enabled = false;}
 			if(GUI.Button(actionrect, this.trashTexture, GUIStyle.none)) {
 				script.displayScorers.RemoveAt(act);
+				script.displayParameters.RemoveAt(act);
 				script.RemoveActionAt(act);
 				serializedObject.Update();
 				return;
 			}
+			if(EditorApplication.isPlaying){GUI.enabled = true;}
 
 			// Arrow scorers field
 			actionrect = baserect;
@@ -127,22 +140,60 @@ public class UtilityAIBehaviourEditor : Editor
 			actionrect.y += 8;
 			actionrect.width = 0;
 			script.displayScorers[act] = EditorGUI.Foldout(actionrect, script.displayScorers[act], "Scorers");
+			if(script.displayScorers[act]) {
+				script.displayParameters[act] = false;
+			}
+
+			// Arrow parameters field
+			actionrect.x += 111;
+			actionrect.width = 97;
+			actionrect.height = 16;
+			this.buttonStyle.fontSize = 9;
+			script.displayParameters[act] = GUI.Toggle(actionrect, script.displayParameters[act], "show parameters", this.buttonStyle);
+			if(script.displayParameters[act]) {
+				script.displayScorers[act] = false;
+			}
 
 			// Parameters fields
-			buttonStyle.fontSize = 9;
-			actionrect.height = 15;
+			if(script.displayParameters[act])
+			{
+				actionrect = baserect;
 
-			actionrect.width = 75;
-			actionrect.x += baserect.width + -192;
-			script.actions[act].isStoppable = GUI.Toggle(actionrect, script.actions[act].isStoppable, "Is stoppable", buttonStyle);
+				// Background
+				actionrect.y += 30;
+				actionrect.height = 30;
+				EditorGUI.DrawRect(actionrect, actionColor);
 
-			actionrect.width = 90;
-			actionrect.x += 76;
-			script.actions[act].isParallelizable = GUI.Toggle(actionrect, script.actions[act].isParallelizable, "Is parallelizable", buttonStyle);
-			if(EditorApplication.isPlaying){GUI.enabled = true;}
-			
+				scorerect = actionrect;
+				scorerect.x += 8;
+				scorerect.y += -2;
+				scorerect.width += -16;
+				scorerect.height += -4;
+				EditorGUI.DrawRect(scorerect, scorerColor);
+
+				buttonStyle.fontSize = 9;
+				actionrect.height = 15;
+				actionrect.y += 3;
+
+				if(EditorApplication.isPlaying){GUI.enabled = false;}
+				actionrect.width = 64;
+				actionrect.x += baserect.width + -239;
+				script.actions[act].isStoppable = GUI.Toggle(actionrect, script.actions[act].isStoppable, "stoppable", buttonStyle);
+
+				actionrect.x += actionrect.width + 1;
+				actionrect.width = 80;
+				script.actions[act].isParallelizable = GUI.Toggle(actionrect, script.actions[act].isParallelizable, "parallelizable", buttonStyle);
+
+				actionrect.x += actionrect.width + 1;
+				actionrect.width = 79;
+				script.actions[act].isForceAlone = GUI.Toggle(actionrect, script.actions[act].isForceAlone, "force alone", buttonStyle);
+				if(EditorApplication.isPlaying){GUI.enabled = true;}
+
+				// Set position for next action with scorers displayed
+				baserect.y += 30;
+			}
 			// Scorers fields
-			if(script.displayScorers[act])
+			else if(script.displayScorers[act])
 			{
 				actionrect = baserect;
 
@@ -160,7 +211,7 @@ public class UtilityAIBehaviourEditor : Editor
 					// Background
 					scorerect.x += 8;
 					scorerect.y += -2;
-					scorerect.width += -15;
+					scorerect.width += -16;
 					scorerect.height = 46;
 					EditorGUI.DrawRect(scorerect, scorerColor);
 
@@ -262,6 +313,7 @@ public class UtilityAIBehaviourEditor : Editor
 				Debug.Log($"There is no more action to add ! (Number of action found: {actionMethodNames.Length})");
 			} else {
 				script.displayScorers.Add(false);
+				script.displayParameters.Add(false);
 				script.AddAction(this.actionMethodNames[script.actions.Count], script.actions.Count);
 				serializedObject.Update();
 			}

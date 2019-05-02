@@ -8,6 +8,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[System.NonSerialized]
 	private List<CAA> controllers = new List<CAA>();
 	private UtilityAI utilityAI = new UtilityAI();
+
+	[System.NonSerialized]
+	private List<UtilityAction> all = new List<UtilityAction>();
 	
 	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 	[HideInInspector] public float lastUpdate = 0f;
@@ -15,8 +18,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 	
 
-	public void UpdateUtilityActions() {
-		UtilityAction act;
+	public void UpdateUtilityActions()
+	{
+		UtilityAction selected;
 		UtilityAction current;
 		MovementController ctr;
 
@@ -24,41 +28,57 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		for(int i = 0; i < this.controllers.Count; i++) {
 
 			ctr = this.controllers[i].ctr;
-			current = this.controllers[i].act;
+			current = this.controllers[i].main;
 
 			// if current is running (i.e. it is a coroutine)
 			if(current != null && current.isRunning)
 			{
-				// if current is stoppable
-				if(current.isStoppable)
+				// if current is parallelizable
+				if(current.isParallelizable)
 				{
 					// select best action by score
-					act = utilityAI.Select(ctr, this.actions);
+					selected = utilityAI.Select(ctr, this.actions);
+
+					// start selected action
+					selected?.Start(ctr, ctr.entity);
+					this.controllers[i].AddAction(selected);
+				}
+				// if current is stoppable
+				else if(current.isStoppable)
+				{
+					// select best action by score
+					selected = utilityAI.Select(ctr, this.actions);
 
 					// if best action is not the current action
-					if(current != act) {
-						// stop current
-						current.Stop(ctr.entity);
+					if(current != selected) {
+
+						// if selected action is not parallelizable
+						if(!selected.isParallelizable) {
+							// stop current
+							current.Stop(ctr.entity);
+						}
 
 						// start selected action
-						act.Start(ctr, ctr.entity);
-						this.controllers[i].act = act;
+						selected.Start(ctr, ctr.entity);
+						this.controllers[i].AddAction(selected);
 					}
 				}
 
-				// either current is unstoppable or
-				// a new best action has been launch or
-				// current action is the best action.
+				// here either :
+				// - current is unstoppable or
+				// - current is not parallelizable or
+				// - a new best action has been launch or
+				// - current action is the best action.
 			}
 			// if current is not running
 			else
 			{
 				// select best action by score
-				act = utilityAI.Select(ctr, this.actions);
+				selected = utilityAI.Select(ctr, this.actions);
 
 				// start selected action
-				act?.Start(ctr, ctr.entity);
-				this.controllers[i].act = act;
+				selected?.Start(ctr, ctr.entity);
+				this.controllers[i].AddAction(selected);
 			}
 		}
 	}
@@ -80,7 +100,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 	protected void AddController(MovementController ctr)
 	{
-		CAA caa = new CAA(ctr, null);
+		CAA caa = new CAA(ctr);
 		this.controllers.Add(caa);
 	}
 	protected float MapOnRangeOfView(MovementController ctr, float value, float range)
@@ -100,8 +120,11 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		// Remove from registred controllers
 		this.controllers.Remove(caa);
 
-		// Stop current action
-		caa.act.Stop(caa.ctr.entity);
+		// Stop all actions
+		caa.main?.Stop(caa.ctr.entity);
+		foreach(UtilityAction a in caa.parallelizables) {
+			a?.Stop(caa.ctr.entity);
+		}
 	}
 
 
@@ -130,18 +153,26 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[HideInInspector] public string[] scorerConditionCandidates = {};
 	[HideInInspector] public string[] scorerCurveCandidates = {};
 	[HideInInspector] public List<bool> displayScorers = new List<bool>();
+	[HideInInspector] public List<bool> displayParameters = new List<bool>();
 	// inspector cache //
 
 	// inspector function //
 	public void AddAction(string method, int index) {
 		UtilityAction act = new UtilityAction(method, index);
-		// act.Initialize(this);
 		this.actions.Add(act);
 	}
 	public void RemoveActionAt(int index) {
 		this.actions.RemoveAt(index);
 	}
-	public UtilityAction GetCurrentAction(LivingEntity ent) => this.controllers.Find(x => x.ctr.entity == ent).act;
+	public UtilityAction[] GetCurrentActions(LivingEntity ent) {
+		CAA caa = this.controllers.Find(x => x.ctr.entity == ent);
+		this.all.AddRange(caa.parallelizables);
+		this.all.Add(caa.main);
+		UtilityAction[] result = this.all.ToArray();
+		this.all.Clear();
+		return result;
+
+	}
 	// inspector function //
 
 
@@ -158,11 +189,24 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[System.Serializable]
 	private class CAA {
 		[SerializeField] public MovementController ctr;
-		[SerializeField] public UtilityAction act;
+		[SerializeField] public UtilityAction main { get; private set; }
+		[SerializeField] public List<UtilityAction> parallelizables { get; private set; }
 
-		public CAA(MovementController c, UtilityAction a) {
+		public CAA(MovementController c) {
 			this.ctr = c;
-			this.act = a;
+			this.parallelizables = new List<UtilityAction>();
+		}
+
+		public void AddAction(UtilityAction act) {
+			if(act == null) {
+				return;
+			}
+
+			if(act.isParallelizable) {
+				this.parallelizables.Add(act);
+			} else {
+				this.main = act;
+			}
 		}
 	}
 }

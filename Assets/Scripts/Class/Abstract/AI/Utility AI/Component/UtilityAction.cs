@@ -32,8 +32,27 @@ public class UtilityAction
 	private IEnumerator coroutine = null;
 
 	// state
+	private bool _isParallelizable = false;
+	public bool isParallelizable {
+		get { return this._isParallelizable; }
+		set {
+			this._isParallelizable = value;
+			if(value) {
+				this._isForceAlone = false;
+			}
+		}
+	}
+	private bool _isForceAlone = false;
+	public bool isForceAlone {
+		get { return this._isForceAlone; }
+		set {
+			this._isForceAlone = value;
+			if(value) {
+				this._isParallelizable = false;
+			}
+		}
+	}
 	public bool isStoppable = false;
-	public bool isParallelizable = false;
 	public bool isRunning { get; private set; } = false;
 	
 
@@ -93,7 +112,6 @@ public class UtilityAction
 	{
 		MethodInfo methodInfo;
 
-		this.isStoppable = false;
 		this.isRunning = false;
 
 		methodInfo = t.GetType().GetMethod(method);
@@ -101,10 +119,14 @@ public class UtilityAction
 		if(methodInfo.ReturnType == typeof(void)) {
 			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
 		} else {
-			if(methodInfo.GetGenericArguments().Length == 2) {
+			try {
 				this.coroutineFactory_1 = System.Func<MovementController, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, IEnumerator>), t, methodInfo) as System.Func<MovementController, IEnumerator>;
-			} else {
-				this.coroutineFactory_2 = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+			} catch {
+				try {
+					this.coroutineFactory_2 = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+				} catch {
+					Debug.LogWarning($"WARNING : This method '{method}' is not suitable to be an UtilityAction. Check its arguments.");
+				}
 			}
 		}
 

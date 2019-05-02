@@ -11,7 +11,7 @@ public class LivingEntityEditor : InteractiveEntityEditor
 	private string nameAI;
 
 	private bool showAI = false;
-	private UtilityAction act;
+	private UtilityAction[] acts;
 
 	// float val = 0f;
 
@@ -71,8 +71,10 @@ public class LivingEntityEditor : InteractiveEntityEditor
 			EditorGUI.indentLevel ++;
 			
 			if(EditorApplication.isPlaying) {
-				act = script.behaviour.GetCurrentAction(script);
-				EditorGUILayout.LabelField($"Current action : {act.method} (score = {act.score})", EditorStyles.centeredGreyMiniLabel);
+				this.acts = script.behaviour.GetCurrentActions(script);
+				foreach(UtilityAction a in this.acts) {
+					EditorGUILayout.LabelField($"Current action : {a.method} (score = {a.score}, parallelizable = {a.isParallelizable})", EditorStyles.centeredGreyMiniLabel);
+				}
 			} else {
 				EditorGUILayout.LabelField($"Current action : None (score = 0)", EditorStyles.centeredGreyMiniLabel);
 			}
