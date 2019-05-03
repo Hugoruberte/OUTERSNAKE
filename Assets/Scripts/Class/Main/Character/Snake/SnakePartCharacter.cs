@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Snakes;
 using Interactive.Engine;
+using Tools;
 
 
 public class SnakePartCharacter : SnakeEntity
 {
-	private SnakeBodyManager snakeBodyManager;
-
+	private BoxCollider myCollider;
 	private IEnumerator behaviourCoroutine = null;
 	private ParticleSystem explosion;
+
+	private static float BOXCOLLIDER_STANDARD_SIZE_VALUE = 1f;
 	
 	public SnakePartState snakePartState { get; private set; }
 
@@ -20,16 +22,11 @@ public class SnakePartCharacter : SnakeEntity
 	{
 		base.Awake();
 
-		snakePartState = SnakePartState.Alive;
+		this.snakePartState = SnakePartState.Alive;
+		this.myCollider = GetComponent<BoxCollider>();
+		this.explosion = GetComponentInChildren<ParticleSystem>();
 
-		explosion = GetComponentInChildren<ParticleSystem>();
-	}
-
-	protected override void Start()
-	{
-		base.Start();
-
-		snakeBodyManager = SnakeBodyManager.instance;
+		BOXCOLLIDER_STANDARD_SIZE_VALUE = this.myCollider.size.x;
 	}
 
 
@@ -72,52 +69,68 @@ public class SnakePartCharacter : SnakeEntity
 	/* ---------------------------------------------------------------------------------------------*/
 	public void InitializeSnakePart()
 	{
-		myTransform.SetAsFirstSibling();
+		this.myTransform.SetAsFirstSibling();
 
-		body.gameObject.SetActive(true);
-		body.localScale = Vector3.one;
+		this.body.gameObject.SetActive(true);
+		this.body.localScale = Vector3.one;
+		this.myCollider.enabled = true;
+		this.myCollider.size = Vector3.one * BOXCOLLIDER_STANDARD_SIZE_VALUE;
 
-		snakePartState = SnakePartState.Alive;
+		this.snakePartState = SnakePartState.Alive;
 	}
 
 	public void SetupSnakePart()
 	{
-		StopAllCoroutines();
+		this.StopAllCoroutines();
 
-		InitializeSnakePart();
+		this.InitializeSnakePart();
 		
-		this.cellable.UpdateCurrentCell(myTransform.position, myTransform.up);
+		this.cellable.UpdateCurrentCell(this.myTransform.position, this.myTransform.up);
 	}
 
 	public void ReduceSnakePart(float speed)
 	{
-		if(snakePartState != SnakePartState.Alive) {
+		if(this.snakePartState != SnakePartState.Alive) {
 			return;
 		}
 
-		snakePartState = SnakePartState.Reduce;
+		this.snakePartState = SnakePartState.Reduce;
 
-		StopAllCoroutines();
-		behaviourCoroutine = ReduceSnakePartCoroutine(speed);
-		StartCoroutine(behaviourCoroutine);
+		this.StopAllCoroutines();
+		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.ReduceSnakePartCoroutine(speed));
 	}
 
 	private IEnumerator ReduceSnakePartCoroutine(float speed)
 	{
-		Vector3 from = body.localScale;
-		Vector3 to = Vector3.zero;
-		float step = 0f;
+		Vector3 from, to;
+		Vector3 cfrom;
+		float step;
 
-		while(step < 1f)
+		from = this.body.localScale;
+		cfrom = this.myCollider.size;
+		to = Vector3.zero;
+		step = 0f;
+
+		while(step < 0.75f)
 		{
-			body.localScale = Vector3.Lerp(from, to, step);
+			this.body.localScale = Vector3.Lerp(from, to, step);
+			this.myCollider.size = Vector3.Lerp(cfrom, to, step);
 			step += speed * Time.deltaTime;
 			yield return null;
 		}
 
-		body.localScale = to;
-		snakePartState = SnakePartState.Reusable;
-		behaviourCoroutine = null;
+		this.myCollider.enabled = false;
+
+		while(step < 1f)
+		{
+			this.body.localScale = Vector3.Lerp(from, to, step);
+			step += speed * Time.deltaTime;
+			yield return null;
+		}
+
+		this.body.localScale = to;
+		this.snakePartState = SnakePartState.Reusable;
+		this.behaviourCoroutine = null;
 	}
 
 
@@ -138,29 +151,28 @@ public class SnakePartCharacter : SnakeEntity
 	private void MakeThisSnakePartExplode()
 	{
 		// Can explode only if in Alive snakePartState or Reduce snakePartState
-		if(snakePartState != SnakePartState.Alive && snakePartState != SnakePartState.Reduce) {
+		if(this.snakePartState != SnakePartState.Alive && this.snakePartState != SnakePartState.Reduce) {
 			return;
 		}
 
-		snakePartState = SnakePartState.Explode;
-		StopAllCoroutines();
-		snakeBodyManager.ExplodeFromSnakePart(myTransform);
+		this.snakePartState = SnakePartState.Explode;
+		this.StopAllCoroutines();
+		SnakeBodyManager.instance.ExplodeFromSnakePart(this.myTransform);
 	}
 
 	// Only called from SnakeBodyController, do not called it from anywhere else !
 	public void Explosion()
 	{
-		if(snakePartState != SnakePartState.Reusable && snakePartState != SnakePartState.Dead)
+		if(this.snakePartState != SnakePartState.Reusable && this.snakePartState != SnakePartState.Dead)
 		{
-			snakePartState = SnakePartState.Explode;
+			this.snakePartState = SnakePartState.Explode;
 
-			body.gameObject.SetActive(false);
-			myCollider.enabled = false;
-			explosion.Play();
+			this.body.gameObject.SetActive(false);
+			this.myCollider.enabled = false;
+			this.explosion.Play();
 
-			StopAllCoroutines();
-			behaviourCoroutine = ExplosionCoroutine();
-			StartCoroutine(behaviourCoroutine);
+			this.StopAllCoroutines();
+			this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.ExplosionCoroutine());
 		}
 		else
 		{
@@ -170,7 +182,7 @@ public class SnakePartCharacter : SnakeEntity
 
 	private IEnumerator ExplosionCoroutine()
 	{
-		yield return new WaitWhile(() => explosion.IsAlive());
+		yield return new WaitWhile(() => this.explosion.IsAlive());
 
 		this.Death();
 	}
@@ -179,7 +191,7 @@ public class SnakePartCharacter : SnakeEntity
 	{
 		base.Death();
 
-		snakePartState = SnakePartState.Dead;
+		this.snakePartState = SnakePartState.Dead;
 		GameManager.instance.PutInGarbage(gameObject);
 	}
 }

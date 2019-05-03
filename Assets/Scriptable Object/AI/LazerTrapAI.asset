@@ -27,7 +27,7 @@ MonoBehaviour:
       method: IsThereTargetAround
       index: 0
     index: 0
-    score: 100
+    score: 0
     method: Wander
     active: 1
     discarded_active: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     method: Aim
     active: 1
     discarded_active: 0
-    discarded_max: 1
+    discarded_max: 0
     _max: 75
     _isParallelizable: 0
     _isForceAlone: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
       method: CouldShoot
       index: 3
     index: 2
-    score: -50
+    score: 0
     method: Shoot
     active: 1
     discarded_active: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
     _isParallelizable: 1
     _isForceAlone: 0
     isStoppable: 0
-  updateRate: 0.2
+  updateRate: 0.1
   actionCandidates: []
   scorerCandidates: []
   scorerConditionCandidates: []

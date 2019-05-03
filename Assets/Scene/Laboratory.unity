@@ -664,7 +664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   snakeBodyPrefab: {fileID: 8149796537758200507, guid: bd964521507c39a4183405a2396b7ff7,
     type: 3}
-  bodyLength: 2
+  bodyLength: 10
 --- !u!1 &217625106
 GameObject:
   m_ObjectHideFlags: 0
@@ -4137,7 +4137,7 @@ PrefabInstance:
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9
+      value: -26
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
@@ -4147,7 +4147,7 @@ PrefabInstance:
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
@@ -4188,6 +4188,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560463, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: speed
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7220b42464f40b419a98a157b96dcaa, type: 3}

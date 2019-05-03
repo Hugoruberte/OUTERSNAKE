@@ -25,7 +25,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 	{
 		base.OnStart();
 
-		snake = SnakeManager.instance.snake.transform;
+		snake = SnakeManager.instance.snakeTransform;
 
 		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();
 	}

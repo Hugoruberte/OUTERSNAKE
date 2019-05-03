@@ -8,6 +8,7 @@ public abstract class RabbitEntity : CharacterEntity
 {
 	public RabbitData rabbitData;
 
+	private Collider myCollider;
 	private GameObject death;
 	private GameObject fire;
 	private IEnumerator fireLightCoroutine = null;
@@ -22,10 +23,11 @@ public abstract class RabbitEntity : CharacterEntity
 		this.foodChainValue = 100f;
 
 		// effect
-		fire = myTransform.DeepFind("Fire").gameObject;
-		fireLight = fire.GetComponentInChildren<Light>();
+		this.fire = this.myTransform.DeepFind("Fire").gameObject;
+		this.fireLight = this.fire.GetComponentInChildren<Light>();
 
-		death = myTransform.DeepFind("Death").gameObject;
+		this.myCollider = GetComponent<Collider>();
+		this.death = this.myTransform.DeepFind("Death").gameObject;
 	}
 
 	public override void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i)
@@ -56,12 +58,12 @@ public abstract class RabbitEntity : CharacterEntity
 		base.Death();
 
 		// will not interact in future
-		myCollider.enabled = false;
+		this.myCollider.enabled = false;
 		this.behaviour.Remove(this);
 
 		// disappear
-		body.gameObject.SetActive(false);
-		death.SetActive(true);
+		this.body.gameObject.SetActive(false);
+		this.death.SetActive(true);
 
 		// get destroyed
 		Destroy(gameObject, 4f);

@@ -16,12 +16,20 @@ MonoBehaviour:
   - prefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
       type: 3}
     size: 100
-    entity: {fileID: 0}
+    entity: {fileID: 6496802672037794782, guid: fceecaf78b5fd3045b7bd968dff41b21,
+      type: 3}
   - prefab: {fileID: 8336235860199268992, guid: b3009b19c6455f742a52e308660368a5,
       type: 3}
     size: 25
-    entity: {fileID: 0}
+    entity: {fileID: 7828759676689940975, guid: b3009b19c6455f742a52e308660368a5,
+      type: 3}
   - prefab: {fileID: 4102156173478112985, guid: 913098a1600ef1a49ad2d82a9910b18b,
       type: 3}
     size: 25
-    entity: {fileID: 0}
+    entity: {fileID: 2093139867324701610, guid: 913098a1600ef1a49ad2d82a9910b18b,
+      type: 3}
+  - prefab: {fileID: 8336235860199268992, guid: 993c5543822ee004cb9b320e9d95b2dc,
+      type: 3}
+    size: 25
+    entity: {fileID: 2093139867324701610, guid: 913098a1600ef1a49ad2d82a9910b18b,
+      type: 3}

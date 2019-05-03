@@ -10,21 +10,23 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	public Transform snakeBody { get; private set; }
 
 	private Transform snake;
-	private Dictionary<Transform, SnakePartCharacter> snakePartInteracts = new Dictionary<Transform, SnakePartCharacter>();
+	private Collider snakeColl;
+	private Collider currentIgnoredCollider;
+	private Collider previousIgnoredCollider;
+	private Dictionary<int, SnakePartCharacter> snakePartCharacters = new Dictionary<int, SnakePartCharacter>();
 	private SnakeController snakeController;
 	private const int SNAKE_TAIL_MARGIN = 2;
 	public const int SNAKE_MINIMAL_LENGTH = 2;
-	private float reduceSpeed;
 
 	
 	void Start()
 	{
-		snake = SnakeManager.instance.snake.transform;
+		this.snake = SnakeManager.instance.snakeTransform;
+		this.snakeColl = SnakeManager.instance.snakeCollider;
+		this.snakeController = SnakeManager.instance.snakeController;
 
-		snakeController = SnakeManager.instance.snakeController;
-
-		// SnakeManager.instance.events.onStartStepTo.AddListener(UpdateSnakeTail);
-		// SnakeManager.instance.events.onEndStepTo.AddListener(UpdateSnakeHead);
+		SnakeManager.instance.snakeEvents.onStartStepTo.AddListener(UpdateSnakeTail);
+		SnakeManager.instance.snakeEvents.onEndStepTo.AddListener(UpdateSnakeHead);
 
 		this.InitializeSnakeBody();
 	}
@@ -39,49 +41,62 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	// Event called 'onStartStep' from SnakeController
+	// -> Start moving to destination : reduce last snakepart
 	private void UpdateSnakeTail(Vector3 target, Vector3 normal)
 	{
-		int count = snakeBody.childCount;
-		SnakePartCharacter snakeBodyScript;
+		float reduceSpeed;
+		int count;
+
+		count = snakeBody.childCount;
+		SnakePartCharacter snakePartScript;
 
 		if(count <= this.bodyLength - 1) {
 			return;
 		}
 
 		reduceSpeed = 0.333f * this.snakeController.speed + 1.667f;
-		snakeBodyScript = snakePartInteracts[snakeBody.GetChild(this.bodyLength - 1)];
-		snakeBodyScript.ReduceSnakePart(reduceSpeed);
+		snakePartScript = this.snakePartCharacters[snakeBody.GetChild(this.bodyLength - 1).GetInstanceID()];
+		snakePartScript.ReduceSnakePart(reduceSpeed);
 	}
 
 	// Event called 'onEndStep' from SnakeController
+	// -> Reach destination : spawn a snakepart
 	private void UpdateSnakeHead(Vector3 target)
 	{
 		int count;
 		Transform last;
-		SnakePartCharacter snakeBodyScript;
+		SnakePartCharacter snakePartScript;
 
 		// How many snake body we currently have
-		count = snakeBody.childCount;
+		count = this.snakeBody.childCount;
 
-		// We do not have enough snake body
+		// If we do not have enough snake body
 		if(count < this.bodyLength + SNAKE_TAIL_MARGIN)
 		{
+			// Spawn a new one
 			this.CreateNewSnakePart(target);
 		}
-		// We have enough, move the last one
+		// If we have enough, try to move the last one
 		else
 		{
-			last = snakeBody.GetChild(count - 1);
-			snakeBodyScript = snakePartInteracts[last];
+			last = this.snakeBody.GetChild(count - 1);
+			snakePartScript = this.snakePartCharacters[last.GetInstanceID()];
 
-			if(snakeBodyScript.snakePartState == SnakePartState.Reusable)
+			// If the last one can be moved
+			if(snakePartScript.snakePartState == SnakePartState.Reusable)
 			{
+				// Ignore collision with snake
+				this.SetIgnoredCollider(last.gameObject);
+
+				// Move it the snake position
 				last.position = target;
-				last.rotation = snake.rotation;
-				snakeBodyScript.SetupSnakePart();
+				last.rotation = this.snake.rotation;
+				snakePartScript.SetupSnakePart();
 			}
+			// If last one cannot be moved
 			else
 			{
+				// Spawn a new one
 				this.CreateNewSnakePart(target);
 			}
 		}
@@ -98,28 +113,45 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	private void InitializeSnakeBody()
 	{
 		GameObject newSnakeBody = new GameObject();
-		newSnakeBody.name = "SnakeBody";
-		snakeBody = newSnakeBody.transform;
+		newSnakeBody.name = "Snake Body";
+		this.snakeBody = newSnakeBody.transform;
 
-		snakeBody.SetSiblingIndex(snake.GetSiblingIndex() + 1);
+		this.snakeBody.SetSiblingIndex(snake.GetSiblingIndex() + 1);
 	}
 
 	private void CreateNewSnakePart(Vector3 target)
 	{
+		// Create
 		GameObject part = Instantiate(this.snakeBodyPrefab, target, snake.rotation);
-
-		part.name = "SnakePart";
+		part.name = "Snake Part";
 		part.transform.parent = snakeBody;
 
+		// Initialize
 		SnakePartCharacter controller = part.GetComponent<SnakePartCharacter>();
 		controller.InitializeSnakePart();
-		
-		snakePartInteracts.Add(part.transform, controller);
+		this.snakePartCharacters.Add(part.transform.GetInstanceID(), controller);
+
+		// Ignore collision with snake
+		this.SetIgnoredCollider(part);
 	}
 
-	public void ExplodeSnakeBody()
+	private void SetIgnoredCollider(GameObject part)
 	{
-		foreach(SnakePartCharacter controller in snakePartInteracts.Values)
+		this.previousIgnoredCollider = this.currentIgnoredCollider;
+		this.currentIgnoredCollider = part.GetComponent<Collider>();
+
+		// Ignore collision with current
+		Physics.IgnoreCollision(this.currentIgnoredCollider, this.snakeColl, true);
+
+		// Recheck collision with previous ignored as it is not touching snake anymore (theorically)
+		if(this.previousIgnoredCollider != null) {
+			Physics.IgnoreCollision(this.previousIgnoredCollider, this.snakeColl, false);
+		}
+	}
+
+	public void ExplodeAllSnakeBody()
+	{
+		foreach(SnakePartCharacter controller in this.snakePartCharacters.Values)
 		{
 			controller.Explosion();
 		}
@@ -129,8 +161,8 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	{
 		int index = tr.GetSiblingIndex();
 
-		if(index >= this.bodyLength){
-			snakePartInteracts[tr].Explosion();
+		if(index >= this.bodyLength) {
+			this.snakePartCharacters[tr.GetInstanceID()].Explosion();
 			return;
 		}
 
@@ -138,14 +170,14 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 
 		if(this.bodyLength > SNAKE_MINIMAL_LENGTH)
 		{
-			for(int i = index; i < snakeBody.childCount; i++)
+			for(int i = index; i < this.snakeBody.childCount; i++)
 			{
-				snakePartInteracts[snakeBody.GetChild(i)].Explosion();
+				this.snakePartCharacters[this.snakeBody.GetChild(i).GetInstanceID()].Explosion();
 			}
 		}
 		else
 		{
-			ExplodeSnakeBody();
+			this.ExplodeAllSnakeBody();
 
 			Debug.Log("Snake is dead");
 		}

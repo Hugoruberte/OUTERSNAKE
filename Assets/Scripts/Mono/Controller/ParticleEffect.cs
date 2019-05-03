@@ -5,7 +5,7 @@ using Tools;
 
 public abstract class ParticleEffect : PoolableEntity
 {
-	protected ParticleSystem main;
+	public ParticleSystem main { get; private set; }
 	protected ParticleSystem[] all;
 
 	protected override void Awake()
@@ -16,9 +16,15 @@ public abstract class ParticleEffect : PoolableEntity
 		this.all = this.GetComponentsInChildren<ParticleSystem>();
 	}
 
-	public virtual void Initialize(Vector3 position, Vector3 direction)
+
+	public virtual void Initialize(Vector3 position, Vector3 direction = default(Vector3))
 	{
 		this.SetOrientation(position, direction);
+	}
+	public virtual void Initialize(Vector3 position, Color color)
+	{
+		this.Initialize(position);
+		this.SetColor(color);
 	}
 	public virtual void Initialize(Vector3 position, Vector3 direction, Color color)
 	{

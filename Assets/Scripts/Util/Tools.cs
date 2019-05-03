@@ -268,6 +268,9 @@ namespace Tools
 	{
 		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, IEnumerator coroutine)
 		{
+			if(!mono.gameObject.activeSelf) {
+				return;
+			}
 			if(handler != null) {
 				mono.StopCoroutine(handler);
 			}
@@ -277,6 +280,9 @@ namespace Tools
 
 		public static void TryStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler)
 		{
+			if(!mono.gameObject.activeSelf) {
+				return;
+			}
 			if(handler != null) {
 				mono.StopCoroutine(handler);
 				handler = null;

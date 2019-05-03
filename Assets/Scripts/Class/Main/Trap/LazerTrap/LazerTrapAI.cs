@@ -31,7 +31,7 @@ public class LazerTrapAI : UtilityAIBehaviour<LazerTrapAI>
 	{
 		base.OnStart();
 		
-		this.snake = SnakeManager.instance.snake.transform;
+		this.snake = SnakeManager.instance.snakeTransform;
 		this.colliderResults = new Collider[10];
 		this.raycastResults = new RaycastHit[10];
 	}

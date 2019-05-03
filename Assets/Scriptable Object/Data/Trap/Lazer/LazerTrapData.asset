@@ -24,4 +24,4 @@ MonoBehaviour:
   - 1
   - 5
   wanderMaxPauseQuarter: 3
-  shootDelay: 0.1
+  shootDelay: 0.2

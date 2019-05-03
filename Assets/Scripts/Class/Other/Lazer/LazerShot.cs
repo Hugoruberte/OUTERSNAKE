@@ -26,68 +26,7 @@ public class LazerShot : Lazer
 		// tail width
 		this.curve.MoveKey(1, new Keyframe(1f, 0f));
 		this.headRenderer.widthCurve = curve;
-		// this.SetTailEnd();
 	}
-
-	/*private void SetTailEnd()
-	{
-		if(this.lazerData.tailWidthPointLength == 0f) {
-			this.curve.MoveKey(1, new Keyframe(1f, 0f));
-			this.headRenderer.widthCurve = curve;
-			return;
-		}
-
-		Keyframe key;
-		AnimationCurve cacheCurve;
-		float time;
-		float point, widthPointValue;
-
-		key = new Keyframe();
-		point = 0f;
-
-		this.ClearWidthPoint();
-
-		key.time = 0f;
-		key.value = 1f;
-		key.weightedMode = WeightedMode.Both;
-		key.outWeight = 0f;
-		key.inWeight = 0f;
-		this.curve.AddKey(key);
-
-		key.time = 1f;
-		key.value = 0f;
-		key.weightedMode = WeightedMode.Both;
-		key.outWeight = 0f;
-		key.inWeight = 0f;
-		this.curve.AddKey(key);
-
-		cacheCurve = new AnimationCurve(this.curve.keys);
-
-		while(point < this.lazerData.tailWidthPointLength) {
-			point += this.lazerData.tailWidthPointSpacing + Random.value * 0.1f;
-
-			time = 1f - (point / this.lazerData.length);
-			widthPointValue = (Random.Range(0, 100) < 75) ? 0f : cacheCurve.Evaluate(time);
-
-			key.time = time;
-			key.value = widthPointValue;
-			key.weightedMode = WeightedMode.Both;
-			key.outWeight = 0f;
-			key.inWeight = 0f;
-			this.curve.AddKey(key);
-		}
-
-		point += (this.lazerData.tailWidthPointSpacing + Random.value * 0.1f) / 2f;
-		time = 1f - (point / this.lazerData.length);
-		key.time = time;
-		key.value = cacheCurve.Evaluate(time);
-		key.weightedMode = WeightedMode.Both;
-		key.outWeight = 0f;
-		key.inWeight = 0f;
-		this.curve.AddKey(key);
-
-		this.headRenderer.widthCurve = this.curve;
-	}*/
 
 	public override void Hit(Collider[] colliders, Vector3 pos)
 	{
@@ -125,6 +64,7 @@ public class LazerShot : Lazer
 			this.direction = this.ComputeReflectDirection(this.headRigidbody.position, this.direction, hit.bounceNormal, colliders);
 			this.headRigidbody.velocity = this.direction * this.lazerData.speed;
 
+			// Calculate mid impact between in and out bounce (this.direction has changed)
 			impactDirection += this.direction;
 		}
 		// Last bounce
@@ -135,8 +75,6 @@ public class LazerShot : Lazer
 				this.ignoredCollider.Add(c);
 				Physics.IgnoreCollision(this.headCollider, c);
 			}
-
-			this.SetLazerImpact(this.headRigidbody.position, -this.direction);
 			
 			if(this.lazerData.lastBounceMode == LastBounceMode.Curve)
 			{

@@ -26,7 +26,7 @@ public class SnakeController : MonoBehaviour
 
 	private FaceSwitcher faceswitcher = new FaceSwitcher(true);
 
-	private SnakeMovementEvents events;
+	public SnakeMovementEvents events { get; private set; } = new SnakeMovementEvents();
 
 
 
@@ -52,7 +52,6 @@ public class SnakeController : MonoBehaviour
 
 	void Start()
 	{
-		this.events = SnakeManager.instance.events;
 		this.heart = HeartManager.instance.heart;
 
 		this.StartSnakeMovement();

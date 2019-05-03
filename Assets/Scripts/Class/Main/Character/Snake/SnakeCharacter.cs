@@ -13,8 +13,8 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 	{
 		base.Start();
 
-		SnakeManager.instance.events.onStartStepTo.AddListener(this.cellable.ReserveNextCell);
-		SnakeManager.instance.events.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
+		SnakeManager.instance.snakeEvents.onStartStepTo.AddListener(this.cellable.ReserveNextCell);
+		SnakeManager.instance.snakeEvents.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
 	}
 
 
@@ -40,14 +40,8 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 
 	private void ManageContactWith(GameObject other)
 	{
+		// use a death layer instead !
 		if(other.CompareTag("Snake Part")) {
-
-			float dist = Vector3.Distance(myTransform.position, other.transform.position);
-
-			// it is the collision when the snake part is created
-			if(dist < 0.5f) {
-				return;
-			}
 
 			// snake percuted a snake part...
 			Debug.Log("Snake death");

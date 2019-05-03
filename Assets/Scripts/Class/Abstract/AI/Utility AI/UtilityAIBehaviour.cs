@@ -37,8 +37,8 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 				// if best action is not one of the current actions
 				if(!caa.IsRunning(selected)) {
 
-					// if selected is parallelizable
-					if(selected.isParallelizable) {
+					// if selected is parallelizable && current allows it
+					if(selected.isParallelizable && !caa.main.isForceAlone) {
 						// start selected action
 						caa.StartAction(selected);
 					}
@@ -55,6 +55,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 				// here either :
 				// - current is unstoppable or
+				// - current does not allow parallelization or
 				// - selected is already running or
 				// - selected has been launch.
 			}

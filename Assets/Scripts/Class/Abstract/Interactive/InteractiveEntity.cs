@@ -8,8 +8,7 @@ namespace Interactive.Engine
 	public abstract class InteractiveEntity : MonoBehaviour
 	{
 		public Transform myTransform { get; private set; }
-		protected Transform body;
-		protected Collider myCollider;
+		protected Transform body { get; private set; }
 
 
 		private InteractiveStatus status;
@@ -52,7 +51,6 @@ namespace Interactive.Engine
 			// Initialize variable
 			myTransform = transform;
 			body = myTransform.Find("Body");
-			myCollider = GetComponent<Collider>();
 
 			status = new InteractiveStatus(PhysicalStateEntity.neutral, new Voidd());
 
