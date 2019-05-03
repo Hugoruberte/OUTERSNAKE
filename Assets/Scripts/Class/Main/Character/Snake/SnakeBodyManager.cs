@@ -5,19 +5,15 @@ using Snakes;
 
 public class SnakeBodyManager : Singleton<SnakeBodyManager>
 {
-	public SnakeBodyData snakeBodyData;
-
+	[SerializeField] private GameObject snakeBodyPrefab = null;
+	[HideInInspector] public int bodyLength = 10;
 	public Transform snakeBody { get; private set; }
 
 	private Transform snake;
-
 	private Dictionary<Transform, SnakePartCharacter> snakePartInteracts = new Dictionary<Transform, SnakePartCharacter>();
-
 	private SnakeController snakeController;
-
 	private const int SNAKE_TAIL_MARGIN = 2;
 	public const int SNAKE_MINIMAL_LENGTH = 2;
-	
 	private float reduceSpeed;
 
 	
@@ -27,8 +23,8 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 
 		snakeController = SnakeManager.instance.snakeController;
 
-		SnakeManager.instance.events.onStartStep.AddListener(UpdateSnakeTail);
-		SnakeManager.instance.events.onEndStep.AddListener(UpdateSnakeHead);
+		// SnakeManager.instance.events.onStartStepTo.AddListener(UpdateSnakeTail);
+		// SnakeManager.instance.events.onEndStepTo.AddListener(UpdateSnakeHead);
 
 		this.InitializeSnakeBody();
 	}
@@ -48,17 +44,17 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		int count = snakeBody.childCount;
 		SnakePartCharacter snakeBodyScript;
 
-		if(count <= snakeBodyData.bodyLength - 1) {
+		if(count <= this.bodyLength - 1) {
 			return;
 		}
 
 		reduceSpeed = 0.333f * this.snakeController.speed + 1.667f;
-		snakeBodyScript = snakePartInteracts[snakeBody.GetChild(snakeBodyData.bodyLength - 1)];
+		snakeBodyScript = snakePartInteracts[snakeBody.GetChild(this.bodyLength - 1)];
 		snakeBodyScript.ReduceSnakePart(reduceSpeed);
 	}
 
 	// Event called 'onEndStep' from SnakeController
-	private void UpdateSnakeHead()
+	private void UpdateSnakeHead(Vector3 target)
 	{
 		int count;
 		Transform last;
@@ -68,9 +64,9 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		count = snakeBody.childCount;
 
 		// We do not have enough snake body
-		if(count < snakeBodyData.bodyLength + SNAKE_TAIL_MARGIN)
+		if(count < this.bodyLength + SNAKE_TAIL_MARGIN)
 		{
-			CreateNewSnakePart();
+			this.CreateNewSnakePart(target);
 		}
 		// We have enough, move the last one
 		else
@@ -80,13 +76,13 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 
 			if(snakeBodyScript.snakePartState == SnakePartState.Reusable)
 			{
-				last.position = snake.position;
+				last.position = target;
 				last.rotation = snake.rotation;
 				snakeBodyScript.SetupSnakePart();
 			}
 			else
 			{
-				this.CreateNewSnakePart();
+				this.CreateNewSnakePart(target);
 			}
 		}
 	}
@@ -108,9 +104,9 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		snakeBody.SetSiblingIndex(snake.GetSiblingIndex() + 1);
 	}
 
-	private void CreateNewSnakePart()
+	private void CreateNewSnakePart(Vector3 target)
 	{
-		GameObject part = Instantiate(snakeBodyData.snakeBodyPrefab, snake.position, snake.rotation);
+		GameObject part = Instantiate(this.snakeBodyPrefab, target, snake.rotation);
 
 		part.name = "SnakePart";
 		part.transform.parent = snakeBody;
@@ -133,14 +129,14 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 	{
 		int index = tr.GetSiblingIndex();
 
-		if(index >= snakeBodyData.bodyLength){
+		if(index >= this.bodyLength){
 			snakePartInteracts[tr].Explosion();
 			return;
 		}
 
-		snakeBodyData.bodyLength = index + 1;
+		this.bodyLength = index + 1;
 
-		if(snakeBodyData.bodyLength > SNAKE_MINIMAL_LENGTH)
+		if(this.bodyLength > SNAKE_MINIMAL_LENGTH)
 		{
 			for(int i = index; i < snakeBody.childCount; i++)
 			{

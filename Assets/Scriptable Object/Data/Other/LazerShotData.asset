@@ -43,7 +43,7 @@ MonoBehaviour:
   autoAimThreshold: 0.89
   autoAimLayerMask:
     serializedVersion: 2
-    m_Bits: 1537
+    m_Bits: 513
   autoAimResults:
   - {fileID: 0}
   - {fileID: 0}

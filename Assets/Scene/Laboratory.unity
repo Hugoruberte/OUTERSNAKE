@@ -228,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &32899412
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -662,7 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b12888fbce6d34f4ca495395eea9c3b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snakeBodyData: {fileID: 11400000, guid: eedbc15e385353e4fa37012346abc48a, type: 2}
+  snakeBodyPrefab: {fileID: 8149796537758200507, guid: bd964521507c39a4183405a2396b7ff7,
+    type: 3}
+  bodyLength: 2
 --- !u!1 &217625106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,7 +1092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &474404323
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1839,7 +1841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &775950160
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4135,7 +4137,7 @@ PrefabInstance:
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
     type: 3}
-  rangeOfView: 9
+  rangeOfView: 28
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 1536

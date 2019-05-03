@@ -5,7 +5,7 @@ using UnityEditor;
 using Snakes;
 
 [CustomEditor(typeof(SnakeBodyManager))]
-public class SnakeBodyControllerEditor : Editor
+public class SnakeBodyManagerEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
@@ -13,7 +13,13 @@ public class SnakeBodyControllerEditor : Editor
 
 		DrawDefaultInspector();
 
-		EditorGUILayout.LabelField($"current body length : {script.snakeBodyData.bodyLength}", EditorStyles.centeredGreyMiniLabel);
+		if(EditorApplication.isPlaying){GUI.enabled = false;}
+		script.bodyLength = EditorGUILayout.IntSlider("Snake Body Length", script.bodyLength, SnakeBodyManager.SNAKE_MINIMAL_LENGTH, 1000);
+		if(EditorApplication.isPlaying){GUI.enabled = true;}
+
+		if(GUILayout.Button("Hide body")) {
+			
+		}
 	}
 }
 

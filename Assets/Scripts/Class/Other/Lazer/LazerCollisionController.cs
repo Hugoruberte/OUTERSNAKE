@@ -27,7 +27,7 @@ public class LazerCollisionController : MonoBehaviour
 		this.GetComponent<SphereCollider>().radius = this.radius;
 	}
 
-	void Update()
+	/*void Update()
 	{
 		if(Time.time < this.lastImpactTime + MAX_IMPACT_TIME_INTERVAL) {
 			return;
@@ -46,6 +46,16 @@ public class LazerCollisionController : MonoBehaviour
 				}
 			}
 
+			this.lazer.Hit(this.cache.ToArray(), this.myTransform.position);
+			this.cache.Clear();
+		}
+	}*/
+
+	void OnCollisionEnter(Collision other)
+	{
+		if(this.lazer.lazerData.hitLayerMask.IsInLayerMask(other.gameObject.layer)) {
+
+			this.cache.Add(other.collider);
 			this.lazer.Hit(this.cache.ToArray(), this.myTransform.position);
 			this.cache.Clear();
 		}
