@@ -6,6 +6,8 @@ using Tools;
 public class LazerTrapController : MovementController
 {
 	public LazerTrap lazerTrap { get; private set; }
+	public Transform target;
+	public float lastShootTime = 0f;
 
 	private Transform myTransform;
 	private Transform gun;
@@ -24,7 +26,7 @@ public class LazerTrapController : MovementController
 
 		while(true)
 		{
-			axis = this.gun.up * (((Random.value >= 0.5f) ? 1 : -1) * this.lazerTrap.lazerTrapData.omega);
+			axis = this.gun.up * (((Random.value >= 0.5f) ? 1 : -1) * this.lazerTrap.lazerTrapData.wanderOmega);
 			clock = this.lazerTrap.lazerTrapData.wanderRotationDurationInterval[0] + Random.value * (this.lazerTrap.lazerTrapData.wanderRotationDurationInterval[1] - this.lazerTrap.lazerTrapData.wanderRotationDurationInterval[0]);
 
 			while(clock > 0f) {
@@ -44,7 +46,7 @@ public class LazerTrapController : MovementController
 
 		while(true) {
 			to = Quaternion.LookRotation(target.position - this.gun.position, this.myTransform.up);
-			this.gun.rotation = Quaternion.RotateTowards(this.gun.rotation, to, this.lazerTrap.lazerTrapData.omega * Time.deltaTime);
+			this.gun.rotation = Quaternion.RotateTowards(this.gun.rotation, to, this.lazerTrap.lazerTrapData.aimOmega * Time.deltaTime);
 			yield return null;
 		}
 	}
@@ -52,6 +54,7 @@ public class LazerTrapController : MovementController
 	public IEnumerator Shoot()
 	{
 		this.lazerTrap.Shoot();
+		this.lastShootTime = Time.time;
 
 		yield return Yielders.Wait(this.lazerTrap.lazerTrapData.shootDelay);
 	}

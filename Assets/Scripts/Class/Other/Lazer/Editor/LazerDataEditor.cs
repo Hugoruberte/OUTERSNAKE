@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
 using Tools;
 using Lazers;
 
@@ -39,16 +37,37 @@ public class LazerDataEditor : Editor
 		script.bounce = EditorGUILayout.Toggle("Bounce", script.bounce);
 
 		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Effects", EditorStyles.boldLabel);
-		script.lazerImpactPrefab = EditorGUILayout.ObjectField("Lazer Impact Prefab", script.lazerImpactPrefab, typeof(GameObject), false) as GameObject;
-		script.groundImpactPrefab = EditorGUILayout.ObjectField("Ground Impact Prefab", script.groundImpactPrefab, typeof(GameObject), false) as GameObject;
-
-		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Layer Mask", EditorStyles.boldLabel);
 		script.hitLayerMask = EditorGUILayoutExtension.MappedMaskField("Hit Layer Mask", script.hitLayerMask, this.users);
 		if(script.bounce) {
 			script.bounceLayerMask = EditorGUILayoutExtension.MappedMaskField("Bounce Layer Mask", script.bounceLayerMask, script.hitLayerMask);
 		}
+
+		if(script.bounce) {
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Bounce", EditorStyles.boldLabel);
+			script.maxBounceCount = EditorGUILayout.IntSlider("Max Bounce Count", script.maxBounceCount, 1, 200);
+		
+			script.lastBounceMode = (LastBounceMode)EditorGUILayout.EnumPopup("Last Bounce Mode", script.lastBounceMode);
+
+			EditorGUI.indentLevel ++;
+			script.coneAngle = EditorGUILayout.Slider("Cone Angle", script.coneAngle, 0f, 45f);
+
+			if(script.lastBounceMode == LastBounceMode.Curve || script.lastBounceMode == LastBounceMode.Random) {
+				script.gravityForceMultiplier = EditorGUILayout.Slider("Gravity Force Multiplier", script.gravityForceMultiplier, 0f, 10f);
+				script.forwardForceMultiplier = EditorGUILayout.Slider("Forward Force Multiplier", script.forwardForceMultiplier, 0f, 2f);
+
+				script.forceDampling = EditorGUILayout.Slider("Force Dampling", script.forceDampling, 0f, 1f);
+			}
+
+			EditorGUI.indentLevel --;
+		}
+
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Effects", EditorStyles.boldLabel);
+		script.lazerImpactPrefab = EditorGUILayout.ObjectField("Lazer Impact Prefab", script.lazerImpactPrefab, typeof(GameObject), false) as GameObject;
+		script.groundImpactPrefab = EditorGUILayout.ObjectField("Ground Impact Prefab", script.groundImpactPrefab, typeof(GameObject), false) as GameObject;
+
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Width", EditorStyles.boldLabel);
@@ -72,26 +91,6 @@ public class LazerDataEditor : Editor
 			script.distancePerPointMinMax.Set(Mathf.RoundToInt(Mathf.Min(Mathf.Max(temp.x, 0f), temp.y)), Mathf.RoundToInt(Mathf.Max(temp.x, Mathf.Min(temp.y, 10f))));
 		}
 
-		if(script.bounce) {
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("Bounce Parameters", EditorStyles.boldLabel);
-			script.maxBounceCount = EditorGUILayout.IntSlider("Max Bounce Count", script.maxBounceCount, 1, 200);
-		
-			script.lastBounceMode = (LastBounceMode)EditorGUILayout.EnumPopup("Last Bounce Mode", script.lastBounceMode);
-
-			EditorGUI.indentLevel ++;
-			script.coneAngle = EditorGUILayout.Slider("Cone Angle", script.coneAngle, 0f, 45f);
-
-			if(script.lastBounceMode == LastBounceMode.Curve || script.lastBounceMode == LastBounceMode.Random) {
-				script.gravityForceMultiplier = EditorGUILayout.Slider("Gravity Force Multiplier", script.gravityForceMultiplier, 0f, 10f);
-				script.forwardForceMultiplier = EditorGUILayout.Slider("Forward Force Multiplier", script.forwardForceMultiplier, 0f, 2f);
-
-				script.forceDampling = EditorGUILayout.Slider("Force Dampling", script.forceDampling, 0f, 1f);
-			}
-
-			EditorGUI.indentLevel --;
-		}
-
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Auto Aim", EditorStyles.boldLabel);
 		script.autoAim = EditorGUILayout.Toggle("Auto Aim", script.autoAim);
@@ -100,12 +99,7 @@ public class LazerDataEditor : Editor
 			script.autoAimThreshold = EditorGUILayout.Slider("Target Alignment Threshold", script.autoAimThreshold, 0f, 1f);
 			script.autoAimLayerMask = EditorGUILayoutExtension.MappedMaskField("Target Layer Mask", script.autoAimLayerMask, script.hitLayerMask);
 		}
-		
 
-		if(!EditorApplication.isPlaying && GUI.changed)
-		{
-			EditorUtility.SetDirty(script);
-			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-		}
+		EditorUtilityExtension.SetDirtyOnGUIChange(script);
 	}
 }

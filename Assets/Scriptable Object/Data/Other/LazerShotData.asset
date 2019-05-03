@@ -27,15 +27,13 @@ MonoBehaviour:
   bounceLayerMask:
     serializedVersion: 2
     m_Bits: 1793
-  maxBounceCount: 3
-  lastBounceMode: 0
+  maxBounceCount: 1
+  lastBounceMode: 2
   coneAngle: 10
   gravityForceMultiplier: 5
   forwardForceMultiplier: 0.3
   forceDampling: 0.7
   length: 10
-  tailWidthPointLength: 0
-  tailWidthPointSpacing: 0.33
   width: 0.2
   widthSpeed: 2
   widthPointSpeed: 5

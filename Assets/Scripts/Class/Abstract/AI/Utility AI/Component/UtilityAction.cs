@@ -5,157 +5,171 @@ using System.Reflection;
 using UnityEngine;
 using Tools;
 
-[System.Serializable]
-public class UtilityAction
+namespace Utility.AI
 {
-	// scorers
-	public List<UtilityScorer> scorers = new List<UtilityScorer>();
-
-	private int _max = int.MinValue;
-	public int max {
-		get {
-			if(_max == int.MinValue) { _max = this.Max(); }
-			return _max;
-		}
-	}
-
-	// inspector
-	public int index = 0;
-	public int score = 0;
-	public string method = "";
-	public bool active = true;
-
-	// invocation
-	private System.Action<MovementController> action = null;
-	private System.Func<MovementController, IEnumerator> coroutineFactory_1 = null;
-	private System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory_2 = null;
-	private IEnumerator coroutine = null;
-
-	// state
-	private bool _isParallelizable = false;
-	public bool isParallelizable {
-		get { return this._isParallelizable; }
-		set {
-			this._isParallelizable = value;
-			if(value) {
-				this._isForceAlone = false;
-			}
-		}
-	}
-	private bool _isForceAlone = false;
-	public bool isForceAlone {
-		get { return this._isForceAlone; }
-		set {
-			this._isForceAlone = value;
-			if(value) {
-				this._isParallelizable = false;
-			}
-		}
-	}
-	public bool isStoppable = false;
-	public bool isRunning { get; private set; } = false;
-	
-
-
-
-	public UtilityAction(string method, int index)
+	[System.Serializable]
+	public class UtilityAction
 	{
-		this.index = index;
-		this.method = method;
-	}
+		// scorers
+		public List<UtilityScorer> scorers = new List<UtilityScorer>();
 
-	public int Score(MovementController ctr)
-	{
-		this.score = 0;
-		foreach(UtilityScorer s in this.scorers) {
-			this.score += s.Score(ctr);
-		}
+		// inspector
+		public int index = 0;
+		public int score = 0;
+		public string method = "";
+		public bool active = true;
+		public bool discarded_active = false;
+		public bool discarded_max = false;
+		[SerializeField] private int _max = int.MaxValue;
 
-		return this.score;
-	}
+		// invocation
+		private System.Action<MovementController> action = null;
+		private System.Func<MovementController, IEnumerator> coroutineFactory_1 = null;
+		private System.Func<MovementController, UtilityAction, IEnumerator> coroutineFactory_2 = null;
+		private IEnumerator coroutine = null;
 
-	public void Start(MovementController ctr, MonoBehaviour handler)
-	{
-		if(this.action != null) {
-			this.isRunning = false;
-			this.action(ctr);
-		} else {
-			this.coroutine = this.HandlerCoroutine(ctr);
-			handler.StartCoroutine(this.coroutine);
-		}
-	}
-
-	public void Stop(MonoBehaviour handler)
-	{
-		if(this.action != null) {
-			Debug.LogWarning("Warning: Could not stop this UtilityAction because it is not a coroutine !");
-			return;
-		}
-
-		handler.TryStopCoroutine(ref this.coroutine);
-	}
-
-
-
-
-
-
-
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* -------------------------------------- UTIL FUNCTION ---------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	public void Initialize(UtilityAIBehaviour t)
-	{
-		MethodInfo methodInfo;
-
-		this.isRunning = false;
-
-		methodInfo = t.GetType().GetMethod(method);
-
-		if(methodInfo.ReturnType == typeof(void)) {
-			this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
-		} else {
-			try {
-				this.coroutineFactory_1 = System.Func<MovementController, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, IEnumerator>), t, methodInfo) as System.Func<MovementController, IEnumerator>;
-			} catch {
-				try {
-					this.coroutineFactory_2 = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
-				} catch {
-					Debug.LogWarning($"WARNING : This method '{method}' is not suitable to be an UtilityAction. Check its arguments.");
+		// state
+		[SerializeField] private bool _isParallelizable = false;
+		public bool isParallelizable {
+			get { return this._isParallelizable; }
+			set {
+				this._isParallelizable = value;
+				if(value) {
+					this._isForceAlone = false;
 				}
 			}
 		}
-
-		foreach(UtilityScorer sc in this.scorers) {
-			sc.Initialize(t);
+		[SerializeField] private bool _isForceAlone = false;
+		public bool isForceAlone {
+			get { return this._isForceAlone; }
+			set {
+				this._isForceAlone = value;
+				if(value) {
+					this._isParallelizable = false;
+				}
+			}
 		}
-	}
+		public bool isStoppable = false;
+		public bool isRunning { get; private set; } = false;
+		
 
-	private int Max()
-	{
-		int max;
 
-		max = 0;
-		foreach(UtilityScorer s in this.scorers) {
-			max += s.Max();
+
+		public UtilityAction(string method, int index)
+		{
+			this.index = index;
+			this.method = method;
 		}
 
-		return max;
-	}
+		public int Score(MovementController ctr)
+		{
+			this.score = 0;
+			foreach(UtilityScorer s in this.scorers) {
+				this.score += s.Score(ctr);
+			}
 
-	private IEnumerator HandlerCoroutine(MovementController ctr)
-	{
-		this.isRunning = true;
+			return this.score;
+		}
 
-		IEnumerator co = (this.coroutineFactory_2 == null) ? this.coroutineFactory_1(ctr) : this.coroutineFactory_2(ctr, this);
-		yield return co;
+		public void Start(MovementController ctr, MonoBehaviour handler)
+		{
+			if(this.action != null) {
+				this.isRunning = false;
+				this.action(ctr);
+			} else {
+				this.coroutine = this.HandlerCoroutine(ctr);
+				handler.StartCoroutine(this.coroutine);
+			}
+		}
 
-		this.isRunning = false;
-	}
+		public void Stop(MonoBehaviour handler)
+		{
+			if(this.action != null) {
+				Debug.LogWarning("Warning: Could not stop this UtilityAction because it is not a coroutine !");
+				return;
+			}
+
+			handler.TryStopCoroutine(ref this.coroutine);
+		}
+
+
+
+
+
+
+
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* -------------------------------------- UTIL FUNCTION ---------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		public void Initialize(UtilityAIBehaviour t)
+		{
+			MethodInfo methodInfo;
+
+			this.isRunning = false;
+
+			methodInfo = t.GetType().GetMethod(method);
+
+			if(methodInfo.ReturnType == typeof(void)) {
+				this.action = System.Action<MovementController>.CreateDelegate(typeof(System.Action<MovementController>), t, methodInfo) as System.Action<MovementController>;
+			} else {
+				try {
+					this.coroutineFactory_1 = System.Func<MovementController, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, IEnumerator>), t, methodInfo) as System.Func<MovementController, IEnumerator>;
+				} catch {
+					try {
+						this.coroutineFactory_2 = System.Func<MovementController, UtilityAction, IEnumerator>.CreateDelegate(typeof(System.Func<MovementController, UtilityAction, IEnumerator>), t, methodInfo) as System.Func<MovementController, UtilityAction, IEnumerator>;
+					} catch {
+						Debug.LogWarning($"WARNING : This method '{method}' is not suitable to be an UtilityAction. Check its arguments.");
+					}
+				}
+			}
+
+			foreach(UtilityScorer sc in this.scorers) {
+				sc.Initialize(t);
+			}
+		}
+
+		public int Max()
+		{
+			if(this._max < int.MaxValue) {
+				return this._max;
+			}
+
+			int max, smax;
+
+			max = 0;
+			foreach(UtilityScorer s in this.scorers) {
+				smax = s.Max();
+				if(smax > 0) {
+					max += smax;
+				}
+			}
+
+			this._max = max;
+			return max;
+		}
+
+		public void UpdateCacheMax()
+		{
+			foreach(UtilityScorer s in this.scorers) {
+				s.UpdateCacheMax();
+			}
+			this._max = int.MaxValue;
+			this.Max();
+		}
+
+		private IEnumerator HandlerCoroutine(MovementController ctr)
+		{
+			this.isRunning = true;
+
+			IEnumerator co = (this.coroutineFactory_2 == null) ? this.coroutineFactory_1(ctr) : this.coroutineFactory_2(ctr, this);
+			yield return co;
+
+			this.isRunning = false;
+		}
 
 
 
@@ -164,22 +178,23 @@ public class UtilityAction
 
 
 
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* ----------------------------------- INSPECTOR FUNCTIONS ------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	public void AddScorer(string m, bool ic, int i)
-	{
-		UtilityScorer scorer = new UtilityScorer(ic, m, i);
-		this.scorers.Add(scorer);
-	}
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* ----------------------------------- INSPECTOR FUNCTIONS ------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		/* --------------------------------------------------------------------------------------------*/
+		public void AddScorer(string m, bool ic, int i)
+		{
+			UtilityScorer scorer = new UtilityScorer(ic, m, i);
+			this.scorers.Add(scorer);
+		}
 
-	public void RemoveScorerAt(int index)
-	{
-		// only does that
-		this.scorers.RemoveAt(index);
+		public void RemoveScorerAt(int index)
+		{
+			// only does that
+			this.scorers.RemoveAt(index);
+		}
 	}
 }

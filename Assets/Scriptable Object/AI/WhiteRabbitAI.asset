@@ -12,80 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef614a81c5bbecc45a996423c7181ff9, type: 3}
   m_Name: WhiteRabbitAI
   m_EditorClassIdentifier: 
-  actions:
-  - scorers: []
-    index: 0
-    score: 0
-    method: EatFood
-    active: 1
-    isStoppable: 0
-    isParallelizable: 0
-  - scorers: []
-    index: 1
-    score: 0
-    method: GoToFood
-    active: 1
-    isStoppable: 0
-    isParallelizable: 0
-  - scorers:
-    - isCondition: 1
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 2147483647
-      method: RabbitIsScared
-      index: 0
-    - isCondition: 1
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 2147483647
-      method: RabbitIsHungry
-      index: 1
-    - isCondition: 1
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 2147483647
-      method: ThereIsFood
-      index: 2
-    - isCondition: 1
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 2147483647
-      method: CanReachFood
-      index: 3
-    index: 2
-    score: 0
-    method: Wander
-    active: 1
-    isStoppable: 0
-    isParallelizable: 0
-  lastUpdate: 0
+  actions: []
   updateRate: 0.02
   actionCandidates: []
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 000000
+  displayScorers: 
+  displayParameters: 

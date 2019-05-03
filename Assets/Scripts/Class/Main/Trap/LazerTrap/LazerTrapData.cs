@@ -7,11 +7,14 @@ public class LazerTrapData : ScriptableObject
 	[HideInInspector] public GameObject lazerPrefab;
 	
 	// Parameters
-	[HideInInspector] public float omega;
 	[HideInInspector] public float rangeOfView;
 	[HideInInspector] public LayerMask targetLayerMask;
 
+	// Aim
+	[HideInInspector] public float aimOmega;
+
 	// Wander
+	[HideInInspector] public float wanderOmega;
 	[HideInInspector] public float[] wanderRotationDurationInterval = new float[2];
 	[HideInInspector] public int wanderMaxPauseQuarter;
 

@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
 using Tools;
 
 [CustomEditor(typeof(RabbitData), true), CanEditMultipleObjects]
@@ -28,11 +26,7 @@ public class RabbitDataEditor : Editor
 		script.jumpHeight = EditorGUILayout.Slider("Jump Height", script.jumpHeight, 0.1f, 5f);
 		script.afterJumpTempoInterval = EditorGUILayoutExtension.IntervalField("After Jump Delay", script.afterJumpTempoInterval, AFTER_JUMP_MAGNITUDE);
 		
-		if(!EditorApplication.isPlaying && GUI.changed)
-		{
-			EditorUtility.SetDirty(script);
-			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-		}
+		EditorUtilityExtension.SetDirtyOnGUIChange(script);
 
 		serializedObject.ApplyModifiedProperties();
 	}

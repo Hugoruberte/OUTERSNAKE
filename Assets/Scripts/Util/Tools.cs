@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
@@ -230,6 +232,19 @@ namespace Tools
 
 
 
+	public static class EditorUtilityExtension
+	{
+		public static void SetDirtyOnGUIChange(Object obj)
+		{
+			if(!EditorApplication.isPlaying && GUI.changed) {
+				EditorUtility.SetDirty(obj);
+				EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+			}
+		}
+	}
+
+
+
 	public static class LayerExtension
 	{
 		public static void SetLayerWithChildren(this GameObject root, int layer)
@@ -246,6 +261,8 @@ namespace Tools
 			root.SetLayerWithChildren(LayerMask.NameToLayer(layer));
 		}
 	}
+
+
 
 	public static class CoroutineExtension
 	{
@@ -266,6 +283,8 @@ namespace Tools
 			}
 		}
 	}
+
+
 
 	public static class ParticleSystemExtension
 	{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Snakes;
+using Utility.AI;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "WhiteRabbitAI", menuName = "Scriptable Object/AI/WhiteRabbitAI", order = 3)]

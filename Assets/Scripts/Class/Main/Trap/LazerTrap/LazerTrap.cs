@@ -43,10 +43,14 @@ public class LazerTrap : TrapEntity
 		Debug.Log("TO DO");
 	}
 
-	void Update()
+
+	private void OnDrawGizmosSelected()
 	{
-		if(Input.GetButtonDown("Space")) {
-			this.Shoot();
+		if(this.lazerTrapData == null) {
+			return;
 		}
+
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawWireSphere(transform.position, this.lazerTrapData.rangeOfView);
 	}
 }

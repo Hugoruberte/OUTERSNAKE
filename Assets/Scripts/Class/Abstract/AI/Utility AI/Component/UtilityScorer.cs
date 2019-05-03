@@ -2,106 +2,119 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// I am obligated to use an 'isCondition' variable instead of create
-// two subclass like it was done below because of Unity serialization
-// which do not manage polymorphism and inheritance...
-// I am as sad as you.
-
-[System.Serializable]
-public class UtilityScorer
+namespace Utility.AI
 {
-	public bool isCondition = true;
-	public bool not = false;
+	// I am obligated to use an 'isCondition' variable instead of create
+	// two subclass like it was done below because of Unity serialization
+	// which do not manage polymorphism and inheritance...
+	// I am as sad as you.
 
-	// score
-	public int score = 0;
-	public AnimationCurve curve = null;
-	[SerializeField] private int _max = int.MaxValue;
-
-	// inspector
-	public string method;
-	public int index = 0;
-	private string targetRunningAction;
-
-	// scorer
-	private System.Func<MovementController, bool> condition;
-	private System.Func<MovementController, float> mapper;
-
-
-	public UtilityScorer(bool c, string m, int i)
+	[System.Serializable]
+	public class UtilityScorer
 	{
-		this.isCondition = c;
-		this.method = m;
-		this.index = i;
-	}
+		public bool isCondition = true;
+		public bool not = false;
 
-	public int Score(MovementController ctr)
-	{
-		int res;
-		bool cond;
+		// score
+		public int score = 0;
+		public AnimationCurve curve = null;
+		[SerializeField] private int _max = int.MaxValue;
 
-		if(this.isCondition) {
-			cond = this.condition(ctr);
-			res = ((!cond && this.not) || (cond && !this.not)) ? score : 0;
-		} else {
-			res = Mathf.RoundToInt(this.curve.Evaluate(this.mapper(ctr)));
+		// inspector
+		public string method;
+		public int index = 0;
+		private string target_running_action;
+
+		// scorer
+		private System.Func<MovementController, bool> condition;
+		private System.Func<MovementController, float> mapper;
+
+
+		public UtilityScorer(bool c, string m, int i)
+		{
+			this.isCondition = c;
+			this.method = m;
+			this.index = i;
 		}
 
-		return res;
-	}
+		public int Score(MovementController ctr)
+		{
+			int res;
+			bool cond;
 
-	public int Max()
-	{
-		if(this._max < int.MaxValue) {
-			return this._max;
+			if(this.isCondition) {
+				cond = this.condition(ctr);
+				res = ((!cond && this.not) || (cond && !this.not)) ? score : 0;
+			} else {
+				res = Mathf.RoundToInt(this.curve.Evaluate(this.mapper(ctr)));
+			}
+
+			return res;
 		}
 
-		int max;
+		public int Max()
+		{
+			if(this._max < int.MaxValue) {
+				return this._max;
+			}
 
-		max = int.MinValue;
+			int max;
 
-		if(isCondition) {
-			max = score;
-		} else {
-			int val;
-			for(float step = 0f; step <= 1f; step += 0.1f) {
-				val = Mathf.RoundToInt(this.curve.Evaluate(step));
-				if(val > max) {
-					max = val;
+			max = int.MinValue;
+
+			if(isCondition) {
+				max = score;
+			} else {
+				int val;
+				for(float step = 0f; step <= 1f; step += 0.1f) {
+					val = Mathf.RoundToInt(this.curve.Evaluate(step));
+					if(val > max) {
+						max = val;
+					}
 				}
 			}
+
+			this._max = max;
+			return max;
 		}
 
-		this._max = max;
-		return max;
-	}
-
-	public void Initialize(UtilityAIBehaviour target)
-	{
-		if(this.isCondition)
+		public void UpdateCacheMax()
 		{
-			if(this.method.Contains(" ")) {
-				this.targetRunningAction = this.method.Split(' ')[0];
-				this.condition = this.IsRunningConditionScorer;
-			} else {
-				this.condition = System.Func<MovementController, bool>.CreateDelegate(typeof(System.Func<MovementController, bool>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, bool>;
+			this._max = int.MaxValue;
+			this.Max();
+		}
+
+		public void Initialize(UtilityAIBehaviour target)
+		{
+			if(this.isCondition)
+			{
+				if(this.method.Contains(" ")) {
+					this.target_running_action = this.method.Split(' ')[0];
+					this.condition = this.IsRunningConditionScorer;
+				} else {
+					this.condition = System.Func<MovementController, bool>.CreateDelegate(typeof(System.Func<MovementController, bool>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, bool>;
+				}
 			}
-		}
-		else
-		{
-			this.mapper = System.Func<MovementController, float>.CreateDelegate(typeof(System.Func<MovementController, float>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, float>;
-		}
-	}
-
-	private bool IsRunningConditionScorer(MovementController ctr)
-	{
-		UtilityAction[] acts = ctr.entity.behaviour.GetCurrentActions(ctr.entity);
-		foreach(UtilityAction a in acts) {
-			if(a.method.Equals(this.targetRunningAction)) {
-				return true;
+			else
+			{
+				this.mapper = System.Func<MovementController, float>.CreateDelegate(typeof(System.Func<MovementController, float>), target, target.GetType().GetMethod(method)) as System.Func<MovementController, float>;
 			}
 		}
 
-		return false;
+		private bool IsRunningConditionScorer(MovementController ctr)
+		{
+			UtilityAction[] acts = ctr.entity.behaviour.GetCurrentActions(ctr.entity);
+			foreach(UtilityAction a in acts) {
+				if(a == null) {
+					continue;
+				}
+				
+				if(a.method.Equals(this.target_running_action)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Utility.AI;
 
 [CustomEditor(typeof(LivingEntity), true), CanEditMultipleObjects]
 public class LivingEntityEditor : InteractiveEntityEditor
@@ -11,6 +12,7 @@ public class LivingEntityEditor : InteractiveEntityEditor
 	private string nameAI;
 
 	private bool showAI = false;
+	private bool showDetails = false;
 	private UtilityAction[] acts;
 
 	// float val = 0f;
@@ -67,19 +69,34 @@ public class LivingEntityEditor : InteractiveEntityEditor
 		rect.y += -0.5f;
 		showAI = EditorGUI.Foldout(rect, showAI, "");
 
-		if(showAI) {
-			EditorGUI.indentLevel ++;
-			
+		if(showAI)
+		{
 			if(EditorApplication.isPlaying) {
+				Repaint();
+
 				this.acts = script.behaviour.GetCurrentActions(script);
 				foreach(UtilityAction a in this.acts) {
-					EditorGUILayout.LabelField($"Current action : {a.method} (score = {a.score}, parallelizable = {a.isParallelizable})", EditorStyles.centeredGreyMiniLabel);
+					EditorGUILayout.LabelField($"{a.method} -> score: {a.score}", EditorStyles.centeredGreyMiniLabel);
 				}
 			} else {
-				EditorGUILayout.LabelField($"Current action : None (score = 0)", EditorStyles.centeredGreyMiniLabel);
+				EditorGUILayout.LabelField($"No action running", EditorStyles.centeredGreyMiniLabel);
 			}
-			
+
+			EditorGUI.indentLevel ++;
+			showDetails = EditorGUILayout.Foldout(showDetails, "Details");
+			if(showDetails) {
+				foreach(UtilityAction act in script.behaviour.actions) {
+					if(act.discarded_max) {
+						EditorGUILayout.LabelField($"{act.method} discarded (> max: {act.Max()})");
+					} else if(act.discarded_active) {
+						EditorGUILayout.LabelField($"{act.method} discarded (not active)");
+					} else {
+						EditorGUILayout.LabelField($"{act.method}'s score: {act.score}");
+					}
+				}
+			}
 			EditorGUI.indentLevel --;
+			
 			GUILayout.Space(5);
 		}
 

@@ -39,7 +39,7 @@ public class PoolingManager : Singleton<PoolingManager>
 		}
 
 		if(entity == null) {
-			Debug.LogWarning($"WARNING : This pool '{name}' and '{typeof(T)}' has no entity available... You should increase pool size.");
+			Debug.LogWarning($"WARNING : This pool name:'{name}' and type:'{typeof(T)}' has no more entity available... You should increase pool size.");
 			return null;
 		}
 

@@ -200,10 +200,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64700eb3f8927a64089222d7e6f35ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  maxStepDistance: 2
-  rangeOfView: 5
-  isTired: 0
-  isHungry: 0
-  isScared: 0
   behaviour: {fileID: 0}

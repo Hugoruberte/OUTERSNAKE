@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb50dd77f1be854fa7013fbc0ff7268, type: 3}
   m_Name: LazerTrapData
   m_EditorClassIdentifier: 
-  omega: 100
+  lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
+    type: 3}
+  rangeOfView: 9
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 1536
+  aimOmega: 500
+  wanderOmega: 50
   wanderRotationDurationInterval:
-  - 0
   - 1
+  - 5
   wanderMaxPauseQuarter: 3
   shootDelay: 0.1

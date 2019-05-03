@@ -29,17 +29,23 @@ public class LazerTrapDataEditor : Editor
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
-		script.omega = EditorGUILayout.Slider("Omega", script.omega, 0.1f, 100f);
 		script.rangeOfView = EditorGUILayout.Slider("Range Of View", script.rangeOfView, 0.1f, 100f);
 		script.targetLayerMask = EditorGUILayoutExtension.MappedMaskField("Target Layer Mask", script.targetLayerMask, this.users);
 
 		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Aim", EditorStyles.boldLabel);
+		script.aimOmega = EditorGUILayout.Slider("Aim Omega", script.aimOmega, 0.1f, 500f);
+
+		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Wander", EditorStyles.boldLabel);
+		script.wanderOmega = EditorGUILayout.Slider("Wander Omega", script.wanderOmega, 0.1f, 500f);
 		script.wanderRotationDurationInterval = EditorGUILayoutExtension.IntervalField("Rotation duration interval", script.wanderRotationDurationInterval, new float[2]{0f, 10f});
 		script.wanderMaxPauseQuarter = EditorGUILayout.IntSlider("Maximum number of pause quarter", script.wanderMaxPauseQuarter, 1, 5);
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Shoot", EditorStyles.boldLabel);
 		script.shootDelay = EditorGUILayout.Slider("After shoot delay", script.shootDelay, 0f, 5f);
+
+		EditorUtilityExtension.SetDirtyOnGUIChange(script);
 	}
 }
