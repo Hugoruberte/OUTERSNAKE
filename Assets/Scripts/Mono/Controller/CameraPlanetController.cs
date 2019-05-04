@@ -13,20 +13,16 @@ namespace Cameras
 	public class CameraPlanetController : Singleton<CameraPlanetController>
 	{
 		[Header("State")]
-		public Transform target;
+		[SerializeField] private Rigidbody target = null;
 		public CameraMoveState state = CameraMoveState.Idle;
 
 		[Header("Settings")]
-		[SerializeField, Tooltip("Distance camera <-> target"), Range(5, 75)]
-		private int height = 25;
+		[SerializeField, Tooltip("Distance camera <-> target"), Range(5, 75)] private int height = 25;
 
-		[SerializeField]
-		private AnimationCurve smoothCurve = new AnimationCurve();
+		[SerializeField] private AnimationCurve smoothCurve = new AnimationCurve();
+
 
 		private Transform myTransform;
-		private _Transform heart;
-		private _Transform cacheHeart = new _Transform();
-		private _Transform oldHeart = new _Transform();
 
 		private const float SMOOTH_OMEGA = 3f;
 		private const float SMOOTH_TRANSITION = 75f;
@@ -50,13 +46,9 @@ namespace Cameras
 
 		void Start()
 		{
-			this.heart = HeartManager.instance.heart;
 			this.snakeController = SnakeManager.instance.snakeController;
 
-			this.heart.onRotate.AddListener(this.OnHeartRotate);
-
-			this.cacheHeart.Copy(this.heart);
-			this.oldHeart.Copy(this.heart);
+			HeartManager.instance.onRotate.AddListener(this.OnHeartRotate);
 
 			if(!this.target) {
 				Debug.LogWarning("WARNING : Camera does not have any target to follow !");
@@ -83,8 +75,13 @@ namespace Cameras
 		/* --------------------------------------------------------------------------------------------*/
 		private void SmoothPosition()
 		{
-			this.targetPosition = this.target.position + this.target.up * this.height;
-			this.myTransform.position = Vector3.SmoothDamp(this.myTransform.position, this.targetPosition, ref this.velocity, this.smoothCurve.Evaluate(this.snakeController.speed));
+			this.targetPosition = this.target.position + (this.target.rotation * Vector3Extension.UP) * this.height;
+			this.myTransform.position = Vector3.SmoothDamp(
+				this.myTransform.position,
+				this.targetPosition,
+				ref this.velocity,
+				this.smoothCurve.Evaluate(this.snakeController.speed)
+			);
 		}
 
 
@@ -97,43 +94,38 @@ namespace Cameras
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
-		private void OnHeartRotate()
+		private void OnHeartRotate(_Transform previous, _Transform current)
 		{
-			Quaternion targetHeart;
+			Quaternion targetRotation;
 			float angle;
 			bool locked;
 
 			this.TryStopCoroutine(ref this.smoothRotationCoroutine);
 
-			// art of the ancient, very mystical, much dangerous, no touchy
-			this.oldHeart.Copy(this.cacheHeart);
-			this.cacheHeart.Copy(this.heart);
-
 			angle = Quaternion.Angle(this.myTransform.rotation, this.previousTarget);
 			locked = (angle < SMOOTH_LOCK_THRESHOLD);
-			targetHeart = this.heart.rotation * Quaternion.Euler(90, 0, 0);
-			this.previousTarget = targetHeart;
-			this.StartAndStopCoroutine(ref this.smoothRotationCoroutine, this.SmoothRotationCoroutine(targetHeart, locked));
+			targetRotation = current.rotation * Quaternion.Euler(90, 0, 0);
+			this.previousTarget = targetRotation;
+			this.StartAndStopCoroutine(ref this.smoothRotationCoroutine, this.SmoothRotationCoroutine(previous, current, targetRotation, locked));
 		}
 
-		private IEnumerator SmoothRotationCoroutine(Quaternion targetHeart, bool locked)
+		private IEnumerator SmoothRotationCoroutine(_Transform previous, _Transform current, Quaternion targetRotation, bool locked)
 		{
-			Vector3 lookUp;
+			Vector3 lookUp, targetRight;
 			Vector3 tgtp;
 			Quaternion tgtr;
-			int rightDot;
-			int forwardDot;
-			float previousAngle;
-			float angle;
+			int rightDot, forwardDot;
+			float previousAngle, angle;
 
 
-			rightDot = Mathf.RoundToInt(Vector3.Dot(this.target.right, this.heart.right));
-			forwardDot = Mathf.RoundToInt(Vector3.Dot(this.oldHeart.up, -rightDot * this.heart.forward));
-			lookUp = this.heart.forward + rightDot * forwardDot * this.heart.up;
+			targetRight = this.target.rotation * Vector3Extension.RIGHT;
+			rightDot = Mathf.RoundToInt(Vector3.Dot(targetRight, current.right));
+			forwardDot = Mathf.RoundToInt(Vector3.Dot(previous.up, -rightDot * current.forward));
+			lookUp = current.forward + rightDot * forwardDot * current.up;
 
 			// Camera smoothly reaches 'lookat' rotation
 			do {
-				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				tgtp = this.GetTargetLockAxis(previous, rightDot, locked);
 				tgtr = Quaternion.LookRotation(tgtp - this.myTransform.position, lookUp);
 				this.myTransform.rotation = Quaternion.Slerp(this.myTransform.rotation, tgtr, SMOOTH_TRANSITION * Time.deltaTime);
 				angle = Quaternion.Angle(this.myTransform.rotation, tgtr);
@@ -144,9 +136,9 @@ namespace Cameras
 
 			// Camera looks at target until nearly reaches target rotation
 			do {
-				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				tgtp = this.GetTargetLockAxis(previous, rightDot, locked);
 				this.myTransform.LookAt(tgtp, lookUp);
-				angle = Quaternion.Angle(this.myTransform.rotation, targetHeart);
+				angle = Quaternion.Angle(this.myTransform.rotation, targetRotation);
 
 				yield return null;
 			}
@@ -154,25 +146,25 @@ namespace Cameras
 
 			// Camera continues to look at target until it reaches best angle possible
 			do {
-				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				tgtp = this.GetTargetLockAxis(previous, rightDot, locked);
 				this.myTransform.LookAt(tgtp, lookUp);
 				previousAngle = angle;
-				angle = Quaternion.Angle(this.myTransform.rotation, targetHeart);
+				angle = Quaternion.Angle(this.myTransform.rotation, targetRotation);
 
 				yield return null;
 			}
 			while(previousAngle > angle);
 
 			// Camera finishes its rotation to match heart rotation
-			while(Quaternion.Angle(this.myTransform.rotation, targetHeart) > 0.1f) {
-				this.myTransform.rotation = Quaternion.Slerp(this.myTransform.rotation, targetHeart, SMOOTH_OMEGA * Time.deltaTime);
+			while(Quaternion.Angle(this.myTransform.rotation, targetRotation) > 0.1f) {
+				this.myTransform.rotation = Quaternion.Slerp(this.myTransform.rotation, targetRotation, SMOOTH_OMEGA * Time.deltaTime);
 				yield return null;
 			}
 
-			this.myTransform.rotation = targetHeart;
+			this.myTransform.rotation = targetRotation;
 		}
 
-		private Vector3 GetTargetLockAxis(int dot, bool locked)
+		private Vector3 GetTargetLockAxis(_Transform previous, int dot, bool locked)
 		{
 			if(!locked) {
 				return this.target.position;
@@ -187,9 +179,9 @@ namespace Cameras
 
 			if(dot == 0)
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.RIGHT)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3Extension.RIGHT)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.UP)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3Extension.UP)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);
@@ -197,9 +189,9 @@ namespace Cameras
 			}
 			else
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.RIGHT)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3Extension.RIGHT)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.UP)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3Extension.UP)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);

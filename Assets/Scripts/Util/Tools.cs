@@ -423,12 +423,12 @@ namespace Tools
 
 		public static Vector3 TransformPointUnscaled(this Transform pT, Vector3 position)
 		{
-			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3.one);
+			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3Extension.ONE);
 			return localToWorldMatrix.MultiplyPoint3x4(position);
 		}
 		public static Vector3 InverseTransformPointUnscaled(this Transform pT, Vector3 pos)
 		{
-			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3.one).inverse;
+			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3Extension.ONE).inverse;
 			return worldToLocalMatrix.MultiplyPoint3x4(pos);
 		}
 
@@ -586,6 +586,7 @@ namespace Tools
 	public static class Vector3Extension
 	{
 		public static readonly Vector3 ZERO = Vector3.zero;
+		public static readonly Vector3 ONE = Vector3.one;
 		public static readonly Vector3 RIGHT = Vector3.right;
 		public static readonly Vector3 UP = Vector3.up;
 		public static readonly Vector3 FORWARD = Vector3.forward;

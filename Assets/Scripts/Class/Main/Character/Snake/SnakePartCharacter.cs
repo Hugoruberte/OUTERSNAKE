@@ -72,9 +72,9 @@ public class SnakePartCharacter : SnakeEntity
 		this.myTransform.SetAsFirstSibling();
 
 		this.body.gameObject.SetActive(true);
-		this.body.localScale = Vector3.one;
+		this.body.localScale = Vector3Extension.ONE;
 		this.myCollider.enabled = true;
-		this.myCollider.size = Vector3.one * BOXCOLLIDER_STANDARD_SIZE_VALUE;
+		this.myCollider.size = Vector3Extension.ONE * BOXCOLLIDER_STANDARD_SIZE_VALUE;
 
 		this.snakePartState = SnakePartState.Alive;
 	}
