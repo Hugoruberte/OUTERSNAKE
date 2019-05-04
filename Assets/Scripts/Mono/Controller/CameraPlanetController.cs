@@ -23,20 +23,21 @@ namespace Cameras
 		[SerializeField]
 		private AnimationCurve smoothCurve = new AnimationCurve();
 
-
-
 		private Transform myTransform;
 		private _Transform heart;
 		private _Transform cacheHeart = new _Transform();
 		private _Transform oldHeart = new _Transform();
 
 		private const float SMOOTH_OMEGA = 3f;
+		private const float SMOOTH_TRANSITION = 75f;
+		private const float SMOOTH_LOCK_THRESHOLD = 20f;
 
 		private Vector3 targetPosition;
 		private Vector3 velocity = Vector3Extension.ZERO;
-		private Quaternion targetRotation;
 		private IEnumerator smoothRotationCoroutine = null;
 		private SnakeController snakeController;
+		private Quaternion previousTarget;
+
 
 
 		protected override void Awake()
@@ -44,6 +45,7 @@ namespace Cameras
 			base.Awake();
 			
 			this.myTransform = transform;
+			this.previousTarget = this.myTransform.rotation;
 		}
 
 		void Start()
@@ -52,8 +54,6 @@ namespace Cameras
 			this.snakeController = SnakeManager.instance.snakeController;
 
 			this.heart.onRotate.AddListener(this.OnHeartRotate);
-
-			this.targetRotation = this.heart.rotation * Quaternion.Euler(90, 0, 0);
 
 			this.cacheHeart.Copy(this.heart);
 			this.oldHeart.Copy(this.heart);
@@ -99,19 +99,28 @@ namespace Cameras
 		/* -------------------------------------------------------------------------------------------*/
 		private void OnHeartRotate()
 		{
-			this.targetRotation = this.heart.rotation * Quaternion.Euler(90, 0, 0);
+			Quaternion targetHeart;
+			float angle;
+			bool locked;
 
-			// technique of the ancient, very mystical, much dangerous
+			this.TryStopCoroutine(ref this.smoothRotationCoroutine);
+
+			// art of the ancient, very mystical, much dangerous, no touchy
 			this.oldHeart.Copy(this.cacheHeart);
 			this.cacheHeart.Copy(this.heart);
 
-			this.StartAndStopCoroutine(ref this.smoothRotationCoroutine, this.SmoothRotationCoroutine(this.targetRotation));
+			angle = Quaternion.Angle(this.myTransform.rotation, this.previousTarget);
+			locked = (angle < SMOOTH_LOCK_THRESHOLD);
+			targetHeart = this.heart.rotation * Quaternion.Euler(90, 0, 0);
+			this.previousTarget = targetHeart;
+			this.StartAndStopCoroutine(ref this.smoothRotationCoroutine, this.SmoothRotationCoroutine(targetHeart, locked));
 		}
 
-		private IEnumerator SmoothRotationCoroutine(Quaternion targetHeart)
+		private IEnumerator SmoothRotationCoroutine(Quaternion targetHeart, bool locked)
 		{
 			Vector3 lookUp;
-			Vector3 tgt;
+			Vector3 tgtp;
+			Quaternion tgtr;
 			int rightDot;
 			int forwardDot;
 			float previousAngle;
@@ -122,11 +131,21 @@ namespace Cameras
 			forwardDot = Mathf.RoundToInt(Vector3.Dot(this.oldHeart.up, -rightDot * this.heart.forward));
 			lookUp = this.heart.forward + rightDot * forwardDot * this.heart.up;
 
-
-			// Camera looks at target during face rotation
+			// Camera smoothly reaches 'lookat' rotation
 			do {
-				tgt = GetTargetLockAxis(rightDot);
-				this.myTransform.LookAt(tgt, lookUp);
+				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				tgtr = Quaternion.LookRotation(tgtp - this.myTransform.position, lookUp);
+				this.myTransform.rotation = Quaternion.Slerp(this.myTransform.rotation, tgtr, SMOOTH_TRANSITION * Time.deltaTime);
+				angle = Quaternion.Angle(this.myTransform.rotation, tgtr);
+
+				yield return null;
+			}
+			while(angle > 1f);
+
+			// Camera looks at target until nearly reaches target rotation
+			do {
+				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				this.myTransform.LookAt(tgtp, lookUp);
 				angle = Quaternion.Angle(this.myTransform.rotation, targetHeart);
 
 				yield return null;
@@ -135,8 +154,8 @@ namespace Cameras
 
 			// Camera continues to look at target until it reaches best angle possible
 			do {
-				tgt = GetTargetLockAxis(rightDot);
-				this.myTransform.LookAt(tgt, lookUp);
+				tgtp = this.GetTargetLockAxis(rightDot, locked);
+				this.myTransform.LookAt(tgtp, lookUp);
 				previousAngle = angle;
 				angle = Quaternion.Angle(this.myTransform.rotation, targetHeart);
 
@@ -153,37 +172,41 @@ namespace Cameras
 			this.myTransform.rotation = targetHeart;
 		}
 
-		private Vector3 GetTargetLockAxis(int dot)
+		private Vector3 GetTargetLockAxis(int dot, bool locked)
 		{
-			Vector3 tgt = this.target.position;
+			if(!locked) {
+				return this.target.position;
+			}
+
+			Vector3 tgtp = this.target.position;
 
 			// dot == 0 -> heart rotate around its z axis
 			// dot != 0 -> heart rotate around its x axis
 
-			// We use old heart rotation for the calculus
+			// We use old heart rotation for calculs as nex heart rotation miss some informations
 
 			if(dot == 0)
 			{
 				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.RIGHT)) != 0) {
-					tgt.Set(this.myTransform.position.x, tgt.y, tgt.z);
+					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
 				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.UP)) != 0) {
-					tgt.Set(tgt.x, this.myTransform.position.y, tgt.z);
+					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
-					tgt.Set(tgt.x, tgt.y, this.myTransform.position.z);
+					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);
 				}
 			}
 			else
 			{
 				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.RIGHT)) != 0) {
-					tgt.Set(this.myTransform.position.x, tgt.y, tgt.z);
+					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
 				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.UP)) != 0) {
-					tgt.Set(tgt.x, this.myTransform.position.y, tgt.z);
+					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
-					tgt.Set(tgt.x, tgt.y, this.myTransform.position.z);
+					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);
 				}
 			}
 
-			return tgt;
+			return tgtp;
 		}
 	}
 }
