@@ -71,7 +71,7 @@ public class GroundImpact : PoolableEntity
 	{
 		FarAwayManager.instance?.ReleaseFarAwayPosition(gameObject);
 
-		this.cameraTransform.localPosition = Vector3.zero;
+		this.cameraTransform.localPosition = Vector3Extension.ZERO;
 		this.renderTexture?.Release();
 
 		base.Reset();

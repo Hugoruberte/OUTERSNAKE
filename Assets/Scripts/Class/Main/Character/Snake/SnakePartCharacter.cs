@@ -108,7 +108,7 @@ public class SnakePartCharacter : SnakeEntity
 
 		from = this.body.localScale;
 		cfrom = this.myCollider.size;
-		to = Vector3.zero;
+		to = Vector3Extension.ZERO;
 		step = 0f;
 
 		while(step < 0.75f)

@@ -152,7 +152,7 @@ public abstract class CellableMovementController : MovementController
 		rot = look * Quaternion.Euler(sign * 90, 0, 0);
 
 		transition = (pos - bound.position).normalized;
-		up = Vector3.Cross(transition, look * Vector3.right).normalized;
+		up = Vector3.Cross(transition, look * Vector3Extension.RIGHT).normalized;
 
 		return new StepOver(cell, up, rot);
 	}

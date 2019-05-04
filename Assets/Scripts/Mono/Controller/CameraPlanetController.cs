@@ -33,13 +33,9 @@ namespace Cameras
 		private const float SMOOTH_OMEGA = 3f;
 
 		private Vector3 targetPosition;
-		private Vector3 velocity = Vector3.zero;
-
+		private Vector3 velocity = Vector3Extension.ZERO;
 		private Quaternion targetRotation;
-		private Quaternion previousTargetRotation = Quaternion.identity;
-
 		private IEnumerator smoothRotationCoroutine = null;
-
 		private SnakeController snakeController;
 
 
@@ -55,8 +51,9 @@ namespace Cameras
 			this.heart = HeartManager.instance.heart;
 			this.snakeController = SnakeManager.instance.snakeController;
 
+			this.heart.onRotate.AddListener(this.OnHeartRotate);
+
 			this.targetRotation = this.heart.rotation * Quaternion.Euler(90, 0, 0);
-			this.previousTargetRotation = this.targetRotation;
 
 			this.cacheHeart.Copy(this.heart);
 			this.oldHeart.Copy(this.heart);
@@ -73,9 +70,7 @@ namespace Cameras
 			}
 
 			// Position
-			SmoothPosition();		
-			// Rotation
-			SmoothRotation();
+			this.SmoothPosition();
 		}
 
 
@@ -93,6 +88,8 @@ namespace Cameras
 		}
 
 
+
+
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
@@ -100,25 +97,15 @@ namespace Cameras
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
 		/* -------------------------------------------------------------------------------------------*/
-		private void SmoothRotation()
+		private void OnHeartRotate()
 		{
 			this.targetRotation = this.heart.rotation * Quaternion.Euler(90, 0, 0);
 
-			// A face rotation has been detected !
-			// (at this point target has already rotated to the new face)
-			if(this.targetRotation != this.previousTargetRotation)
-			{
-				this.previousTargetRotation = this.targetRotation;
-				// technique of the ancient, very mystical, much dangerous
-				this.oldHeart.Copy(this.cacheHeart);
-				this.cacheHeart.Copy(this.heart);
+			// technique of the ancient, very mystical, much dangerous
+			this.oldHeart.Copy(this.cacheHeart);
+			this.cacheHeart.Copy(this.heart);
 
-				if(this.smoothRotationCoroutine != null) {
-					StopCoroutine(this.smoothRotationCoroutine);
-				}
-				this.smoothRotationCoroutine = SmoothRotationCoroutine(this.targetRotation);
-				StartCoroutine(this.smoothRotationCoroutine);
-			}
+			this.StartAndStopCoroutine(ref this.smoothRotationCoroutine, this.SmoothRotationCoroutine(this.targetRotation));
 		}
 
 		private IEnumerator SmoothRotationCoroutine(Quaternion targetHeart)
@@ -146,7 +133,7 @@ namespace Cameras
 			}
 			while(angle > 10f);
 
-			// Camera continues to look at target until it reaches best angle
+			// Camera continues to look at target until it reaches best angle possible
 			do {
 				tgt = GetTargetLockAxis(rightDot);
 				this.myTransform.LookAt(tgt, lookUp);
@@ -157,15 +144,13 @@ namespace Cameras
 			}
 			while(previousAngle > angle);
 
-			// Camera rotate to match heart rotation
-			while(Quaternion.Angle(this.myTransform.rotation, targetHeart) > 0.1f)
-			{
+			// Camera finishes its rotation to match heart rotation
+			while(Quaternion.Angle(this.myTransform.rotation, targetHeart) > 0.1f) {
 				this.myTransform.rotation = Quaternion.Slerp(this.myTransform.rotation, targetHeart, SMOOTH_OMEGA * Time.deltaTime);
 				yield return null;
 			}
 
 			this.myTransform.rotation = targetHeart;
-			this.smoothRotationCoroutine = null;
 		}
 
 		private Vector3 GetTargetLockAxis(int dot)
@@ -177,18 +162,21 @@ namespace Cameras
 
 			// We use old heart rotation for the calculus
 
-			if(dot == 0) {
-				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3.right)) != 0) {
+			if(dot == 0)
+			{
+				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.RIGHT)) != 0) {
 					tgt.Set(this.myTransform.position.x, tgt.y, tgt.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3.up)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.forward, Vector3Extension.UP)) != 0) {
 					tgt.Set(tgt.x, this.myTransform.position.y, tgt.z);
 				} else {
 					tgt.Set(tgt.x, tgt.y, this.myTransform.position.z);
 				}
-			} else {
-				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3.right)) != 0) {
+			}
+			else
+			{
+				if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.RIGHT)) != 0) {
 					tgt.Set(this.myTransform.position.x, tgt.y, tgt.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3.up)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(this.oldHeart.right, Vector3Extension.UP)) != 0) {
 					tgt.Set(tgt.x, this.myTransform.position.y, tgt.z);
 				} else {
 					tgt.Set(tgt.x, tgt.y, this.myTransform.position.z);

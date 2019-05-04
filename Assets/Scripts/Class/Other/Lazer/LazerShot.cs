@@ -227,8 +227,8 @@ public class LazerShot : Lazer
 
 		// explosion
 		this.explosionRigidbody.isKinematic = true;
-		this.explosionRigidbody.velocity = Vector3.zero;
-		this.explosionRigidbody.transform.localPosition = Vector3.zero;
+		this.explosionRigidbody.velocity = Vector3Extension.ZERO;
+		this.explosionRigidbody.transform.localPosition = Vector3Extension.ZERO;
 
 		// reset
 		base.Reset();

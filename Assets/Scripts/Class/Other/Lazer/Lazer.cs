@@ -27,7 +27,7 @@ namespace Lazers
 
 		public LazerHit(Collider[] colliders, Vector3 pos, LayerMask bounceLayerMask) {
 			this.impacts = new LazerImpact[colliders.Length];
-			this.bounceNormal = Vector3.zero;
+			this.bounceNormal = Vector3Extension.ZERO;
 
 			GameObject other;
 			Vector3 point;
@@ -197,7 +197,7 @@ public abstract class Lazer : PoolableEntity
 
 		// parameter
 		this.bounceCount = 0;
-		this.direction = Vector3.zero;
+		this.direction = Vector3Extension.ZERO;
 
 		// callback
 		this.onLazerHit = null;
@@ -207,8 +207,8 @@ public abstract class Lazer : PoolableEntity
 		this.dying = false;
 		
 		// rigidbody
-		this.headRigidbody.velocity = Vector3.zero;
-		this.headRigidbody.transform.localPosition = Vector3.zero;
+		this.headRigidbody.velocity = Vector3Extension.ZERO;
+		this.headRigidbody.transform.localPosition = Vector3Extension.ZERO;
 		this.headRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 		// collider

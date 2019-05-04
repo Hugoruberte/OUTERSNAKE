@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tools;
 
 public class FarAwayManager : Singleton<FarAwayManager>
 {
@@ -20,7 +21,7 @@ public class FarAwayManager : Singleton<FarAwayManager>
 	[SerializeField] private Vector3 basicFarAwayPosition = new Vector3(1000, 1000, 1000);
 	[SerializeField, Range(1f, 100f)] private float basicRadius = 1f;
 
-	private readonly Vector3 direction = Vector3.right;
+	private readonly Vector3 direction = Vector3Extension.RIGHT;
 	private List<Client> clients = new List<Client>();
 
 	public Vector3 GetFarAwayPosition(GameObject o) => this.GetFarAwayPosition(o, this.basicRadius);

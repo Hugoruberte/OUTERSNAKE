@@ -72,7 +72,7 @@ public class LazerRay : Lazer
 			return;
 		}
 
-		this.headRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.velocity = Vector3Extension.ZERO;
 			
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}*/
@@ -97,7 +97,7 @@ public class LazerRay : Lazer
 		// 	return;
 		// }
 
-		// this.headRigidbody.velocity = Vector3.zero;
+		// this.headRigidbody.velocity = Vector3Extension.ZERO;
 			
 		// this.Death(false);
 	}
@@ -150,7 +150,7 @@ public class LazerRay : Lazer
 
 	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)
 	{
-		this.headRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.velocity = Vector3Extension.ZERO;
 
 		// width point
 		this.InitializeWidthPoint();

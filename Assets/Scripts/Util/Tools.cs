@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
@@ -12,35 +13,59 @@ namespace Tools
 {
 	public class _Transform
 	{
-		public Vector3 right { get { return this.rotation * Vector3.right; }}
-		public Vector3 up { get { return this.rotation * Vector3.up; }}
-		public Vector3 forward { get { return this.rotation * Vector3.forward; }}
+		public Vector3 right { get { return this.rotation * Vector3Extension.RIGHT; }}
+		public Vector3 up { get { return this.rotation * Vector3Extension.UP; }}
+		public Vector3 forward { get { return this.rotation * Vector3Extension.FORWARD; }}
 
-		public Vector3 position { get; set; }
-		public Quaternion rotation { get; set; }
+		private Vector3 _position;
+		public Vector3 position {
+			get { return this._position; }
+			set {
+				this._position = value;
+				this.onMove.Invoke();
+			}
+		}
+
+		private Quaternion _rotation;
+		public Quaternion rotation {
+			get { return this._rotation; }
+			set {
+				this._rotation = value;
+				this.onRotate.Invoke();
+			}
+		}
+
+		public UnityEvent onMove { get; private set; }
+		public UnityEvent onRotate { get; private set; }
 
 		public _Transform() {
-			this.position = Vector3.zero;
-			this.rotation = Quaternion.identity;
+			this._position = Vector3Extension.ZERO;
+			this._rotation = Quaternion.identity;
+			this.onMove = new UnityEvent();
+			this.onRotate = new UnityEvent();
 		}
 
 		public _Transform(Transform t) {
 			this.Copy(t);
+			this.onMove = new UnityEvent();
+			this.onRotate = new UnityEvent();
 		}
 
 		public _Transform(Vector3 pos, Quaternion rot) {
-			this.position = pos;
-			this.rotation = rot;
+			this._position = pos;
+			this._rotation = rot;
+			this.onMove = new UnityEvent();
+			this.onRotate = new UnityEvent();
 		}
 
 		public void Copy(Transform tr) {
-			this.position = tr.position;
-			this.rotation = tr.rotation;
+			this._position = tr.position;
+			this._rotation = tr.rotation;
 		}
 
 		public void Copy(_Transform tr) {
-			this.position = tr.position;
-			this.rotation = tr.rotation;
+			this._position = tr.position;
+			this._rotation = tr.rotation;
 		}
 	}
 
@@ -575,11 +600,11 @@ namespace Tools
 		{
 			Vector3 n = v.normalized;
 
-			if(Mathf.Abs(Vector3.Dot(n, Vector3.right)) == 1)
+			if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.RIGHT)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Vector3.up)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.UP)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Vector3.forward)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.FORWARD)) == 1)
 				return true;
 
 			return false;
@@ -591,10 +616,10 @@ namespace Tools
 			Vector3 n, res;
 			float max, value;
 
-			res = Vector3.zero;
+			res = Vector3Extension.ZERO;
 			max = 0f;
 			n = v.normalized;
-			test = new Vector3[3] {Vector3.right, Vector3.up, Vector3.forward};
+			test = new Vector3[3] {Vector3Extension.RIGHT, Vector3Extension.UP, Vector3Extension.FORWARD};
 
 			foreach(Vector3 t in test) {
 				value = Vector3.Dot(n, t);
@@ -918,8 +943,8 @@ namespace Tools
 			Gizmos.DrawLine(from, to);
 			Vector3 direction = to - from;
 	 
-			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Vector3.forward;
-			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Vector3.forward;
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Vector3Extension.FORWARD;
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Vector3Extension.FORWARD;
 			Gizmos.DrawRay(to, right * arrowHeadLength);
 			Gizmos.DrawRay(to, left * arrowHeadLength);
 		}
