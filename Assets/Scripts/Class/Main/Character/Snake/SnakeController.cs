@@ -7,7 +7,6 @@ using Snakes;
 [RequireComponent(typeof(Rigidbody))]
 public class SnakeController : MonoBehaviour 
 {
-	private Transform myTransform;
 	private Rigidbody myRigidbody;
 	private _Transform heart;
 
@@ -18,8 +17,8 @@ public class SnakeController : MonoBehaviour
 
 	private int right = 0;
 	private int forward = 0;
-	private int forward_cache = 0;
 	private int right_cache = 0;
+	private int forward_cache = 0;
 	private const int WALL_DELAY = 2;
 	private const int LEDGE_DELAY = 5;
 	private int targetMask;
@@ -43,9 +42,7 @@ public class SnakeController : MonoBehaviour
 
 	void Awake()
 	{
-		this.myTransform = transform;
 		this.myRigidbody = GetComponent<Rigidbody>();
-		this.targetPosition = this.myTransform.AbsolutePosition();
 
 		this.targetMask = (1 << LayerMask.NameToLayer("Ground"));
 	}
@@ -53,6 +50,9 @@ public class SnakeController : MonoBehaviour
 	void Start()
 	{
 		this.heart = HeartManager.instance.heart;
+
+		this.myRigidbody.rotation = transform.AbsoluteRotation();
+		this.targetPosition = transform.AbsolutePosition();
 
 		this.StartSnakeMovement();
 	}
@@ -148,7 +148,7 @@ public class SnakeController : MonoBehaviour
 			}
 
 			// We are not switching faces and/or the switching is done : get inputs + snake rotation
-			this.ApplyInputs();
+			this.ApplyInputsAndRotateSnake();
 
 			// Calcul this.direction vector
 			this.direction = this.forward * this.heart.forward + this.right * this.heart.right;
@@ -165,14 +165,14 @@ public class SnakeController : MonoBehaviour
 			// If found a new face :
 			if(this.faceswitcher.switching == true) {
 				// Rotate snake over face + adapt target position
-				this.targetPosition = this.ManageFaceRotationAndAdaptTargetPosition(this.direction);
+				this.targetPosition = this.ManageFaceRotationAndUpdateTargetPosition(this.direction);
 			}
 			
 			// Move snake according to previous calculated target position
 			if(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
 				// Events -> will reserve next cell + optional callback
 				this.events.onStartStep.Invoke();
-				this.events.onStartStepTo.Invoke(this.targetPosition, this.myTransform.up);
+				this.events.onStartStepTo.Invoke(this.targetPosition, this.myRigidbody.rotation * Vector3Extension.UP);
 
 				while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
 					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
@@ -223,7 +223,7 @@ public class SnakeController : MonoBehaviour
 	/* -------------------------------------------------------------------------------------------*/
 	/* -------------------------------------------------------------------------------------------*/
 	/* -------------------------------------------------------------------------------------------*/
-	private void ApplyInputs()
+	private void ApplyInputsAndRotateSnake()
 	{
 		// If we are not switching faces
 		if(!this.faceswitcher.switching)
@@ -247,6 +247,9 @@ public class SnakeController : MonoBehaviour
 
 	private void SearchForNewFace(Vector3 dir)
 	{
+		Debug.DrawRay(this.myRigidbody.position, dir * 1f, Color.blue);
+		Debug.DrawRay(this.targetPosition, -this.heart.up * 1f, Color.green);
+
 		// Wall
 		if(Physics.Raycast(this.myRigidbody.position, dir, 1f, this.targetMask)) {
 			this.faceswitcher.SetFaceSwitching(WALL_DELAY, -dir, this.myRigidbody.position);
@@ -257,7 +260,7 @@ public class SnakeController : MonoBehaviour
 		}
 	}
 
-	private Vector3 ManageFaceRotationAndAdaptTargetPosition(Vector3 dir)
+	private Vector3 ManageFaceRotationAndUpdateTargetPosition(Vector3 dir)
 	{
 		Vector3 target;
 
@@ -288,7 +291,7 @@ public class SnakeController : MonoBehaviour
 		float rightDot;
 		float dirDot;
 
-		axis = Vector3Extension.RoundToInt(this.myTransform.right);
+		axis = Vector3Int.RoundToInt(this.myRigidbody.rotation * Vector3Extension.RIGHT);
 		forwardDot = Vector3.Dot(this.heart.forward, axis);
 		rightDot = Vector3.Dot(this.heart.right, axis);
 		dirDot = Vector3.Dot(dir, this.faceswitcher.normal);
@@ -308,7 +311,7 @@ public class SnakeController : MonoBehaviour
 
 		dot = Vector3.Dot(dir, this.faceswitcher.normal);
 		rotator = Quaternion.Euler(dot * 90, 0, 0);
-		newRotation = this.myTransform.AbsoluteRotation() * rotator;
+		newRotation = this.myRigidbody.rotation * rotator;
 
 		return newRotation;
 	}
@@ -326,8 +329,8 @@ public class SnakeController : MonoBehaviour
 		public bool switching {
 			get {
 				if(_switching) {
-					if(delay > 0) delay --;
-					if(delay == 0) _switching = false;
+					if(delay > 0) { delay --; }
+					if(delay == 0) { _switching = false;} 
 				}
 				return _switching;
 			}
@@ -340,8 +343,8 @@ public class SnakeController : MonoBehaviour
 		{
 			this._switching = false;
 			this.delay = 0;
-			this.normal = Vector3.zero;
-			this.destination = Vector3.zero;
+			this.normal = Vector3Extension.ZERO;
+			this.destination = Vector3Extension.ZERO;
 		}
 
 		public void SetFaceSwitching(int d, Vector3 n, Vector3 dest)

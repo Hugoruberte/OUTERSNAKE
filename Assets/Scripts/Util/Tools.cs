@@ -560,10 +560,10 @@ namespace Tools
 
 	public static class Vector3Extension
 	{
-		public static Vector3 RoundToInt(Vector3 vect)
-		{
-			return new Vector3(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y), Mathf.RoundToInt(vect.z));
-		}
+		public static readonly Vector3 ZERO = Vector3.zero;
+		public static readonly Vector3 RIGHT = Vector3.right;
+		public static readonly Vector3 UP = Vector3.up;
+		public static readonly Vector3 FORWARD = Vector3.forward;
 
 		public static Vector3 SetRoundToInt(this Vector3 vect)
 		{
@@ -613,11 +613,6 @@ namespace Tools
 
 	public static class Vector2Extension
 	{
-		public static Vector2 RoundToInt(Vector2 vect)
-		{
-			return new Vector2(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y));
-		}
-
 		public static void SetRoundToInt(this Vector2 vect)
 		{
 			vect.Set(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y));
