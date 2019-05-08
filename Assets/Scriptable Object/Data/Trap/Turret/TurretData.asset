@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb50dd77f1be854fa7013fbc0ff7268, type: 3}
+  m_Name: TurretData
+  m_EditorClassIdentifier: 
+  lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
+    type: 3}
+  loadPrefab: {fileID: 3017055663255704847, guid: f9d2bdc3740fae141a69cc14b46088e0,
+    type: 3}
+  shootPrefab: {fileID: 4524636548990293286, guid: 430e3360ed4ea0643ac1b0051f7ec529,
+    type: 3}
+  haloPrefab: {fileID: 6430371367858408622, guid: 4984c22f9996ede4c8759213e400020f,
+    type: 3}
+  rangeOfView: 15
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 1536
+  aimOmega: 500
+  wanderOmega: 50
+  wanderRotationDurationInterval:
+  - 1
+  - 5
+  wanderMaxPauseQuarter: 3
+  loadDuration: 0.5
+  shootDelay: 0.5

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Tools;
+using My.Tools;
 using Snakes;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -171,20 +171,23 @@ public class SnakeController : MonoBehaviour
 			// Move snake according to previous calculated target position
 			if(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
 				// Events -> will reserve next cell + optional callback
-				this.events.onStartStep.Invoke();
-				this.events.onStartStepTo.Invoke(this.targetPosition, this.myRigidbody.rotation * Vector3Extension.UP);
+				this.events.onStartStep?.Invoke();
+				this.events.onStartStepTo?.Invoke(this.targetPosition, this.myRigidbody.rotation * Vector3Extension.UP);
 
-				while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
+				do {
 					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
 					yield return null;
 				}
+				while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy);
 
 				this.myRigidbody.position = this.targetPosition;
 
 				// Event -> reserved cell become current cell + optional callback 
-				this.events.onEndStep.Invoke();
-				this.events.onEndStepTo.Invoke(this.targetPosition);
-			} else {
+				this.events.onEndStep?.Invoke();
+				this.events.onEndStepTo?.Invoke(this.targetPosition);
+			}
+			else
+			{
 				// skip frame to avoid freeze
 				yield return null;
 			}
@@ -201,8 +204,8 @@ public class SnakeController : MonoBehaviour
 		this.myRigidbody.position = this.targetPosition;
 
 		// Event
-		this.events.onEndStep.Invoke();
-		this.events.onEndStepTo.Invoke(this.targetPosition);
+		this.events.onEndStep?.Invoke();
+		this.events.onEndStepTo?.Invoke(this.targetPosition);
 
 		this.cancelInput = false;
 	}

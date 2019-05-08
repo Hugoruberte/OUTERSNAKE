@@ -1,20 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using static System.Func<bool>;
 
 public static class Yielders
 {
 	private static Dictionary<float, WaitForSeconds> intervals = new Dictionary<float, WaitForSeconds>(100);
 	
-	private static WaitForEndOfFrame _endOfFrame = new WaitForEndOfFrame();
-	public static WaitForEndOfFrame endOfFrame {
-		get { return _endOfFrame;}
-	}
- 
-	private static WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
-	public static WaitForFixedUpdate fixedUpdate {
-		get { return _fixedUpdate; }
-	}
+	public static readonly WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
+	public static readonly WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
  
 
 
@@ -30,5 +24,23 @@ public static class Yielders
 		}
 
 		return res;
+	}
+
+	public static WaitUntil Until(WaitUntil handle, System.Func<bool> predicate)
+	{
+		if(handle == null) {
+			handle = new WaitUntil(predicate);
+		}
+
+		return handle;
+	}
+
+	public static WaitWhile Until(WaitWhile handle, System.Func<bool> predicate)
+	{
+		if(handle == null) {
+			handle = new WaitWhile(predicate);
+		}
+
+		return handle;
 	}
 }

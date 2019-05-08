@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using Tools;
+using My.Tools;
+using My.Events;
 
 public class HeartManager : Singleton<HeartManager>
 {
@@ -8,8 +9,7 @@ public class HeartManager : Singleton<HeartManager>
 	private _Transform cache = new _Transform();
 	private _Transform previous = new _Transform();
 
-	public class OnRotateEvent : UnityEvent<_Transform, _Transform> {}
-	public OnRotateEvent onRotate = new OnRotateEvent();
+	public _Transform_TransformEvent onRotate;
 
 	protected override void Awake()
 	{
@@ -17,7 +17,7 @@ public class HeartManager : Singleton<HeartManager>
 
 		this.previous.Copy(this.cache);
 		this.cache.Copy(this.heart);
-		this.heart.onRotate.AddListener(this.OnRotateEventLauncher);
+		this.heart.onRotate += this.OnRotateEventLauncher;
 	}
 
 	private void OnRotateEventLauncher()
@@ -25,6 +25,6 @@ public class HeartManager : Singleton<HeartManager>
 		this.previous.Copy(this.cache);
 		this.cache.Copy(this.heart);
 
-		this.onRotate.Invoke(this.previous, this.heart);
+		this.onRotate?.Invoke(this.previous, this.heart);
 	}
 }

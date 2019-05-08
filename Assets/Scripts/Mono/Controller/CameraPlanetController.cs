@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Tools;
+using My.Tools;
 
 namespace Cameras
 {
@@ -48,7 +48,7 @@ namespace Cameras
 		{
 			this.snakeController = SnakeManager.instance.snakeController;
 
-			HeartManager.instance.onRotate.AddListener(this.OnHeartRotate);
+			HeartManager.instance.onRotate += this.OnHeartRotate;
 
 			if(!this.target) {
 				Debug.LogWarning("WARNING : Camera does not have any target to follow !");

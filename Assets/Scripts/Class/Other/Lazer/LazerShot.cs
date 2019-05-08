@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
+using My.Tools;
 using Lazers;
 
 public class LazerShot : Lazer
@@ -19,9 +19,9 @@ public class LazerShot : Lazer
 		this.explosionRigidbody = explosion.GetComponent<Rigidbody>();
 	}
 
-	public override void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
+	public override void Launch(Transform from, Vector3 towards, OnLazerHit callback)
 	{
-		base.Initialize(from, towards, callback);
+		base.Launch(from, towards, callback);
 
 		// tail width
 		this.curve.MoveKey(1, new Keyframe(1f, 0f));
@@ -184,13 +184,14 @@ public class LazerShot : Lazer
 
 	private void SetLazerImpact(Vector3 position, Vector3 direction)
 	{
-		ParticleInstantController impact = poolingManager.Get<ParticleInstantController>(this.lazerData.lazerImpactPrefab);
+		InstantParticleEffect impact = poolingManager.Get<InstantParticleEffect>(this.lazerData.lazerImpactPrefab);
 
 		if(impact == null) {
 			return;
 		}
 
-		impact.Initialize(position, direction, Color.red);
+		impact.SetOrientation(position, direction);
+		impact.SetColor(Color.red);
 
 		impact.Launch();
 	}

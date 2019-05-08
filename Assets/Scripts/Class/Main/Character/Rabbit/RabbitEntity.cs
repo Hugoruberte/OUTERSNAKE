@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Interactive.Engine;
-using Tools;
+using My.Tools;
 
 public abstract class RabbitEntity : CharacterEntity
 {

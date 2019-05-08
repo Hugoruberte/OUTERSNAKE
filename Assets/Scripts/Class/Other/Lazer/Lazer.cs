@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
+using My.Tools;
 using Lazers;
 
 namespace Lazers
@@ -84,16 +84,13 @@ public abstract class Lazer : PoolableEntity
 		this.lazerCollisionController = headRenderer.GetComponent<LazerCollisionController>();
 	}
 
-	public virtual void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
+	public virtual void Launch(Transform from, Vector3 towards, OnLazerHit callback)
 	{
+		base.Launch();
+
 		this.transform.SetPositionAndRotation(from.position, from.rotation);
 		this.direction = towards.normalized;
 		this.onLazerHit = callback;
-	}
-
-	public override void Launch()
-	{
-		base.Launch();
 
 		this.startTime = Time.time;
 		this.headRigidbody.velocity = this.direction * this.lazerData.speed;

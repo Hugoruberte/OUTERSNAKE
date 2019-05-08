@@ -25,8 +25,8 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		this.snakeColl = SnakeManager.instance.snakeCollider;
 		this.snakeController = SnakeManager.instance.snakeController;
 
-		SnakeManager.instance.snakeEvents.onStartStepTo.AddListener(UpdateSnakeTail);
-		SnakeManager.instance.snakeEvents.onEndStepTo.AddListener(UpdateSnakeHead);
+		SnakeManager.instance.snakeEvents.onStartStepTo += this.UpdateSnakeTail;
+		SnakeManager.instance.snakeEvents.onEndStepTo += this.UpdateSnakeHead;
 
 		this.InitializeSnakeBody();
 	}

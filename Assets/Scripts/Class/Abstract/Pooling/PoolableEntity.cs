@@ -1,13 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class PoolableEntity : MonoBehaviour
+public abstract class PoolableEntity : MonoBehaviour
 {
 	protected GameObject myGameObject;
-
-	[HideInInspector]
-	public bool isActive = false;
-
 	protected PoolingManager poolingManager { get; private set; }
+
+	[HideInInspector] public bool isActive = false;
 
 
 	protected virtual void Awake()

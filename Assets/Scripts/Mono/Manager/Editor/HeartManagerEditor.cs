@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Tools;
+using My.Tools;
 
 [CustomEditor(typeof(HeartManager))]
 public class HeartManagerEditor : Editor

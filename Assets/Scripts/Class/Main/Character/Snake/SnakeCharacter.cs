@@ -13,8 +13,8 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 	{
 		base.Start();
 
-		SnakeManager.instance.snakeEvents.onStartStepTo.AddListener(this.cellable.ReserveNextCell);
-		SnakeManager.instance.snakeEvents.onEndStep.AddListener(this.cellable.UpdateCurrentCell);
+		SnakeManager.instance.snakeEvents.onStartStepTo += this.cellable.ReserveNextCell;
+		SnakeManager.instance.snakeEvents.onEndStep += this.cellable.UpdateCurrentCell;
 	}
 
 

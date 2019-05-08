@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
+using My.Tools;
 using PathfindingAI;
 
 [CreateAssetMenu(fileName = "PathfindingManager", menuName = "Scriptable Object/Other/PathfindingManager", order = 3)]

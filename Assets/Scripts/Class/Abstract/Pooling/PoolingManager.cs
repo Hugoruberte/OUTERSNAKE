@@ -3,7 +3,7 @@ using System;
 
 public class PoolingManager : Singleton<PoolingManager>
 {
-	public PoolingData poolingData;
+	public PoolingData[] poolingDatas;
 
 	private Transform folder;
 
@@ -18,18 +18,29 @@ public class PoolingManager : Singleton<PoolingManager>
 
 	void Start()
 	{
-		this.poolingData.CreatePool(this.folder);
+		foreach(PoolingData d in this.poolingDatas) {
+			d.CreatePool(this.folder);
+		}
 	}
 
 	public T Get<T>(string name) where T : PoolableEntity
 	{
-		PoolableEntity entity = null;
-		PoolingData.Pool pool = this.poolingData.pools.Find(x => x.entity is T && x.prefab.name == name);
+		PoolableEntity entity;
+		PoolingData.Pool pool;
+		int index;
 
-		if(pool.prefab == null) {
+		index = 0;
+		do {
+			pool = this.poolingDatas[index ++].pools.Find(x => x.entity is T && x.prefab.name == name);
+		}
+		while(!pool.prefab && index < this.poolingDatas.Length);
+
+		if(!pool.prefab) {
 			Debug.LogError($"ERROR : No matching pool found with name '{name}' and type '{typeof(T)}' in pooling data !");
 			return null;
 		}
+
+		entity = null;
 
 		foreach(PoolableEntity e in pool.entities) {
 			if(!e.isActive) {
@@ -52,11 +63,21 @@ public class PoolingManager : Singleton<PoolingManager>
 
 	public void Stow(PoolableEntity entity)
 	{
+		PoolingData.Pool pool;
 		Transform folder;
-		Type t = entity.GetType();
+		Type t;
+		int index;
 
-		folder = this.poolingData.pools.Find(x => x.entity.GetType() == t && Array.IndexOf(x.entities, entity) > -1).inactiveFolder;
-		
+		t = entity.GetType();
+		index = 0;
+
+		do {
+			pool = this.poolingDatas[index ++].pools.Find(x => x.entity.GetType() == t && Array.IndexOf(x.entities, entity) > -1);
+		}
+		while(!pool.prefab && index < this.poolingDatas.Length);
+
+		folder = pool.inactiveFolder;
+
 		entity.Reset();
 		entity.transform.parent = folder;
 	}

@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
+using My.Tools;
 using Lazers;
 
 public class LazerRay : Lazer
@@ -20,9 +20,9 @@ public class LazerRay : Lazer
 		}
 	}
 
-	public override void Initialize(Transform from, Vector3 towards, OnLazerHit callback)
+	public override void Launch(Transform from, Vector3 towards, OnLazerHit callback)
 	{
-		base.Initialize(from, towards, callback);
+		base.Launch(from, towards, callback);
 
 		if(this.lazerData.bounce) {
 			this.hitPoints.Add(from.position + towards);
