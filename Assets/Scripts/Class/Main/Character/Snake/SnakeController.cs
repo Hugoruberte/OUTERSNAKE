@@ -2,11 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using My.Tools;
+using My.Events;
 using Snakes;
+
 
 [RequireComponent(typeof(Rigidbody))]
 public class SnakeController : MonoBehaviour 
 {
+	public struct SnakeMovementEvents
+	{
+		public ActionEvent onStartStep;
+		public ActionEvent onEndStep;
+		
+		public Vector3Vector3Event onStartStepTo;
+		public Vector3Event onEndStepTo;
+	}
+
 	private Rigidbody myRigidbody;
 	private _Transform heart;
 
@@ -25,26 +36,25 @@ public class SnakeController : MonoBehaviour
 
 	private FaceSwitcher faceswitcher = new FaceSwitcher(true);
 
-	public SnakeMovementEvents events { get; private set; } = new SnakeMovementEvents();
+	private bool cancelInput = false;
 
 
 
+	[Header("Snake Data")]
+	public SnakeData data;
 
-	[Header("Motion")]
-	[Range(0.0f, 100.0f)] public float speed = 10f;
-	[Range(0.01f, 0.2f)] public float positionAccuracy = 0.1f;
-	
-	[HideInInspector] public bool cancelInput = false;
-
-	[Header("States")]
-	public SnakeMoveState state = SnakeMoveState.Idle;
 
 
 	void Awake()
 	{
 		this.myRigidbody = GetComponent<Rigidbody>();
 
-		this.targetMask = (1 << LayerMask.NameToLayer("Ground"));
+		this.targetMask = 1 << LayerMask.NameToLayer("Ground");
+
+		// Data
+		this.data.snakeRigidbody = this.myRigidbody;
+		this.data.snakeMovementEvents = new SnakeMovementEvents();
+		this.data.snakeController = this;
 	}
 
 	void Start()
@@ -126,7 +136,7 @@ public class SnakeController : MonoBehaviour
 			this.right_cache = 0;
 		}
 		
-		if(this.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
+		if(this.data.state == SnakeMoveState.Idle && (horizontal != 0 || vertical != 0))
 		{
 			if(vertical == -1) {
 				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, 180, 0);
@@ -134,7 +144,7 @@ public class SnakeController : MonoBehaviour
 				this.myRigidbody.rotation = this.heart.rotation * Quaternion.Euler(0, horizontal * 90, 0);
 			}
 				
-			this.state = SnakeMoveState.Run;
+			this.data.state = SnakeMoveState.Run;
 		}
 	}
 
@@ -142,7 +152,7 @@ public class SnakeController : MonoBehaviour
 	{
 		while(true)
 		{
-			if(this.state != SnakeMoveState.Run) {
+			if(this.data.state != SnakeMoveState.Run) {
 				yield return null;
 				continue;
 			}
@@ -169,22 +179,22 @@ public class SnakeController : MonoBehaviour
 			}
 			
 			// Move snake according to previous calculated target position
-			if(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
+			if(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.data.accuracy) {
 				// Events -> will reserve next cell + optional callback
-				this.events.onStartStep?.Invoke();
-				this.events.onStartStepTo?.Invoke(this.targetPosition, this.myRigidbody.rotation * Vector3Extension.UP);
+				this.data.snakeMovementEvents.onStartStep?.Invoke();
+				this.data.snakeMovementEvents.onStartStepTo?.Invoke(this.targetPosition, this.myRigidbody.rotation * Vector3Extension.UP);
 
 				do {
-					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
+					this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.data.speed * Time.deltaTime);
 					yield return null;
 				}
-				while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy);
+				while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.data.accuracy);
 
 				this.myRigidbody.position = this.targetPosition;
 
 				// Event -> reserved cell become current cell + optional callback 
-				this.events.onEndStep?.Invoke();
-				this.events.onEndStepTo?.Invoke(this.targetPosition);
+				this.data.snakeMovementEvents.onEndStep?.Invoke();
+				this.data.snakeMovementEvents.onEndStepTo?.Invoke(this.targetPosition);
 			}
 			else
 			{
@@ -196,16 +206,16 @@ public class SnakeController : MonoBehaviour
 
 	private IEnumerator StopSnakeMovementCoroutine()
 	{
-		while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.positionAccuracy) {
-			this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.speed * Time.deltaTime);
+		while(Vector3.Distance(this.myRigidbody.position, this.targetPosition) > this.data.accuracy) {
+			this.myRigidbody.position = Vector3.MoveTowards(this.myRigidbody.position, this.targetPosition, this.data.speed * Time.deltaTime);
 			yield return null;
 		}
 
 		this.myRigidbody.position = this.targetPosition;
 
 		// Event
-		this.events.onEndStep?.Invoke();
-		this.events.onEndStepTo?.Invoke(this.targetPosition);
+		this.data.snakeMovementEvents.onEndStep?.Invoke();
+		this.data.snakeMovementEvents.onEndStepTo?.Invoke(this.targetPosition);
 
 		this.cancelInput = false;
 	}
@@ -267,7 +277,7 @@ public class SnakeController : MonoBehaviour
 	{
 		Vector3 target;
 
-		if(Vector3.Distance(this.myRigidbody.position, this.faceswitcher.destination) < this.positionAccuracy)
+		if(Vector3.Distance(this.myRigidbody.position, this.faceswitcher.destination) < this.data.accuracy)
 		{
 			dir.Normalize();
 

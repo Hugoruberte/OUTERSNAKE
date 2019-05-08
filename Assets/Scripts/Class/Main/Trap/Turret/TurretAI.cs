@@ -31,7 +31,7 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 	{
 		base.OnStart();
 		
-		this.snake = SnakeManager.instance.snakeTransform;
+		this.snake = SnakeData.instance.snakeTransform;
 		this.colliderResults = new Collider[10];
 		this.raycastResults = new RaycastHit[10];
 	}

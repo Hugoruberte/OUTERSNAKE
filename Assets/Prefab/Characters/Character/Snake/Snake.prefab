@@ -124,7 +124,7 @@ GameObject:
   m_Layer: 9
   m_Name: Snake
   m_TagString: Player
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -184,10 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c941d6d924e82489246d4cc368e3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
-  positionAccuracy: 0.05
-  cancelInput: 0
-  state: 2
+  data: {fileID: 11400000, guid: c6fcf6f7a7984814e973f5840968e193, type: 2}
 --- !u!114 &288344288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,3 +198,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   behaviour: {fileID: 0}
+  data: {fileID: 11400000, guid: c6fcf6f7a7984814e973f5840968e193, type: 2}

@@ -6,19 +6,8 @@ public abstract class LivingEntity : InteractiveEntity
 {
 	[HideInInspector] public UtilityAIBehaviour behaviour;
 
-	
-	/* ---------------------------------------------------------------------------------------------*/
-	/* ------------------------------------------- LIFE --------------------------------------------*/
-	/* ---------------------------------------------------------------------------------------------*/
-	protected override void OnUpdateLife() {
-		base.OnUpdateLife();
-
-		if(this.life <= 0) {
-			this.Death();
-		}
-	}
-
-	protected virtual void Death() {
-		// empty
+	protected virtual void Death()
+	{
+		this.behaviour.Remove(this);
 	}
 }

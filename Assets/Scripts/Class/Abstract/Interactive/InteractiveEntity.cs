@@ -22,26 +22,17 @@ namespace Interactive.Engine
 			set { this.status.element = value; }
 		}
 		public ChemicalMaterialEntity material { get; protected set; } = ChemicalMaterialEntity.flesh;
-		
-
-
-		private float _life = 100f;
-		public float life {
-			get { return this._life; }
-			set {
-				this._life = value;
-				this.OnUpdateLife();
-			}
-		}
-
-		public bool isAlive { get { return (this.life > 0f); }}
-
-
-		public readonly Cellable cellable = new Cellable();
-
+	
 
 		protected delegate void SetOnElement(bool active);
 		protected SetOnElement currentSetOnElement;
+
+
+		// Nearly everything is cellable
+		public readonly Cellable cellable = new Cellable();
+
+
+		
 
 
 
@@ -49,13 +40,13 @@ namespace Interactive.Engine
 		protected virtual void Awake()
 		{
 			// Initialize variable
-			myTransform = transform;
-			body = myTransform.Find("Body");
+			this.myTransform = transform;
+			this.body = this.myTransform.Find("Body");
 
-			status = new InteractiveStatus(PhysicalStateEntity.neutral, new Voidd());
+			this.status = new InteractiveStatus(PhysicalStateEntity.neutral, new Voidd());
 
-			if(!body) {
-				Debug.LogWarning("WARNING : This entity does not have a \"Body\". Is this wanted ?", myTransform);
+			if(!this.body) {
+				Debug.LogWarning("WARNING : This entity does not have a \"Body\". Is this wanted ?", this.myTransform);
 			}
 		}
 
@@ -81,9 +72,6 @@ namespace Interactive.Engine
 			this.status.element = e;
 			this.material = m;
 		}
-
-		// life
-		protected virtual void OnUpdateLife() {}
 
 		public virtual void InteractWith(InteractiveStatus s, PhysicalInteractionEntity i) {}
 

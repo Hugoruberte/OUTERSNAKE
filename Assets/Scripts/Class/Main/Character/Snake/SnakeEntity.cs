@@ -25,7 +25,7 @@ namespace Snakes
 		{
 			base.Awake();
 
-			this.SetInteractiveState(new Fire(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
+			this.SetInteractiveState(new Voidd(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
 		}
 
 		protected override void Start()
@@ -33,7 +33,7 @@ namespace Snakes
 			base.Start();
 
 			// initialize cell
-			this.cellable.Initialize(myTransform);
+			this.cellable.Initialize(this.myTransform);
 		}
 	}
 }

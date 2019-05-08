@@ -8,13 +8,17 @@ namespace Interactive.Engine
 		{
 			if(main is IFoodChainEntity m && other is IFoodChainEntity o) {
 
-				// if my rank > other rank -> eat it : add its food chain value to my life
-				// if my rank < other rank -> get eat : remove its food chain value from my life
+				float value = 0;
+
+				// if my rank > other rank -> eat it : add its food chain value
+				// if my rank < other rank -> get eat : remove its food chain value
 				if(m.foodChainRank > o.foodChainRank) {
-					main.life += o.foodChainValue;
+					value = o.foodChainValue;
 				} else if(m.foodChainRank < o.foodChainRank) {
-					main.life -= o.foodChainValue;
+					value = -o.foodChainValue;
 				}
+
+				m.FoodChainInteraction(value);
 			}
 		}
 	}

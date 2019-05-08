@@ -18,6 +18,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 	{
 		MovementController ctr = new WhiteRabbitController(rabbit);
 		this.AddController(ctr);
+
 		return this;
 	}
 
@@ -25,7 +26,7 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 	{
 		base.OnStart();
 
-		snake = SnakeManager.instance.snakeTransform;
+		snake = SnakeData.instance.snakeTransform;
 
 		dangers = FindObjectsOfType<MonoBehaviour>().OfType<IDangerousEntity>();
 	}

@@ -5,28 +5,26 @@ using Snakes;
 
 public class SnakeBodyManager : Singleton<SnakeBodyManager>
 {
+	[Header("Data")]
+	[SerializeField] private SnakeData snakeData = null;
+
+	[Header("Body")]
 	[SerializeField] private GameObject snakeBodyPrefab = null;
 	[HideInInspector] public int bodyLength = 10;
 	public Transform snakeBody { get; private set; }
 
-	private Transform snake;
-	private Collider snakeColl;
+	
 	private Collider currentIgnoredCollider;
 	private Collider previousIgnoredCollider;
 	private Dictionary<int, SnakePartCharacter> snakePartCharacters = new Dictionary<int, SnakePartCharacter>();
-	private SnakeController snakeController;
 	private const int SNAKE_TAIL_MARGIN = 2;
 	public const int SNAKE_MINIMAL_LENGTH = 2;
 
 	
 	void Start()
 	{
-		this.snake = SnakeManager.instance.snakeTransform;
-		this.snakeColl = SnakeManager.instance.snakeCollider;
-		this.snakeController = SnakeManager.instance.snakeController;
-
-		SnakeManager.instance.snakeEvents.onStartStepTo += this.UpdateSnakeTail;
-		SnakeManager.instance.snakeEvents.onEndStepTo += this.UpdateSnakeHead;
+		this.snakeData.snakeMovementEvents.onStartStepTo += this.UpdateSnakeTail;
+		this.snakeData.snakeMovementEvents.onEndStepTo += this.UpdateSnakeHead;
 
 		this.InitializeSnakeBody();
 	}
@@ -54,7 +52,7 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 			return;
 		}
 
-		reduceSpeed = 0.333f * this.snakeController.speed + 1.667f;
+		reduceSpeed = 0.333f * this.snakeData.speed + 1.667f;
 		snakePartScript = this.snakePartCharacters[snakeBody.GetChild(this.bodyLength - 1).GetInstanceID()];
 		snakePartScript.ReduceSnakePart(reduceSpeed);
 	}
@@ -90,7 +88,7 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 
 				// Move it the snake position
 				last.position = target;
-				last.rotation = this.snake.rotation;
+				last.rotation = this.snakeData.snakeTransform.rotation;
 				snakePartScript.SetupSnakePart();
 			}
 			// If last one cannot be moved
@@ -116,13 +114,13 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		newSnakeBody.name = "Snake Body";
 		this.snakeBody = newSnakeBody.transform;
 
-		this.snakeBody.SetSiblingIndex(snake.GetSiblingIndex() + 1);
+		this.snakeBody.SetSiblingIndex(this.snakeData.snakeTransform.GetSiblingIndex() + 1);
 	}
 
 	private void CreateNewSnakePart(Vector3 target)
 	{
 		// Create
-		GameObject part = Instantiate(this.snakeBodyPrefab, target, snake.rotation);
+		GameObject part = Instantiate(this.snakeBodyPrefab, target, this.snakeData.snakeRigidbody.rotation);
 		part.name = "Snake Part";
 		part.transform.parent = snakeBody;
 
@@ -141,11 +139,11 @@ public class SnakeBodyManager : Singleton<SnakeBodyManager>
 		this.currentIgnoredCollider = part.GetComponent<Collider>();
 
 		// Ignore collision with current
-		Physics.IgnoreCollision(this.currentIgnoredCollider, this.snakeColl, true);
+		Physics.IgnoreCollision(this.currentIgnoredCollider, this.snakeData.snakeCollider, true);
 
 		// Recheck collision with previous ignored as it is not touching snake anymore (theorically)
 		if(this.previousIgnoredCollider != null) {
-			Physics.IgnoreCollision(this.previousIgnoredCollider, this.snakeColl, false);
+			Physics.IgnoreCollision(this.previousIgnoredCollider, this.snakeData.snakeCollider, false);
 		}
 	}
 

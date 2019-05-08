@@ -16,10 +16,12 @@ namespace Cameras
 		[SerializeField] private Rigidbody target = null;
 		public CameraMoveState state = CameraMoveState.Idle;
 
-		[Header("Settings")]
+		[Header("¨Parameters")]
 		[SerializeField, Tooltip("Distance camera <-> target"), Range(5, 75)] private int height = 25;
-
 		[SerializeField] private AnimationCurve smoothCurve = new AnimationCurve();
+
+		[Header("Data")]
+		[SerializeField] private SnakeData snakeData = null;
 
 
 		private Transform myTransform;
@@ -31,7 +33,6 @@ namespace Cameras
 		private Vector3 targetPosition;
 		private Vector3 velocity = Vector3Extension.ZERO;
 		private IEnumerator smoothRotationCoroutine = null;
-		private SnakeController snakeController;
 		private Quaternion previousTarget;
 
 
@@ -46,8 +47,6 @@ namespace Cameras
 
 		void Start()
 		{
-			this.snakeController = SnakeManager.instance.snakeController;
-
 			HeartManager.instance.onRotate += this.OnHeartRotate;
 
 			if(!this.target) {
@@ -80,7 +79,7 @@ namespace Cameras
 				this.myTransform.position,
 				this.targetPosition,
 				ref this.velocity,
-				this.smoothCurve.Evaluate(this.snakeController.speed)
+				this.smoothCurve.Evaluate(this.snakeData.speed)
 			);
 		}
 

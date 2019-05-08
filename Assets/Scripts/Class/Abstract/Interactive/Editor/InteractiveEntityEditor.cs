@@ -21,6 +21,11 @@ public class InteractiveEntityEditor : Editor
 
 		DrawDefaultInspector();
 
+		if(!Application.isPlaying) {
+			return;
+		}
+
+		EditorGUILayout.Space();
 		showInteractiveInfo = EditorGUILayout.Foldout(showInteractiveInfo, "");
 		rect = EditorGUILayout.GetControlRect(true, 0);
 		rect.y += -18;
@@ -60,7 +65,6 @@ public class InteractiveEntityEditor : Editor
 			// life
 			GUI.enabled = true;
 			EditorGUI.indentLevel--;
-			EditorGUILayout.LabelField($"Life : {script.life}", EditorStyles.centeredGreyMiniLabel);
 
 			EditorGUILayout.Space();
 		}
@@ -80,15 +84,14 @@ public class InteractiveEntityEditor : Editor
 				EditorGUI.indentLevel++;
 				GUI.enabled = false;
 
-				EditorGUILayout.Toggle("Is Walkable :", script.cellable.isWalkable);
-
 				if(hasCell) {
 					EditorGUILayout.Vector3Field("Position :", script.cellable.currentCell.position);
 					EditorGUILayout.Toggle("Is Inner :", script.cellable.currentCell.isInner);
 				}
 
+				EditorGUILayout.Toggle("Is Walkable :", script.cellable.isWalkable);
+
 				GUI.enabled = true;
-				EditorGUILayout.Space();
 				EditorGUI.indentLevel--;
 			}
 		}

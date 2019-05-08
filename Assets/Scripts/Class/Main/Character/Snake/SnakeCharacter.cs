@@ -7,14 +7,26 @@ using Snakes;
 
 public class SnakeCharacter : SnakeEntity, IDangerousEntity
 {
+	[Header("Snake Data")]
+	public SnakeData data;
+
 	public Transform _transform { get { return this.myTransform; } }
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		this.data.snakeObject = gameObject;
+		this.data.snakeTransform = this.myTransform;
+		this.data.snakeCollider = this.GetComponent<Collider>();
+	}
 
 	protected override void Start()
 	{
 		base.Start();
 
-		SnakeManager.instance.snakeEvents.onStartStepTo += this.cellable.ReserveNextCell;
-		SnakeManager.instance.snakeEvents.onEndStep += this.cellable.UpdateCurrentCell;
+		this.data.snakeMovementEvents.onStartStepTo += this.cellable.ReserveNextCell;
+		this.data.snakeMovementEvents.onEndStep += this.cellable.UpdateCurrentCell;
 	}
 
 
