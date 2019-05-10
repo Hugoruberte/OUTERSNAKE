@@ -79,8 +79,6 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 				Debug.LogError($"ERROR : Instance of '{typeof(T)}' is null, either you tried to access it from the Awake function or it has not been initialized yet");
 			}
 
-			Debug.LogWarning($"WARNING : Access Scriptable MonoSingleton '{typeof(T)}' by instance ! Although it is accepted, it is better to use an object reference to prevent hard link between object.");
-
 			return _instance;
 		}
 		private set {
@@ -93,7 +91,7 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 		}
 	}
 
-	public virtual void OnEnable()
+	protected virtual void OnEnable()
 	{
 		instance = this as T;
 	}

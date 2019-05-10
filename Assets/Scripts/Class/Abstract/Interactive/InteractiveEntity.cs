@@ -43,7 +43,7 @@ namespace Interactive.Engine
 			this.myTransform = transform;
 			this.body = this.myTransform.Find("Body");
 
-			this.status = new InteractiveStatus(PhysicalStateEntity.neutral, new Voidd());
+			this.status = new InteractiveStatus(PhysicalStateEntity.neutral, new Void());
 
 			if(!this.body) {
 				Debug.LogWarning("WARNING : This entity does not have a \"Body\". Is this wanted ?", this.myTransform);

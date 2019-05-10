@@ -7,7 +7,7 @@ public class InteractiveEngineTest : MonoBehaviour
 {
 	void OnEnable()
 	{
-		ChemicalElementEntity[] elements = new ChemicalElementEntity[] {new Voidd(), new Fire(), new Water(), new Wind(), new Earth(), new Lightning(), new Ice(), new Magma(), new Steam(), new Snow()};
+		ChemicalElementEntity[] elements = new ChemicalElementEntity[] {new Void(), new Fire(), new Water(), new Wind(), new Earth(), new Lightning(), new Ice(), new Magma(), new Steam(), new Snow()};
 
 		ChemicalElementEntity result;
 		

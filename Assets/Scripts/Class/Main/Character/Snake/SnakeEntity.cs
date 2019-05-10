@@ -25,7 +25,7 @@ namespace Snakes
 		{
 			base.Awake();
 
-			this.SetInteractiveState(new Voidd(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
+			this.SetInteractiveState(new Void(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
 		}
 
 		protected override void Start()
