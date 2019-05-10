@@ -10,7 +10,7 @@ namespace Cameras
 		Move
 	}
 
-	public class CameraPlanetController : Singleton<CameraPlanetController>
+	public class CameraPlanetController : MonoSingleton<CameraPlanetController>
 	{
 		[Header("State")]
 		[SerializeField] private Rigidbody target = null;

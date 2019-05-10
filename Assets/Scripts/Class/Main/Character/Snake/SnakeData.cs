@@ -3,7 +3,7 @@ using System;
 using Snakes;
 
 [CreateAssetMenu(fileName = "SnakeData", menuName = "Scriptable Object/Data/SnakeData", order = 3)]
-public class SnakeData : ScriptableSingleton<SnakeData>
+public class SnakeData : ScriptableSingleton<SnakeData>, ISerializationCallbackReceiver
 {
 	[NonSerialized] public GameObject snakeObject;
 	[NonSerialized] public Transform snakeTransform;
@@ -34,10 +34,7 @@ public class SnakeData : ScriptableSingleton<SnakeData>
 	}
 
 
-	public override void OnAfterDeserialize()
-	{
-		base.OnAfterDeserialize();
+	public void OnAfterDeserialize() => this._runtimeState = this._state;
 
-		this._runtimeState = this._state;
-	}
+	public void OnBeforeSerialize() {}
 }

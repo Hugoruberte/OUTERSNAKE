@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using My.Tools;
 using My.Events;
 
-public class HeartManager : Singleton<HeartManager>
+public class HeartManager : MonoSingleton<HeartManager>
 {
 	public _Transform heart = new _Transform();
 	private _Transform cache = new _Transform();

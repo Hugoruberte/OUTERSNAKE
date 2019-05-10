@@ -574,6 +574,7 @@ GameObject:
   - component: {fileID: 217625108}
   - component: {fileID: 217625110}
   - component: {fileID: 217625109}
+  - component: {fileID: 217625111}
   m_Layer: 0
   m_Name: Other Manager
   m_TagString: Untagged
@@ -637,6 +638,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basicFarAwayPosition: {x: 1000, y: 1000, z: 1000}
   basicRadius: 10
+--- !u!114 &217625111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217625106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1510ae354d24769449efc08db888bd27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &265924117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,7 +2193,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1092589556}
-  - component: {fileID: 1092589559}
   - component: {fileID: 1092589558}
   - component: {fileID: 1092589557}
   - component: {fileID: 1092589564}
@@ -2236,18 +2248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveEngineData: {fileID: 11400000, guid: e01d973974ed9ac4d9f9ad95d5e7cc26,
     type: 2}
---- !u!114 &1092589559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092589555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a7274c3bcf9454e949e36ad51c7d3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1092589564
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class PoolingManager : Singleton<PoolingManager>
+public class PoolingManager : MonoSingleton<PoolingManager>
 {
 	public PoolingData[] poolingDatas;
 

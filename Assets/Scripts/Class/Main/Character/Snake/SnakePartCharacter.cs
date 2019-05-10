@@ -192,7 +192,7 @@ public class SnakePartCharacter : SnakeEntity
 		base.Death();
 
 		this.snakePartState = SnakePartState.Dead;
-		GameManager.instance.PutInGarbage(gameObject);
+		GarbageManager.instance.PutInGarbage(gameObject);
 	}
 }
 

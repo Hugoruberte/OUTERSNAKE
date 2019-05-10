@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlanetManager : Singleton<PlanetManager>
+public class PlanetManager : MonoSingleton<PlanetManager>
 {
 	[HideInInspector]
 	public Planet[] planets;

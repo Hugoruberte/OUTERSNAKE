@@ -4,22 +4,19 @@ using UnityEngine;
 
 namespace Interactive.Engine
 {
-	public class InteractiveEngine : Singleton<InteractiveEngine>
+	public class InteractiveEngine : MonoSingleton<InteractiveEngine>
 	{
 		public InteractiveEngineData interactiveEngineData;
 		
 		private static List<InteractiveExtensionEngine> extensions = new List<InteractiveExtensionEngine>();
-
 		private static ChemistryEngine chemistry = new ChemistryEngine();
 		private static PhysicEngine physic = new PhysicEngine();
 
 		protected override void Awake()
 		{
 			base.Awake();
-
-			if(interactiveEngineData == null) {
-				Debug.LogWarning("WARNING : You forgot to add an 'InteractiveEngineData' scriptable object to the InteractiveEngine !", transform);
-			}
+			
+			// this.interactiveEngineData = InteractiveEngineData.instance;
 
 			// Add extension engine :
 			extensions.Add(new FoodChainEngine());

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
-public class FarAwayManager : Singleton<FarAwayManager>
+public class FarAwayManager : MonoSingleton<FarAwayManager>
 {
 	[System.Serializable]
 	private struct Client {

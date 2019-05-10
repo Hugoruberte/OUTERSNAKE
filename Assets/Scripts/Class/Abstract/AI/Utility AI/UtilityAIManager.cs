@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UtilityAIManager : Singleton<UtilityAIManager>
+public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 {
 	[Header("Utility AI Behaviours")]
 	[SerializeField] private UtilityAIBehaviour[] behaviours = null;

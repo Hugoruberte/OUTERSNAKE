@@ -1,9 +1,6 @@
-using UnityEngine;
-using Snakes;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+public class GarbageManager : MonoSingleton<GarbageManager>
 {
 	private Transform garbage;
 

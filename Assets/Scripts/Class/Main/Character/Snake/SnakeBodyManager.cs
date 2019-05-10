@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Snakes;
 
-public class SnakeBodyManager : Singleton<SnakeBodyManager>
+public class SnakeBodyManager : MonoSingleton<SnakeBodyManager>
 {
 	[Header("Data")]
 	[SerializeField] private SnakeData snakeData = null;

@@ -1,7 +1,40 @@
 using UnityEngine;
+using System;
+using System.Reflection;
 
 
-public abstract class Singleton<T> : MonoBehaviour where T : class
+public abstract class Singleton<T> where T : Singleton<T>
+{
+	private static T _instance = null;
+	public static T instance {
+		get {
+			if(_instance == null) {
+				_instance = GetNewClass();
+				_instance.OnAwake();
+			}
+
+			return _instance;
+		}
+	}
+
+	private static T GetNewClass()
+	{
+		Type t = typeof(T);
+		Type generic = t.MakeGenericType();
+		return Activator.CreateInstance(generic) as T;
+	}
+
+	protected virtual void OnAwake() {}
+}
+
+
+
+
+
+
+
+
+public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 {
 	private static T _instance = null;
 	public static T instance {
@@ -37,7 +70,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : class
 	}
 }
 
-public abstract class ScriptableSingleton<T> : ScriptableObject, ISerializationCallbackReceiver where T : class
+public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 {
 	private static T _instance = null;
 	public static T instance {
@@ -46,7 +79,7 @@ public abstract class ScriptableSingleton<T> : ScriptableObject, ISerializationC
 				Debug.LogError($"ERROR : Instance of '{typeof(T)}' is null, either you tried to access it from the Awake function or it has not been initialized yet");
 			}
 
-			Debug.LogWarning($"WARNING : Access Scriptable Singleton '{typeof(T)}' by instance ! Although it is accepted, it is better to use an object reference to prevent hard link between object.");
+			Debug.LogWarning($"WARNING : Access Scriptable MonoSingleton '{typeof(T)}' by instance ! Although it is accepted, it is better to use an object reference to prevent hard link between object.");
 
 			return _instance;
 		}
@@ -60,15 +93,13 @@ public abstract class ScriptableSingleton<T> : ScriptableObject, ISerializationC
 		}
 	}
 
-	public virtual void OnAfterDeserialize()
+	public virtual void OnEnable()
 	{
 		instance = this as T;
 	}
 
-	public virtual void OnBeforeSerialize() {}
-
 	protected virtual void OnDisable()
-    {
-        instance = null;
-    }
+	{
+		instance = null;
+	}
 }
