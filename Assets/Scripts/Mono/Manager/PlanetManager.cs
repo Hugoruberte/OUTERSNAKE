@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class PlanetManager : MonoSingleton<PlanetManager>
 {
-	[HideInInspector]
-	public Planet[] planets;
+	[HideInInspector] public Planet[] planets;
 
 	protected override void Awake()
 	{

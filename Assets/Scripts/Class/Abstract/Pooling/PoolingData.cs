@@ -5,24 +5,29 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "PoolingData", menuName = "Scriptable Object/Data/PoolingData", order = 3)]
 public class PoolingData : ScriptableObject
 {
-	[System.Serializable]
+	[Serializable]
 	public struct Pool {
 		public GameObject prefab;
 		public int size;
-		[HideInInspector] public PoolableEntity entity;
+		public PoolableEntity entity;
 
-		[System.NonSerialized] public PoolableEntity[] entities;
-		[System.NonSerialized] public Transform activeFolder;
-		[System.NonSerialized] public Transform inactiveFolder;
+		[NonSerialized] public PoolableEntity[] entities;
+		[NonSerialized] public Transform activeFolder;
+		[NonSerialized] public Transform inactiveFolder;
+
+		// INSPECTOR
+		public bool show;
 
 		public Pool(GameObject p, int s) {
 			this.prefab = p;
 			this.size = s;
-			this.entity = p.GetComponent<PoolableEntity>();
+			this.entity = p?.GetComponent<PoolableEntity>();
 
 			this.entities = null;
 			this.activeFolder = null;
 			this.inactiveFolder = null;
+
+			this.show = false;
 		}
 
 		public Pool(Pool p, PoolableEntity[] a, Transform af, Transform iaf) {
@@ -33,43 +38,50 @@ public class PoolingData : ScriptableObject
 			this.entities = a;
 			this.activeFolder = af;
 			this.inactiveFolder = iaf;
+
+			this.show = false;
 		}
 	}
 
 
-	public List<Pool> pools = new List<Pool>();
+	[HideInInspector] public List<Pool> pools = new List<Pool>();
 
 
 	public void CreatePool(Transform f)
 	{
 		Pool pp;
 		GameObject g;
-		Transform folder;
-		Transform activeFolder;
-		Transform inactiveFolder;
+		Transform folder, objectFolder;
+		Transform activeFolder, inactiveFolder;
 		PoolableEntity p;
 		PoolableEntity[] objs;
+
+		// scriptable object objectFolder
+		g = new GameObject();
+		g.name = this.name;
+		folder = g.transform;
+		folder.parent = f;
 
 		for(int k = 0; k < this.pools.Count; k++) {
 
 			pp = this.pools[k];
 			objs = new PoolableEntity[pp.size];
 
-			// folders
+			// object folders
 			g = new GameObject();
 			g.name = pp.prefab.name;
-			folder = g.transform;
-			folder.parent = f;
+			objectFolder = g.transform;
+			objectFolder.parent = folder;
 
 			g = new GameObject();
 			g.name = pp.prefab.name + " (Active)";
 			activeFolder = g.transform;
-			activeFolder.parent = folder;
+			activeFolder.parent = objectFolder;
 
 			g = new GameObject();
 			g.name = pp.prefab.name + " (Inactive)";
 			inactiveFolder = g.transform;
-			inactiveFolder.parent = folder;
+			inactiveFolder.parent = objectFolder;
 
 			for(int i = 0; i < pp.size; i++) {
 				g = Instantiate(pp.prefab);
@@ -84,5 +96,19 @@ public class PoolingData : ScriptableObject
 
 			this.pools[k] = new Pool(pp, objs, activeFolder, inactiveFolder);
 		}
+	}
+
+	public void AddAt(int index)
+	{
+		Pool newcomer = new Pool(null, 1);
+		this.pools.Insert(index, newcomer);
+	}
+
+	public void AddNew(GameObject g)
+	{
+		Pool newcomer = new Pool(g, 1);
+		newcomer.show = true;
+
+		this.pools.Add(newcomer);
 	}
 }

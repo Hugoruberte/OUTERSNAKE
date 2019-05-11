@@ -111,5 +111,5 @@ MonoBehaviour:
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 000000
+  displayScorers: 010000
   displayParameters: 000000

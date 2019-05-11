@@ -17,12 +17,7 @@ public abstract class Singleton<T> where T : Singleton<T>
 		}
 	}
 
-	private static T GetNewClass()
-	{
-		Type t = typeof(T);
-		Type generic = t.MakeGenericType();
-		return Activator.CreateInstance(generic) as T;
-	}
+	private static T GetNewClass() => Activator.CreateInstance(typeof(T)) as T;
 
 	protected virtual void OnAwake() {}
 }

@@ -10,8 +10,52 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df127cdf71816414ea9c57d4d5390b82, type: 3}
-  m_Name: InteractiveEngine
+  m_Name: Interactive Engine
   m_EditorClassIdentifier: 
-  primaries: []
-  weaknesses: []
-  inspector_showDetails: 
+  primaries:
+  - element: 1
+    array: 01000000
+  - element: 2
+    array: 02000000
+  - element: 4
+    array: 04000000
+  - element: 8
+    array: 08000000
+  - element: 16
+    array: 10000000
+  - element: 32
+    array: 20000000
+  - element: 64
+    array: 0800000004000000
+  - element: 128
+    array: 1000000002000000
+  - element: 256
+    array: 0200000004000000
+  - element: 512
+    array: 020000000400000008000000
+  - element: 1024
+    array: 100000000800000004000000
+  weaknesses:
+  - element: 1
+    array: 0100000002000000040000000800000010000000200000004000000080000000000100000002000000040000
+  - element: 2
+    array: 0400000020000000
+  - element: 4
+    array: 2000000010000000
+  - element: 8
+    array: 0200000004000000
+  - element: 16
+    array: 0800000002000000
+  - element: 32
+    array: 1000000008000000
+  - element: 64
+    array: 020000002000000010000000
+  - element: 128
+    array: 080000000400000020000000
+  - element: 256
+    array: 2000000010000000
+  - element: 512
+    array: 200000001000000002000000
+  - element: 1024
+    array: 080000000200000020000000
+  inspector_showDetails: 0000000000000000000000

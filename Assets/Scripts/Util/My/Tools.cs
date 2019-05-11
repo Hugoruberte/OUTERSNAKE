@@ -248,7 +248,44 @@ namespace My.Tools
 
 			return current;
 		}
+
+		public static void DragAndDropField(float height, string label, bool show, ObjectEvent callback, System.Func<Object, bool> rules = null)
+		{
+			Rect area = GUILayoutUtility.GetRect(0.0f, height, GUILayout.ExpandWidth(true));
+			
+			Event evt = Event.current;
+			if(show) {
+				GUI.Box(area, label);
+			}
+			
+			switch(evt.type)
+			{
+				case EventType.DragUpdated:
+				case EventType.DragPerform:
+					if(!area.Contains(evt.mousePosition)) { return; }
+
+					if(rules != null) {
+						foreach(Object draggedObject in DragAndDrop.objectReferences) {
+							if(!rules(draggedObject)) {
+								return;
+							}
+						}
+					}
+					
+					DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+			 
+					if(evt.type == EventType.DragPerform) {
+						DragAndDrop.AcceptDrag();
+				 
+						foreach(Object draggedObject in DragAndDrop.objectReferences) {
+							callback(draggedObject);
+						}
+					}
+					break;
+			}
+		}
 	}
+
 
 
 

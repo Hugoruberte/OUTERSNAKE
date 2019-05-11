@@ -25,4 +25,7 @@ namespace My.Events
 
 	public delegate void _TransformEvent(_Transform current);
 	public delegate void _Transform_TransformEvent(_Transform previous, _Transform current);
+
+	public delegate void ObjectEvent(Object current);
+	public delegate void ObjectObjectEvent(Object previous, Object current);
 }

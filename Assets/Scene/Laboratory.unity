@@ -515,53 +515,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114302012}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &132121966
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 132121967}
-  - component: {fileID: 132121969}
-  m_Layer: 0
-  m_Name: Snake Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &132121967
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 132121966}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1092589556}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &132121969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 132121966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b12888fbce6d34f4ca495395eea9c3b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  snakeData: {fileID: 11400000, guid: c6fcf6f7a7984814e973f5840968e193, type: 2}
-  snakeBodyPrefab: {fileID: 8149796537758200507, guid: bd964521507c39a4183405a2396b7ff7,
-    type: 3}
-  bodyLength: 10
 --- !u!1 &217625106
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,9 +525,9 @@ GameObject:
   m_Component:
   - component: {fileID: 217625107}
   - component: {fileID: 217625108}
+  - component: {fileID: 217625111}
   - component: {fileID: 217625110}
   - component: {fileID: 217625109}
-  - component: {fileID: 217625111}
   m_Layer: 0
   m_Name: Other Manager
   m_TagString: Untagged
@@ -594,7 +547,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1092589556}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &217625108
 MonoBehaviour:
@@ -2194,7 +2147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1092589556}
   - component: {fileID: 1092589557}
-  - component: {fileID: 1092589564}
+  - component: {fileID: 1092589558}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -2213,8 +2166,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1399124076}
-  - {fileID: 132121967}
   - {fileID: 217625107}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2233,7 +2184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behaviours:
   - {fileID: 11400000, guid: 03bbcde5c3885584b993152ca9f4c698, type: 2}
---- !u!114 &1092589564
+--- !u!114 &1092589558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2242,9 +2193,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1092589555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b66ea12b021c85245a997a9d0548b9ef, type: 3}
+  m_Script: {fileID: 11500000, guid: b12888fbce6d34f4ca495395eea9c3b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  snakeData: {fileID: 11400000, guid: c6fcf6f7a7984814e973f5840968e193, type: 2}
+  snakeBodyPrefab: {fileID: 8149796537758200507, guid: bd964521507c39a4183405a2396b7ff7,
+    type: 3}
+  bodyLength: 10
 --- !u!1 &1108726372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2768,49 +2723,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1398184315}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1399124075
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1399124076}
-  - component: {fileID: 1399124077}
-  m_Layer: 0
-  m_Name: Test Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1399124076
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1399124075}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1092589556}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1399124077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1399124075}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55490fd387f336f4b8a0ded6486d3890, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1400559263
 GameObject:
   m_ObjectHideFlags: 0
