@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using static UnityEngine.Debug;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,15 +7,19 @@ using System;
 
 namespace Interactive.Engine
 {
+	// Max 32 elements
 	public enum ChemicalElement
 	{
+		// STANDARD
 		Void = 1,
 		Fire = 2,
 		Water = 4,
 		Wind = 8,
 		Earth = 16,
-		Ice = 32,
-		Lightning = 64,
+		Lightning = 32,
+
+		// MIX
+		Ice = 64,
 		Magma = 128,
 		Steam = 256,
 		Snow = 512,
@@ -227,13 +231,7 @@ namespace Interactive.Engine
 			return isMainWinning;
 		}
 
-		public virtual ChemicalElementEntity Spawn() {
-			// only does that
-			return Activator.CreateInstance(this.GetType(), ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementEntity;
-		}
-
 		public override string ToString() => $"{this.type}";
-
 
 
 
@@ -270,7 +268,6 @@ namespace Interactive.Engine
 
 
 
-
 		/* ---------------------------------------------------------------------------------------------*/
 		/* ---------------------------------------------------------------------------------------------*/
 		/* ---------------------------------------------------------------------------------------------*/
@@ -290,6 +287,12 @@ namespace Interactive.Engine
 			}
 		}
 	}
+
+
+
+
+
+
 
 
 
@@ -375,14 +378,10 @@ namespace Interactive.Engine
 				return _mixes;
 			}
 		}
-		private static Type[] _types = null;
-		private static Type[] types {
-			get {
-				if(_types == null) {
-					_types = GetAllTypes();
-				}
-				return _types;
-			}
+
+		private static ChemicalElementEntity Spawn(ChemicalElementEntity e) {
+			// only does that
+			return Activator.CreateInstance(e.GetType(), ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementEntity;
 		}
 
 		protected internal static ChemicalElementEntity MixTwoElement(ChemicalElementEntity a, ChemicalElementEntity b) {
@@ -405,7 +404,6 @@ namespace Interactive.Engine
 			ChemicalElementEntity winner = null;
 
 			candidates = InteractiveEngine.instance.chemicalElementMixEntityPoolList;
-			candidates.Clear();
 
 			foreach(ChemicalElementMixEntity mix in ChemicalElementMixEntity.mixes) {
 				if(mix.type != a.type && mix.type != b.type && mix.CouldBeMadeOf(a, b)) {
@@ -420,18 +418,19 @@ namespace Interactive.Engine
 				}
 			}
 
+			candidates.Clear();
+
 			InteractiveEngine.instance.SetMixOf(a, b, winner);
 
-			return (winner != null) ? winner.Spawn() : null;
+			return (winner != null) ? Spawn(winner) : null;
 		}
 
 		// get composition by decomposing 'recipe' in its primary element
 		private static ChemicalElement[] GetPrimariesByDecomposition(ChemicalElement[] recipe) {
-			ChemicalElement[] es0 = SlowGetPrimariesOf(recipe[0]);
-			ChemicalElement[] es1 = SlowGetPrimariesOf(recipe[1]);
+			ChemicalElement[] es0 = InternalGetPrimariesOf(recipe[0]);
+			ChemicalElement[] es1 = InternalGetPrimariesOf(recipe[1]);
 			List<ChemicalElement> cache = InteractiveEngine.instance.chemicalElementPoolList;
-
-			cache.Clear();
+			ChemicalElement[] result;
 
 			foreach(ChemicalElement e in es0) {
 				if(!cache.Contains(e)) {
@@ -444,18 +443,20 @@ namespace Interactive.Engine
 				}
 			}
 
-			return cache.ToArray();
+			result = cache.ToArray();
+			cache.Clear();
+
+			return result;
 		}
 
 		// get weaknesses according to recipe element weaknesses
 		private static ChemicalElement[] GetWeaknessesByDecomposition(ChemicalElement[] recipe) {
-			ChemicalElement[] wk0 = SlowGetWeaknessOf(recipe[0]);
-			ChemicalElement[] wk1 = SlowGetWeaknessOf(recipe[1]);
+			ChemicalElement[] wk0 = InternalGetWeaknessOf(recipe[0]);
+			ChemicalElement[] wk1 = InternalGetWeaknessOf(recipe[1]);
 			ChemicalElement[] wk = wk0.Concat(wk1).ToArray();
 			List<ChemicalElement> cache = InteractiveEngine.instance.chemicalElementPoolList;
+			ChemicalElement[] result;
 			bool found;
-
-			cache.Clear();
 
 			foreach(ChemicalElement e in wk) {
 				// do not add weakness which are part of our recipe !
@@ -472,77 +473,49 @@ namespace Interactive.Engine
 				}
 			}
 
-			return cache.ToArray();
+			result = cache.ToArray();
+			cache.Clear();
+
+			return result;
 		}
 
 		// get primaries element of a particular element
-		private static ChemicalElement[] SlowGetPrimariesOf(ChemicalElement e) {
-			switch(e) {
-				case ChemicalElement.Void: 
-				case ChemicalElement.Fire:
-				case ChemicalElement.Wind:
-				case ChemicalElement.Water:
-				case ChemicalElement.Earth:
-				case ChemicalElement.Lightning:
-					return new ChemicalElement[] {e};
+		private static ChemicalElement[] InternalGetPrimariesOf(ChemicalElement e) {
+			Type t = Type.GetType(typeof(ChemicalElementEntity).Namespace + "." + e.ToString());
+
+			if(!t.IsSubclassOf(typeof(ChemicalElementMixEntity))) {
+				return new ChemicalElement[] {e};
 			}
 
-			ChemicalElementMixEntity ent;
+			ChemicalElementMixEntity ent = Activator.CreateInstance(t, ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
 
-			foreach(Type type in ChemicalElementMixEntity.types) {
-				if(type.Name == e.ToString()) {
-					// this will initialize this primaries of 'e'
-					ent = Activator.CreateInstance(type, ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
-					return InteractiveEngine.instance.GetPrimariesOf(ent);
-				}
-			}
-
-			Debug.LogError($"ERROR: Should have not reached this place but we did with '{e}' !");
-			return null;
+			return InteractiveEngine.instance.GetPrimariesOf(ent);
 		}
 
 		// get weaknesses of a particular element
-		private static ChemicalElement[] SlowGetWeaknessOf(ChemicalElement e) {
-			switch(e) {
-				case ChemicalElement.Void: return Void.weakness;
-				case ChemicalElement.Fire: return Fire.weakness;
-				case ChemicalElement.Wind: return Wind.weakness;
-				case ChemicalElement.Water: return Water.weakness;
-				case ChemicalElement.Earth: return Earth.weakness;
-				case ChemicalElement.Lightning: return Lightning.weakness;
+		private static ChemicalElement[] InternalGetWeaknessOf(ChemicalElement e) {
+			Type t = Type.GetType(typeof(ChemicalElementEntity).Namespace + "." + e.ToString());
+
+			if(!t.IsSubclassOf(typeof(ChemicalElementMixEntity))) {
+				return t.GetField("weakness", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as ChemicalElement[];
 			}
 
-			ChemicalElementMixEntity ent;
+			ChemicalElementMixEntity ent = Activator.CreateInstance(t, ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
 
-			foreach(Type type in ChemicalElementMixEntity.types) {
-				if(type.Name == e.ToString()) {
-					// this will initialize the weaknesses of 'e'
-					ent = Activator.CreateInstance(type, ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
-					return InteractiveEngine.instance.GetWeaknessesOf(ent);
-				}
-			}
-
-			Debug.LogError($"ERROR: Should have not reached this place but we did with '{e}' !");
-			return null;
-		}
-
-		private static Type[] GetAllTypes() {
-			Type t;
-			t = typeof(ChemicalElementMixEntity);
-			return Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
+			return InteractiveEngine.instance.GetWeaknessesOf(ent);
 		}
 
 		private static ChemicalElementMixEntity[] GetAllMixes() {
-			int i;
+			Type t;
 			Type[] ts;
 			ChemicalElementMixEntity[] res;
 
-			ts = ChemicalElementMixEntity.types;
+			t = typeof(ChemicalElementMixEntity);
+			ts = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsSubclassOf(t) && myType.IsClass && !myType.IsAbstract).ToArray();
 			res = new ChemicalElementMixEntity[ts.Length];
-			i = 0;
 
-			foreach(Type type in ts) {
-				res[i++] = Activator.CreateInstance(type, ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
+			for(int i = 0; i < ts.Length; i++) {
+				res[i] = Activator.CreateInstance(ts[i], ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
 			}
 
 			return res;

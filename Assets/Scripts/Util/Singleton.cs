@@ -70,6 +70,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 	}
 }
 
+
+[ExecuteInEditMode]
 public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 {
 	private static T _instance = null;
@@ -97,6 +99,11 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 	}
 
 	protected virtual void OnDisable()
+	{
+		instance = null;
+	}
+
+	protected virtual void OnDestroy()
 	{
 		instance = null;
 	}

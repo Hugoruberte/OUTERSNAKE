@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,16 +12,6 @@ namespace Interactive.Engine
 	[CreateAssetMenu(fileName = "InteractiveEngine", menuName = "Scriptable Object/Other/InteractiveEngine", order = 1)]
 	public class InteractiveEngine : ScriptableSingleton<InteractiveEngine>
 	{
-		[HideInInspector] public List<ChemicalElementMixEntity> chemicalElementMixEntityPoolList = new List<ChemicalElementMixEntity>();
-		[HideInInspector] public List<ChemicalElement> chemicalElementPoolList = new List<ChemicalElement>();
-		[HideInInspector] public List<ChemicalToArrayData> primaries = new List<ChemicalToArrayData>();
-		[HideInInspector] public List<ChemicalToArrayData> weaknesses = new List<ChemicalToArrayData>();
-		[HideInInspector] public List<IntToChemicalData> couples = new List<IntToChemicalData>();
-		[HideInInspector] public List<IntToChemicalData> winners = new List<IntToChemicalData>();
-
-		private readonly StringBuilder stringBuilder = new StringBuilder();
-		private const string voiddString = "Interactive.Engine.Void";
-		
 		private static List<InteractiveExtensionEngine> extensions = new List<InteractiveExtensionEngine>();
 		private static ChemistryEngine chemistry = new ChemistryEngine();
 		private static PhysicEngine physic = new PhysicEngine();
@@ -51,7 +42,7 @@ namespace Interactive.Engine
 			}
 		}
 
-		public static void Reaction(InteractiveEntity main, ChemicalElementEntity element, PhysicalInteractionEntity interaction)
+		private static void Reaction(InteractiveEntity main, ChemicalElementEntity element, PhysicalInteractionEntity interaction)
 		{
 			InteractiveStatus status;
 
@@ -91,13 +82,23 @@ namespace Interactive.Engine
 
 
 
+		[HideInInspector] protected internal List<ChemicalElementMixEntity> chemicalElementMixEntityPoolList = new List<ChemicalElementMixEntity>();
+		[HideInInspector] protected internal List<ChemicalElement> chemicalElementPoolList = new List<ChemicalElement>();
+
+		[HideInInspector] public List<ChemicalToArrayData> primaries = new List<ChemicalToArrayData>();
+		[HideInInspector] public List<ChemicalToArrayData> weaknesses = new List<ChemicalToArrayData>();
+
+		[HideInInspector] private List<IntToChemicalData> couples = new List<IntToChemicalData>();
+		[HideInInspector] private List<IntToChemicalData> winners = new List<IntToChemicalData>();
+
+		private readonly StringBuilder stringBuilder = new StringBuilder();
+		private const string voiddString = "Interactive.Engine.Void";
+
+		[HideInInspector] public bool[] inspector_showDetails;
 
 
-		public bool HasPrimariesOf(ChemicalElementEntity ent)
-		{
-			// only does that
-			return this.primaries.Exists(x => x.element == ent.type);
-		}
+		public bool HasPrimariesOf(ChemicalElementEntity ent) => this.primaries.Exists(x => x.element == ent.type);
+
 		public void SetPrimariesOf(ChemicalElementEntity ent, ChemicalElement[] ps)
 		{
 			this.primaries.Add(new ChemicalToArrayData(ent.type, ps));
@@ -220,6 +221,107 @@ namespace Interactive.Engine
 			} else {
 				return 0;
 			}
+		}
+
+
+
+		public void ClearAll()
+		{
+			this.chemicalElementMixEntityPoolList.Clear();
+			this.chemicalElementPoolList.Clear();
+
+			this.primaries.Clear();
+			this.weaknesses.Clear();
+
+			this.couples.Clear();
+			this.winners.Clear();
+		}
+
+		public void WarmUp()
+		{
+			this.ClearAll();
+
+			Type t;
+			Type[] types;
+
+			ChemicalElementEntity element;
+			PhysicalInteractionEntity interaction;
+			InteractiveStatus status;
+
+			ChemicalElementEntity[] elements;
+			ChemicalMaterialEntity[] materials;
+			PhysicalStateEntity[] states;
+
+			object[] parameters;
+
+
+
+			t = typeof(ChemicalElementEntity);
+			types = Assembly.GetAssembly(t).GetExportedTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
+
+			parameters = new object[] {0f};
+
+			elements = new ChemicalElementEntity[types.Length];
+			for(int i = 0; i < elements.Length; i++) {
+				elements[i] = Activator.CreateInstance(types[i], parameters) as ChemicalElementEntity;
+			}
+
+		
+			
+			t = typeof(ChemicalMaterialEntity);
+			types = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
+
+			materials = new ChemicalMaterialEntity[types.Length];
+			for(int i = 0; i < materials.Length; i++) {
+				materials[i] = t.GetField(types[i].Name.ToLower()).GetValue(null) as ChemicalMaterialEntity;
+			}
+
+			
+			t = typeof(PhysicalStateEntity);
+			types = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
+
+			states = new PhysicalStateEntity[types.Length];
+			for(int i = 0; i < states.Length; i++) {
+				states[i] = t.GetField(types[i].Name.ToLower()).GetValue(null) as PhysicalStateEntity;
+			}
+
+			
+
+			float start = Time.realtimeSinceStartup;
+
+			// ELEMENT * ELEMENT
+			for(int i = 0; i < elements.Length; i++) {
+				for(int j = i; j < elements.Length; j++) {
+					element = elements[i] * elements[j];
+				}
+			}
+
+			// ELEMENT * MATERIAL
+			for(int i = 0; i < elements.Length; i++) {
+				for(int j = 0; j < materials.Length; j++) {
+					element = elements[i] * materials[j];
+				}
+			}
+
+			// ELEMENT * STATE
+			for(int i = 0; i < elements.Length; i++) {
+				for(int j = 0; j < states.Length; j++) {
+					status = elements[i] * states[j];
+				}
+			}
+
+
+			// STATE * STATE
+			for(int i = 0; i < states.Length; i++) {
+				for(int j = i; j < states.Length; j++) {
+					interaction = states[i] * states[j];
+				}
+			}
+
+			Debug.Log($"Took {Time.realtimeSinceStartup - start} seconds");
+
+			// INSPECTOR
+			this.inspector_showDetails = new bool[this.primaries.Count];
 		}
 	}
 

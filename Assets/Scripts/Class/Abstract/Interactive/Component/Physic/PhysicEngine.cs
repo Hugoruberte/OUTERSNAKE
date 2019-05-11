@@ -11,6 +11,7 @@ namespace Interactive.Engine
 
 			interaction = main.physical * other.physical;
 			interaction.other = other.gameObject;
+			
 			Debug.LogWarning("Need to finish here...");
 			// interaction.intensity = collision.blablabla;
 

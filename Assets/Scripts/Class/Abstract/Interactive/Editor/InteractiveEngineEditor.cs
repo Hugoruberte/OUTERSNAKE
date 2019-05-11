@@ -2,107 +2,172 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Interactive.Engine;
 using System.Text;
 
-[CustomEditor(typeof(InteractiveEngine))]
-public class InteractiveEngineEditor : Editor
+namespace Interactive.Engine
 {
-	private bool showPrimaries = true;
-	private bool showWeaknesses = true;
-	private StringBuilder builder = new StringBuilder();
-
-	private float val = 0f;
-
-	public override void OnInspectorGUI()
+	[CustomEditor(typeof(InteractiveEngine))]
+	public class InteractiveEngineEditor : Editor
 	{
-		InteractiveEngine script = target as InteractiveEngine;
+		private StringBuilder builder = new StringBuilder();
 
-		DrawDefaultInspector();
+		private readonly Color grey = new Color32(170, 170, 170, 255);
+		private readonly Color dark = new Color32(140, 140, 140, 255);
 
-		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Informations", EditorStyles.boldLabel);
+		// private float val = 0f;
 
-		EditorGUI.indentLevel ++;
 
-		this.showPrimaries = EditorGUILayout.Foldout(this.showPrimaries, "Primaries");
-		if(this.showPrimaries)
+		public override void OnInspectorGUI()
 		{
-			EditorGUI.indentLevel ++;
-			foreach(ChemicalToArrayData e in script.primaries)
-			{
-				Rect rect = EditorGUILayout.GetControlRect(true, 0);
+			InteractiveEngine script = target as InteractiveEngine;
 
-				this.builder.Clear();
-				this.builder.Append(e.element.ToString()).Append(" :");
-				EditorGUILayout.LabelField(this.builder.ToString(), EditorStyles.boldLabel);
-
-				Rect n = new Rect();
-				n.x = rect.x + 30;
-				n.y += 600;
-				n.width = 200;
-				n.height = 20;
-				val = EditorGUI.FloatField(n, "Val", val);
-
-				rect.x += this.GetWidth(this.builder.ToString()) * 1.4f + -5;
-				rect.y += 2;
-				rect.width = 300;
-				rect.height = 20;
-
-				this.builder.Clear();
-				this.builder.Append(e.array[0].ToString());
-				for(int i = 1; i < e.array.Length; i++) {
-					this.builder.Append(" + ").Append(e.array[i].ToString());
-				}
-
-				EditorGUI.LabelField(rect, this.builder.ToString(), EditorStyles.miniLabel);
-				EditorGUILayout.Space();
-			}
+			DrawDefaultInspector();
 			EditorGUILayout.Space();
-			EditorGUI.indentLevel --;
-		}
-		
-		this.showWeaknesses = EditorGUILayout.Foldout(this.showWeaknesses, "Weaknesses");
-		if(this.showWeaknesses)
-		{
-			EditorGUI.indentLevel ++;
-			foreach(ChemicalToArrayData e in script.weaknesses)
-			{
-				EditorGUILayout.LabelField(e.element.ToString(), EditorStyles.boldLabel);
 
-				EditorGUI.indentLevel++;
-				foreach(ChemicalElement k in e.array) {
-					EditorGUILayout.LabelField(k.ToString(), EditorStyles.miniLabel);
-				}
-				EditorGUILayout.Space();
-				EditorGUI.indentLevel--;
+			EditorGUILayout.LabelField("Elements", EditorStyles.boldLabel);
+
+			Rect rect = EditorGUILayout.GetControlRect(true, 0);
+			// Rect n = rect;
+			// n.x += 30;
+			// n.y += 600;
+			// n.width = 200;
+			// n.height = 20;
+			// val = EditorGUI.FloatField(n, "Val", val);
+
+
+			ChemicalToArrayData e;
+			Rect elementrect = rect;
+			Rect colorrect;
+
+			if(script.inspector_showDetails == null || script.inspector_showDetails.Length != script.primaries.Count) {
+				script.inspector_showDetails = new bool[script.primaries.Count];
 			}
-			EditorGUI.indentLevel --;
+			
+			for(int i = 0; i < script.primaries.Count; i++)
+			{
+				e = script.primaries[i];
+
+				elementrect.x = rect.x + 3;
+				elementrect.width = rect.width + -15;
+				elementrect.height = 22;
+
+				colorrect = elementrect;
+				colorrect.x += -3;
+				colorrect.y += -3;
+				colorrect.width += 6;
+				colorrect.height += 6;
+				EditorGUI.DrawRect(colorrect, grey);
+				EditorGUI.DrawRect(elementrect, dark);
+
+				elementrect.x += 18;
+				elementrect.y += 3;
+				elementrect.width = 200;
+				elementrect.height = 20;
+				script.inspector_showDetails[i] = EditorGUI.Foldout(elementrect, script.inspector_showDetails[i], e.element.ToString());
+
+				if(script.inspector_showDetails[i])
+				{
+					elementrect.x += -18;
+					elementrect.y += elementrect.height - 1;
+					elementrect.width = rect.width + -15;
+					elementrect.height = 40;
+
+					colorrect = elementrect;
+					colorrect.x += -3;
+					colorrect.y += 3;
+					colorrect.width += 6;
+					EditorGUI.DrawRect(colorrect, grey);
+					EditorGUI.DrawRect(elementrect, dark);
+
+					this.builder.Clear();
+					this.builder.Append(e.array[0].ToString());
+					for(int j = 1; j < e.array.Length; j++) {
+						this.builder.Append(" + ").Append(e.array[j].ToString());
+					}
+
+					elementrect.x += 9;
+					elementrect.y += -2;
+					EditorGUI.LabelField(elementrect, "Recipe :", EditorStyles.boldLabel);
+					elementrect.x += 56;
+					EditorGUI.LabelField(elementrect, this.builder.ToString(), EditorStyles.miniLabel);
+
+					elementrect.x += -56;
+					elementrect.y += 20;
+					EditorGUI.LabelField(elementrect, "Weaknesses :", EditorStyles.boldLabel);
+
+					ChemicalElement[] weaknesses = script.weaknesses.Find(x => x.element == e.element).array;
+					int index = 0;
+
+					elementrect.x += 93;
+					elementrect.width = rect.width + -125;
+
+					bool back = false;
+
+					do
+					{
+						colorrect = elementrect;
+
+						this.builder.Clear();
+						this.builder.Append(weaknesses[index ++]);
+
+						while(index < weaknesses.Length) {
+							if(this.GetWidth(this.builder.ToString() + ", " + weaknesses[index], EditorStyles.miniLabel) > elementrect.width) { break; }
+							this.builder.Append(", ").Append(weaknesses[index ++]);
+						}
+
+						if(back) {
+							colorrect.x += -105;
+							colorrect.y += 10;
+							colorrect.width += 116;
+							colorrect.height = 15;
+							EditorGUI.DrawRect(colorrect, grey);
+							colorrect.x += 3;
+							colorrect.y += -3;
+							colorrect.width += -6;
+							colorrect.height = 15;
+							EditorGUI.DrawRect(colorrect, dark);
+						}
+						
+						EditorGUI.LabelField(elementrect, this.builder.ToString(), EditorStyles.miniLabel);
+						elementrect.y += 15;
+						back = true;
+					}
+					while(index < weaknesses.Length);
+
+					elementrect.y += (i == 0) ? 8 : 10;
+					elementrect.x += -84;
+				}
+				else
+				{
+					elementrect.y += 22;
+				}
+			}
+
+			if(script.primaries.Count == 0) {
+				elementrect.x += 20;
+				elementrect.y += -5;
+			}
+
+			elementrect.x += -18;
+			elementrect.y += 5;
+			elementrect.width = rect.width + -15;
+			elementrect.height = 20;
+			if(GUI.Button(elementrect, "WARM UP")) {
+				script.WarmUp();
+			}
 		}
 
-		EditorGUI.indentLevel --;
-		
+		private float GetWidth(string s, GUIStyle style)
+		{
+			float min, max;
 
-		/*foreach(int c in script.couples.Keys) {
-			ChemicalElementEntity e = script.couples[c];
-			// Show element
+			GUIContent content = new GUIContent(s);
+
+			style.CalcMinMaxWidth(content, out min, out max);
+
+			return max;
 		}
-
-		foreach(int c in script.winners.Keys) {
-			ChemicalElement e = script.winners[c];
-			// Show element
-		}*/
-	}
-
-	private float GetWidth(string s)
-	{
-		float min, max;
-
-		GUIContent content = new GUIContent(s);
-		GUIStyle style = EditorStyles.miniLabel;
-
-		style.CalcMinMaxWidth(content, out min, out max);
-
-		return max;
 	}
 }
+
+
