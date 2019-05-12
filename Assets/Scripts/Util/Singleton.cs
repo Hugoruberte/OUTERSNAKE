@@ -69,7 +69,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 [ExecuteInEditMode]
 public abstract class ScriptableSingleton<T> : ScriptableObject where T : class
 {
-	private static T _instance = null;
+	[SerializeField] private static T _instance = null;
 	public static T instance {
 		get {
 			if(_instance == null) {

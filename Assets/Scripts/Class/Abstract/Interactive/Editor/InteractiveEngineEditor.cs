@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Text;
+using My.Tools;
 
 namespace Interactive.Engine
 {
@@ -111,7 +112,7 @@ namespace Interactive.Engine
 						this.builder.Append(weaknesses[index ++]);
 
 						while(index < weaknesses.Length) {
-							if(this.GetWidth(this.builder.ToString() + ", " + weaknesses[index], EditorStyles.miniLabel) > elementrect.width) { break; }
+							if(EditorUtilityExtension.GetTextWidth(this.builder.ToString() + ", " + weaknesses[index], EditorStyles.miniLabel) > elementrect.width) { break; }
 							this.builder.Append(", ").Append(weaknesses[index ++]);
 						}
 
@@ -155,17 +156,6 @@ namespace Interactive.Engine
 			if(GUI.Button(elementrect, "WARM UP")) {
 				script.WarmUp();
 			}
-		}
-
-		private float GetWidth(string s, GUIStyle style)
-		{
-			float min, max;
-
-			GUIContent content = new GUIContent(s);
-
-			style.CalcMinMaxWidth(content, out min, out max);
-
-			return max;
 		}
 	}
 }

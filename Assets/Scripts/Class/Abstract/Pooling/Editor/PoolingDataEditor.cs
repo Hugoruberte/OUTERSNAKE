@@ -60,10 +60,12 @@ public class PoolingDataEditor : Editor
 		// val = EditorGUI.FloatField(n, "Value", val);
 
 		GUIStyle style = new GUIStyle(EditorStyles.label);
+		GUIStyle n_style = new GUIStyle(EditorStyles.miniLabel);
 
+		n_style.fontSize = 8;
 		style.richText = true;
+		
 		PoolingData.Pool pool;
-		string name;
 
 		baserect.y += 18;
 
@@ -85,8 +87,14 @@ public class PoolingDataEditor : Editor
 			baserect.y += -1;
 			baserect.width = 1000;
 			baserect.height = 40;
-			name = (pool.prefab) ? pool.prefab.name : "<color=yellow>Empty</color>";
-			EditorGUI.LabelField(baserect, name, style);
+			if(pool.prefab) {
+				EditorGUI.LabelField(baserect, pool.prefab.name, style);
+
+				baserect.x = EditorUtilityExtension.GetTextWidth(pool.prefab.name, EditorStyles.label) + 21;
+				EditorGUI.LabelField(baserect, $"({pool.size})", n_style);
+			} else {
+				EditorGUI.LabelField(baserect, "<color=yellow>Empty</color>", style);
+			}
 
 			baserect.x = rect.width + -7;
 			baserect.y += 1;
@@ -140,6 +148,8 @@ public class PoolingDataEditor : Editor
 
 			script.pools[i] = pool;
 		}
+
+		EditorUtilityExtension.SetDirtyOnGUIChange(script);
 	}
 
 	private bool Rules(Object o)

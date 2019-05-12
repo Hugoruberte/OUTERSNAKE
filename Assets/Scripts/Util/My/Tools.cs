@@ -298,6 +298,17 @@ namespace My.Tools
 				EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 			}
 		}
+
+		public static float GetTextWidth(string s, GUIStyle style)
+		{
+			float min, max;
+
+			GUIContent content = new GUIContent(s);
+
+			style.CalcMinMaxWidth(content, out min, out max);
+
+			return max;
+		}
 	}
 
 
