@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cb50dd77f1be854fa7013fbc0ff7268, type: 3}
-  m_Name: TurretData
+  m_Name: Turret Data
   m_EditorClassIdentifier: 
   lazerPrefab: {fileID: 6496802672037794780, guid: fceecaf78b5fd3045b7bd968dff41b21,
     type: 3}
@@ -20,7 +20,7 @@ MonoBehaviour:
     type: 3}
   haloPrefab: {fileID: 6430371367858408622, guid: 4984c22f9996ede4c8759213e400020f,
     type: 3}
-  rangeOfView: 15
+  rangeOfView: 50
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 1536
@@ -30,5 +30,5 @@ MonoBehaviour:
   - 1
   - 5
   wanderMaxPauseQuarter: 3
-  loadDuration: 0.25
+  loadDuration: 0.45
   shootDelay: 0.75
