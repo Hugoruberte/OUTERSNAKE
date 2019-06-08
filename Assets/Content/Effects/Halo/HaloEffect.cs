@@ -24,7 +24,7 @@ public class HaloEffect : Effect
 	[SerializeField, Range(HALO_MIN_SIZE, 10f)] private float editorWidth = 0.1f;
 	
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

@@ -21,14 +21,14 @@ namespace Snakes
 
 	public abstract class SnakeEntity : CharacterEntity
 	{
-		protected override private void Awake()
+		protected override void Awake()
 		{
 			base.Awake();
 
-			this.SetInteractiveState(new Fire(), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
+			this.SetInteractiveState(new Fire(10f), ChemicalMaterialEntity.flesh, PhysicalStateEntity.neutral);
 		}
 
-		protected override private void Start()
+		protected override void Start()
 		{
 			base.Start();
 

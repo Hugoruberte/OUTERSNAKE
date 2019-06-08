@@ -5,7 +5,7 @@ using BehaviourTreeAI;
 
 public class YellowRabbit : RabbitEntity
 {
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 		

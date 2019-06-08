@@ -7,14 +7,14 @@ public class SnakeAutoCharacter : SnakeCharacter
 {
 	private SnakeController ctr;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 
 		this.ctr = this.GetComponent<SnakeController>();
 	}
 
-	protected override private void Start()
+	protected override void Start()
 	{
 		base.Start();
 

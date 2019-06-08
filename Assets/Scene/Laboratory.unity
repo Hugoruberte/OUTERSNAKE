@@ -130,7 +130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &633575
 Transform:
   m_ObjectHideFlags: 0
@@ -567,7 +567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f7eb4430cc3794aa9e7683c2f13209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planets: []
 --- !u!114 &217625109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4069,6 +4068,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858356031097560460, guid: d7220b42464f40b419a98a157b96dcaa,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5858356031097560450, guid: d7220b42464f40b419a98a157b96dcaa,
         type: 3}

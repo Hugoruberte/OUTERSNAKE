@@ -18,7 +18,7 @@ public class SnakePartCharacter : SnakeEntity
 
 
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

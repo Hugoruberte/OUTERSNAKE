@@ -14,7 +14,7 @@ public abstract class RabbitEntity : CharacterEntity
 	private IEnumerator fireLightCoroutine = null;
 	private Light fireLight;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

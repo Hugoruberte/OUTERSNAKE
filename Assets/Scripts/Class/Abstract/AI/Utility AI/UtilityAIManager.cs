@@ -7,7 +7,7 @@ public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 	[Header("Utility AI Behaviours")]
 	[SerializeField] private UtilityAIBehaviour[] behaviours = null;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 		

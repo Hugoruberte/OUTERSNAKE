@@ -37,7 +37,7 @@ namespace Interactive.Engine
 
 
 
-		protected virtual private void Awake()
+		protected virtual void Awake()
 		{
 			// Initialize variable
 			this.myTransform = transform;
@@ -50,7 +50,7 @@ namespace Interactive.Engine
 			}
 		}
 
-		protected virtual private void Start()
+		protected virtual void Start()
 		{
 			// initialize state
 			this.InteractWith(this.status, null);

@@ -65,7 +65,9 @@ public class SnakeController : MonoBehaviour
 		this.heart = HeartManager.instance.heart;
 
 		this.myRigidbody.rotation = transform.AbsoluteRotation();
-		this.targetPosition = this.GetAbsolutePlanetRelativePosition(this.myRigidbody.position);
+
+		// this.targetPosition = this.cellable.currentCell.position + this.cellable.currentCell.normal * 0.5f;
+		this.targetPosition = transform.AbsolutePosition();
 
 		this.StartSnakeMovement();
 	}
@@ -112,6 +114,14 @@ public class SnakeController : MonoBehaviour
 		this.data.onCancelInput?.Invoke(cancel);
 	}
 
+	public void SetDirection(int horizontal, int vertical)
+	{
+		horizontal = Mathf.RoundToInt(Mathf.Clamp(horizontal, -1f, 1f));
+		vertical = Mathf.RoundToInt(Mathf.Clamp(vertical, -1f, 1f));
+
+		this.ApplyInputs(horizontal, vertical);
+	}
+
 	public void Turn(bool toTheRight)
 	{
 		int vertical, horizontal;
@@ -127,14 +137,6 @@ public class SnakeController : MonoBehaviour
 		if(vertical == 0 && horizontal == 0) {
 			horizontal = (toTheRight) ? 1 : -1;
 		}
-
-		this.ApplyInputs(horizontal, vertical);
-	}
-
-	public void SetDirection(int horizontal, int vertical)
-	{
-		horizontal = Mathf.RoundToInt(Mathf.Clamp(horizontal, -1f, 1f));
-		vertical = Mathf.RoundToInt(Mathf.Clamp(vertical, -1f, 1f));
 
 		this.ApplyInputs(horizontal, vertical);
 	}
@@ -313,47 +315,6 @@ public class SnakeController : MonoBehaviour
 		} else if(!Physics.Raycast(this.targetPosition, -this.heart.up, 1f, this.targetMask)) {
 			this.faceswitcher.SetFaceSwitching(LEDGE_DELAY, dir, this.targetPosition);
 		}
-	}
-
-	private Planet SearchForCurrentPlanet()
-	{
-		Planet p;
-		int count;
-		Collider c;
-		Collider[] results;
-
-		p = null;
-		results = Shared.colliderArray;
-		count = Physics.OverlapSphereNonAlloc(this.myRigidbody.position, 2f, results, this.targetMask);
-
-		for(int i = 0; i < results.Length && count > 0; i++)
-		{
-			c = results[i];
-
-			if(c == null) {
-				continue;
-			}
-
-			p = c.GetComponentInParent<Planet>();
-
-			if(p != null) {
-				break;
-			}
-		}
-
-		results.Clear();
-
-		return p;
-	}
-
-	private Vector3 GetAbsolutePlanetRelativePosition(Vector3 pos)
-	{
-		// Vector3 planetRelative;
-
-		// planetRelative = Vector3Int.RoundToInt(this.planet.InverseTransformPoint(pos));
-
-		// return this.planet.TransformPoint(planetRelative);
-		return Vector3.zero;
 	}
 
 	private Vector3 ManageFaceRotationAndUpdateTargetPosition(Vector3 dir)

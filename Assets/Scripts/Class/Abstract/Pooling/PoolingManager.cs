@@ -7,7 +7,7 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 
 	private Transform folder;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

@@ -10,7 +10,7 @@ public abstract class Effect : PoolableEntity
 	private Vector3 followOffset;
 
 
-	protected virtual private void Awake()
+	protected virtual void Awake()
 	{
 		this.myTransform = transform;
 	}

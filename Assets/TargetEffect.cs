@@ -25,7 +25,7 @@ public class TargetEffect : Effect
 	private LineRenderer[] lineRenderers;
 	private GeometricShapeData[] gsds;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

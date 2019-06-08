@@ -37,7 +37,7 @@ namespace Cameras
 
 
 
-		protected override private void Awake()
+		protected override void Awake()
 		{
 			base.Awake();
 			

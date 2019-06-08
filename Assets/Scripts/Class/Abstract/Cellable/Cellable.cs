@@ -4,7 +4,7 @@ using UnityEngine;
 public class Cellable
 {
 	protected Transform body;
-	protected Transform myTransform;
+	protected Transform transform;
 	private Vector3 currentNormal;
 
 	private Cell reservedCell = null;
@@ -18,9 +18,9 @@ public class Cellable
 	// must be called after 'Awake' (in 'Start' for example)
 	public void Initialize(Transform t)
 	{
-		this.myTransform = t;
-		this.currentNormal = this.myTransform.up;
-		this.body = this.myTransform.Find("Body");
+		this.transform = t;
+		this.currentNormal = this.transform.up;
+		this.body = this.transform.Find("Body");
 
 		// this must be called in 'Start'
 		this.InitializeSurfaceAndCell();
@@ -52,30 +52,28 @@ public class Cellable
 	/* --------------------------------------------------------------------------------------------*/
 	public void ReserveNextCell(Cell c)
 	{
-		reservedCell = c;
-		reservedCell?.AddElement(this);
+		this.reservedCell = c;
+		this.reservedCell?.AddElement(this);
 	}
 
 	public void ReserveNextCell(Vector3 pos, Vector3 normal)
 	{
-		reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
-		reservedCell?.AddElement(this);
+		this.reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
+		this.reservedCell?.AddElement(this);
 	}
 
 	public void UpdateCurrentCell()
 	{
 		this.currentCell?.RemoveElement(this);
-		this.currentCell = reservedCell;
-		reservedCell = null;
+		this.currentCell = this.reservedCell;
+		this.reservedCell = null;
 	}
 
 	public void UpdateCurrentCell(Vector3 pos, Vector3 normal)
 	{
-		if(this.currentSurface == null) {
-			this.InitializeSurfaceAndCell();
-		}
-		reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
-		reservedCell?.AddElement(this);
+		if(this.currentSurface == null) { this.InitializeSurfaceAndCell(); }
+		this.reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
+		this.reservedCell?.AddElement(this);
 
 		this.UpdateCurrentCell();
 	}
@@ -99,10 +97,12 @@ public class Cellable
 		Planet[] planets;
 
 		planets = PlanetManager.instance.planets;
-		foreach(Planet p in planets) {
-			if(p.IsPlanetOf(myTransform)) {
 
-				this.currentCell = p.SetElementOnPlanet(myTransform);
+		foreach(Planet p in planets)
+		{
+			if(p.IsPlanetOf(transform)) {
+
+				this.currentCell = p.SetElementOnPlanet(transform);
 				this.currentCell.AddElement(this);
 				this.currentSurface = this.currentCell.surface;
 				return;
@@ -130,7 +130,7 @@ public class Cellable
 	private void UpdateCellWithPositionOnSameFace(Vector3 newPosition)
 	{
 		if(this.currentCell == null) {
-			Debug.LogError("ERROR : Could not use this function because 'currentCell' value is null.", myTransform);
+			Debug.LogError("ERROR : Could not use this function because 'currentCell' value is null.", transform);
 			return;
 		}
 

@@ -11,7 +11,7 @@ public class LazerRay : Lazer
 
 	private bool[] widthPoints;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

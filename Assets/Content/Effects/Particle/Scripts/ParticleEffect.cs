@@ -8,7 +8,7 @@ public abstract class ParticleEffect : Effect
 	public ParticleSystem main { get; private set; }
 	protected ParticleSystem[] all;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

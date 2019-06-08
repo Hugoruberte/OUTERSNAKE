@@ -11,7 +11,7 @@ public class LazerShot : Lazer
 	private Rigidbody explosionRigidbody;
 	private ParticleSystem explosion;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

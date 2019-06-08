@@ -12,7 +12,7 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 
 	public Transform _transform { get { return this.myTransform; } }
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 
@@ -21,7 +21,7 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 		this.data.snakeCollider = this.GetComponent<Collider>();
 	}
 
-	protected override private void Start()
+	protected override void Start()
 	{
 		base.Start();
 

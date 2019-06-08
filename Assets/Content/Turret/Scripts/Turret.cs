@@ -9,14 +9,14 @@ public class Turret : TrapEntity
 	public Transform muzzle { get; private set; }
 	public TurretData turretData = null;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 
 		this.muzzle = transform.DeepFind("Muzzle");
 	}
 
-	protected override private void Start()
+	protected override void Start()
 	{
 		base.Start();
 

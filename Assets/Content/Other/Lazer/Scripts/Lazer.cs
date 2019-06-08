@@ -74,7 +74,7 @@ public abstract class Lazer : PoolableEntity
 	public LazerData lazerData;
 
 
-	protected virtual private void Awake()
+	protected virtual void Awake()
 	{
 		this.headRenderer = GetComponentInChildren<TrailRenderer>();
 		this.headCollider = headRenderer.GetComponent<Collider>();

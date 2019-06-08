@@ -8,7 +8,7 @@ public class InteractiveManager : MonoSingleton<InteractiveManager>
 	[Header("Interactive Engine")]
 	[SerializeField] private InteractiveEngine engine = null;
 
-	protected override private void Awake()
+	protected override void Awake()
 	{
 		base.Awake();
 

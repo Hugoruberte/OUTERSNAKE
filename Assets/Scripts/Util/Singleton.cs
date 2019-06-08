@@ -36,7 +36,11 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 	public static T instance {
 		get {
 			if(_instance == null) {
-				Debug.LogError($"ERROR : Instance of {typeof(T)} is null, either you tried to access it from the Awake function or it has not been initialized in its own Awake function");
+				_instance = FindObjectOfType(typeof(T)) as T;
+			}
+
+			if(_instance == null) {
+				Debug.LogError($"ERROR : Instance of {typeof(T)} is null, it does not exist.");
 			}
 
 			return _instance;
@@ -51,7 +55,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 		}
 	}
 
-	protected virtual private void Awake()
+	protected virtual void Awake()
 	{
 		if(_instance == null) {
 			instance = this as T;

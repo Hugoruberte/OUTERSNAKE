@@ -8,7 +8,7 @@ public class Planet : MonoBehaviour
 
 	private void Awake()
 	{
-		surface = new Surface(transform);
+		this.surface = new Surface(transform);
 	}
 
 	public bool IsPlanetOf(Transform t)
@@ -34,9 +34,4 @@ public class Planet : MonoBehaviour
 
 		return null;
 	}
-
-	// private void Update()
-	// {
-	// 	transform.Translate(Vector3.right * 0.1f * Time.deltaTime);
-	// }
 }
