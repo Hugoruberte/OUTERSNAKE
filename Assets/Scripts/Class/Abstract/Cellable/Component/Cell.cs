@@ -24,21 +24,20 @@ public class Cell
 	public readonly Vector3 local;
 	public readonly List<Ledge> ledges;
 	public readonly bool isInner = false;
-	public bool isBound {
-		get { return !this.isInner; }
-	}
+	public bool isBound { get => !this.isInner; }
 	public bool isWalkable {
 		get {
 			foreach(Cellable e in this.elements) {
-				if(!e.isWalkable) return false;
+				if(!e.isWalkable) {
+					return false;
+				}
 			}
 			return true;
 		}
 	}
 	public readonly Grill grill;
-	public Surface surface {
-		get => this.grill.surface;
-	}
+	public Surface surface { get => this.grill.surface; }
+
 
 	public Cell(Grill g, Vector3 pos, Vector3 n, Vector3 l, Transform t, bool bound)
 	{
@@ -96,4 +95,7 @@ public class Cell
 
 		return (this.ledges.Count == 0);
 	}
+
+
+	public override string ToString() => $"Cell: position = {this.position}, normal = {this.normal}, isInner = {this.isInner}";
 }

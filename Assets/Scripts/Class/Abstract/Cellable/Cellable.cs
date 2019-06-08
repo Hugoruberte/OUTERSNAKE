@@ -3,35 +3,29 @@ using UnityEngine;
 
 public class Cellable
 {
-	protected Transform body;
-	protected Transform transform;
-	private Vector3 currentNormal;
+	private Transform transform;
+	private Vector3 normal;
 
 	private Cell reservedCell = null;
 	public Cell currentCell { get; private set; } = null;
 
 	public Surface currentSurface { get; private set; } = null;
 
-	public bool isWalkable { get; protected set; } = true;
-	public bool isInitialized { get; private set; } = false;
+	public bool isWalkable { get; private set; } = true;
+	public bool initialized { get; private set; } = false;
+
+
 
 	// must be called after 'Awake' (in 'Start' for example)
 	public void Initialize(Transform t)
 	{
 		this.transform = t;
-		this.currentNormal = this.transform.up;
-		this.body = this.transform.Find("Body");
+		this.normal = this.transform.up;
 
 		// this must be called in 'Start'
 		this.InitializeSurfaceAndCell();
 
-		this.isInitialized = true;
-	}
-
-	public void Clear()
-	{
-		this.ClearCell(this.currentCell);
-		this.ClearCell(reservedCell);
+		this.initialized = true;
 	}
 
 
@@ -55,7 +49,6 @@ public class Cellable
 		this.reservedCell = c;
 		this.reservedCell?.AddElement(this);
 	}
-
 	public void ReserveNextCell(Vector3 pos, Vector3 normal)
 	{
 		this.reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
@@ -68,15 +61,19 @@ public class Cellable
 		this.currentCell = this.reservedCell;
 		this.reservedCell = null;
 	}
-
 	public void UpdateCurrentCell(Vector3 pos, Vector3 normal)
 	{
-		if(this.currentSurface == null) { this.InitializeSurfaceAndCell(); }
+		if(this.currentSurface == null) {
+			this.InitializeSurfaceAndCell();
+		}
+
 		this.reservedCell = this.currentSurface.GetCellWithPositionAndFaceNormal(pos, normal);
 		this.reservedCell?.AddElement(this);
 
 		this.UpdateCurrentCell();
 	}
+
+
 
 
 
@@ -115,6 +112,7 @@ public class Cellable
 	private void ClearCell(Cell c)
 	{
 		c?.RemoveElement(this);
+
 		if(c == this.currentCell) {
 			this.currentCell = null;
 		}

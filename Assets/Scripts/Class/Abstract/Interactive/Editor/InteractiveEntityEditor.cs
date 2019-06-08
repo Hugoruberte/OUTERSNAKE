@@ -70,7 +70,7 @@ public class InteractiveEntityEditor : Editor
 		}
 
 
-		if(script.cellable.isInitialized) {
+		if(script.cellable.initialized) {
 			hasCell = (script.cellable.currentCell != null);
 
 			showCellInfo = EditorGUILayout.Foldout(showCellInfo, "");

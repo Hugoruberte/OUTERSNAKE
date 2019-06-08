@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interval: 0.25
-  intervalOffset: 2
+  intervalOffset: 0.75
 --- !u!1 &5307443914941843417
 GameObject:
   m_ObjectHideFlags: 0

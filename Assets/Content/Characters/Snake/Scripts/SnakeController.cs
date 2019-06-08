@@ -62,12 +62,11 @@ public class SnakeController : MonoBehaviour
 
 	private void Start()
 	{
-		this.heart = HeartManager.instance.heart;
-
 		this.myRigidbody.rotation = transform.AbsoluteRotation();
+		this.targetPosition = this.cellable.currentCell.position + this.cellable.currentCell.normal * 0.5f;
 
-		// this.targetPosition = this.cellable.currentCell.position + this.cellable.currentCell.normal * 0.5f;
-		this.targetPosition = transform.AbsolutePosition();
+		this.heart = HeartManager.instance.heart;
+		// this.heart.rotation = Quaternion.LookRotation(this.myRigidbody.rotation * Shared.vector3Up);
 
 		this.StartSnakeMovement();
 	}

@@ -217,8 +217,8 @@ public class Grill
 			Debug.LogWarning($"WARNING : The face's ({face.name}) height is < 2 ! (height = {height})", face);
 		}
 
-		this.width_corrector = (0.5f * (width%2) - 0.5f);
-		this.height_corrector = (-0.5f * (height%2) + 0.5f);
+		this.width_corrector = 0.5f * (width%2) - 0.5f;
+		this.height_corrector = -0.5f * (height%2) + 0.5f;
 
 		anchorx = -(width/2) - width_corrector;
 		anchorz = (height/2) - height_corrector;
@@ -253,9 +253,9 @@ public class Grill
 			return -1;
 		}
 
-		columns = (local.x + width_corrector + width/2) * height;
-		rows = local.z + height_corrector - height/2;
-		index = (int)(columns - rows);
+		columns = Mathf.Round(local.x + width_corrector + width/2);
+		rows = Mathf.Round(local.z + height_corrector - height/2);
+		index = Mathf.RoundToInt(columns * height - rows);
 
 		return index;
 	}
