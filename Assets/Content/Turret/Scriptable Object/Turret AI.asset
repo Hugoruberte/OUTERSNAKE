@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c774e24fdc849042b38952b2ce2682e, type: 3}
   m_Name: Turret AI
   m_EditorClassIdentifier: 
+  updateRate: 0.1
   actions:
   - scorers:
     - isCondition: 1
@@ -26,8 +27,20 @@ MonoBehaviour:
       _max: 100
       method: IsThereTargetAround
       index: 0
+    - isCondition: 1
+      not: 0
+      score: 0
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 2147483647
+      method: IsTargetInSight
+      index: 1
     index: 0
-    score: 0
+    score: 100
     method: Wander
     active: 1
     discarded_active: 0
@@ -54,15 +67,15 @@ MonoBehaviour:
     method: Aim
     active: 1
     discarded_active: 0
-    discarded_max: 0
+    discarded_max: 1
     _max: 75
     _isParallelizable: 0
     _isForceAlone: 0
     isStoppable: 1
   - scorers:
     - isCondition: 1
-      not: 0
-      score: 50
+      not: 1
+      score: -1000
       curve:
         serializedVersion: 2
         m_Curve: []
@@ -71,22 +84,10 @@ MonoBehaviour:
         m_RotationOrder: 4
       _max: 50
       method: Aim is running
-      index: 5
+      index: 4
     - isCondition: 1
       not: 0
-      score: 50
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 50
-      method: IsTargetInSight
-      index: 2
-    - isCondition: 1
-      not: 1
-      score: -100
+      score: 100
       curve:
         serializedVersion: 2
         m_Curve: []
@@ -95,9 +96,21 @@ MonoBehaviour:
         m_RotationOrder: 4
       _max: -100
       method: CouldShoot
-      index: 3
+      index: 2
+    - isCondition: 1
+      not: 1
+      score: -50
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 2147483647
+      method: IsTargetInSight
+      index: 1
     index: 2
-    score: 100
+    score: -950
     method: Shoot
     active: 1
     discarded_active: 0
@@ -106,10 +119,9 @@ MonoBehaviour:
     _isParallelizable: 1
     _isForceAlone: 0
     isStoppable: 0
-  updateRate: 0.1
   actionCandidates: []
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 010000
+  displayScorers: 010101
   displayParameters: 000000

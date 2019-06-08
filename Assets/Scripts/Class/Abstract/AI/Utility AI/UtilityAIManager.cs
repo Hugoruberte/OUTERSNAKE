@@ -7,7 +7,7 @@ public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 	[Header("Utility AI Behaviours")]
 	[SerializeField] private UtilityAIBehaviour[] behaviours = null;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 		
@@ -16,14 +16,14 @@ public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 		}
 	}
 
-	void Start()
+	private void Start()
 	{
 		foreach(UtilityAIBehaviour b in this.behaviours) {
 			b.OnStart();
 		}
 	}
 
-	void Update()
+	private void Update()
 	{
 		foreach(UtilityAIBehaviour b in this.behaviours) {
 			b.OnUpdate();

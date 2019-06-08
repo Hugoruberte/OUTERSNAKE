@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 using Lazers;
 
@@ -34,8 +33,6 @@ public class LazerData : ScriptableObject
 
 	// Length
 	[HideInInspector] public float length;
-	// [HideInInspector] public float tailWidthPointLength;
-	// [HideInInspector] public float tailWidthPointSpacing;
 	
 	// Width
 	[HideInInspector] public float width;
@@ -50,5 +47,4 @@ public class LazerData : ScriptableObject
 	[HideInInspector] public float autoAimRange;
 	[HideInInspector] public float autoAimThreshold;
 	[HideInInspector] public LayerMask autoAimLayerMask;
-	[HideInInspector] public Collider[] autoAimResults = new Collider[10];
 }

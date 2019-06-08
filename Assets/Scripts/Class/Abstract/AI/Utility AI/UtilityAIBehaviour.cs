@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Utility.AI;
+using My.Events;
 
 public abstract class UtilityAIBehaviour : ScriptableObject
 {
-	[System.NonSerialized] private List<CAA> caas = new List<CAA>();
-
-	private static List<UtilityAction> _all = new List<UtilityAction>();
+	private static readonly List<UtilityAction> _all = new List<UtilityAction>();
 	
+	[System.NonSerialized] private readonly List<CAA> caas = new List<CAA>();
 	[System.NonSerialized] public float lastUpdate;
-	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 	[HideInInspector] public float updateRate = 0.02f;
-
+	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 	
 
 	public void UpdateUtilityActions()
@@ -26,6 +25,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			// caa links a controller to its currently running actions
 			// -> its 'ctr' field is the controller (i.e. a bunny)
 			// -> its 'main' field contains a running action which cannot be parallelizable
+			// -> its 'parallelizables' field contains all possible running parallelizables actions
 			caa = this.caas[i];
 
 			// select best action by score
@@ -109,6 +109,28 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		caa.StopAllActions();
 	}
 
+	public void AddStartListener(string methodName, ActionEvent callback)
+	{
+		UtilityAction act = this.actions.Find(x => x.method.Equals(methodName));
+
+		if(act == null) {
+			Debug.LogWarning("WARNING : Could not find action with name '" + methodName + "'.");
+			return;
+		}
+
+		act.onStart += callback;
+	}
+	public void AddEndListener(string methodName, ActionEvent callback)
+	{
+		UtilityAction act = this.actions.Find(x => x.method.Equals(methodName));
+
+		if(act == null) {
+			Debug.LogWarning("WARNING : Could not find action with name '" + methodName + "'.");
+			return;
+		}
+
+		act.onEnd += callback;
+	}
 
 
 
@@ -117,7 +139,120 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 
 
 
-	
+
+
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* ------------------ USEFUL STRUCT BECAUSE DICTIONARY ARE NOT SERIALIZABLE -------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	/* --------------------------------------------------------------------------------------------*/
+	[System.Serializable]
+	private class CAA {
+		[SerializeField] public MovementController ctr;
+		[SerializeField] public UtilityAction main { get; private set; }
+		[SerializeField] public List<UtilityAction> parallelizables { get; private set; }
+
+		public CAA(MovementController c) {
+			this.ctr = c;
+			this.parallelizables = new List<UtilityAction>();
+		}
+
+		public void AddAction(UtilityAction act)
+		{
+			if(act == null) {
+				return;
+			}
+
+			this.CleanActions();
+
+			if(act.isParallelizable) {
+				this.parallelizables.Add(act);
+			} else {
+				this.main = act;
+			}
+		}
+
+		public void StartAction(UtilityAction act)
+		{
+			// if action need to run alone
+			if(act.isForceAlone) {
+				// stop all other stoppable running actions
+				this.StopAllStoppableAction();
+			}
+
+			// start action
+			act.Start(this.ctr, this.ctr.entity);
+			this.AddAction(act);
+		}
+
+		public void StopMainAction() {
+			this.main?.Stop(this.ctr.entity);
+			this.main = null;
+		}
+
+		public void StopAllActions() {
+			this.main?.Stop(this.ctr.entity);
+			foreach(UtilityAction a in this.parallelizables) {
+				a?.Stop(this.ctr.entity);
+			}
+			this.parallelizables.Clear();
+		}
+
+		public void StopAllStoppableAction() {
+			this.CleanActions();
+			if(this.main != null && this.main.isStoppable) {
+				this.main.Stop(this.ctr.entity);
+			}
+			int stopped = 0;
+			foreach(UtilityAction a in this.parallelizables) {
+				if(a.isStoppable) {
+					stopped ++;
+					a.Stop(this.ctr.entity);
+				}
+			}
+			if(stopped == this.parallelizables.Count) {
+				this.parallelizables.Clear();
+			}
+		}
+
+		public bool IsRunning(UtilityAction act) {
+			this.CleanActions();
+
+			if(this.main.method.Equals(act.method)) {
+				return true;
+			}
+
+			foreach(UtilityAction a in this.parallelizables) {
+				if(a.method.Equals(act.method)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void CleanActions() {
+			if(this.main != null && !this.main.isRunning) {
+				this.main = null;
+			}
+
+			for(int i = this.parallelizables.Count - 1; i >= 0; i--) {
+				if(this.parallelizables[i] == null || !this.parallelizables[i].isRunning) {
+					this.parallelizables.RemoveAt(i);
+				}
+			}
+		}
+	}
+
+
+
+
+
+
+
+
 
 
 
@@ -160,94 +295,6 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 	}
 	// inspector function //
-
-
-
-
-
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* ------------------ USEFUL STRUCT BECAUSE DICTIONARY ARE NOT SERIALIZABLE -------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	/* --------------------------------------------------------------------------------------------*/
-	[System.Serializable]
-	private class CAA {
-		[SerializeField] public MovementController ctr;
-		[SerializeField] public UtilityAction main { get; private set; }
-		[SerializeField] public List<UtilityAction> parallelizables { get; private set; }
-
-		public CAA(MovementController c) {
-			this.ctr = c;
-			this.parallelizables = new List<UtilityAction>();
-		}
-
-		public void AddAction(UtilityAction act) {
-			if(act == null) {
-				return;
-			}
-
-			this.CleanActions();
-
-			if(act.isParallelizable) {
-				this.parallelizables.Add(act);
-			} else {
-				this.main = act;
-			}
-		}
-
-		public void StartAction(UtilityAction act)
-		{
-			// if action need to run alone
-			if(act.isForceAlone) {
-				// stop all other running actions
-				this.StopAllActions();
-			}
-
-			// start action
-			act?.Start(this.ctr, this.ctr.entity);
-			this.AddAction(act);
-		}
-
-		public void StopMainAction() => this.main?.Stop(this.ctr.entity);
-
-		public void StopAllActions() {
-			this.main?.Stop(this.ctr.entity);
-			foreach(UtilityAction a in this.parallelizables) {
-				a?.Stop(this.ctr.entity);
-			}
-			this.parallelizables.Clear();
-		}
-
-		public bool IsRunning(UtilityAction act) {
-			this.CleanActions();
-
-			if(this.main.method.Equals(act.method)) {
-				return true;
-			}
-
-			foreach(UtilityAction a in this.parallelizables) {
-				if(a.method.Equals(act.method)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private void CleanActions() {
-			if(this.main != null && !this.main.isRunning) {
-				this.main = null;
-			}
-
-			for(int i = this.parallelizables.Count - 1; i >= 0; i--) {
-				if(this.parallelizables[i] == null || !this.parallelizables[i].isRunning) {
-					this.parallelizables.RemoveAt(i);
-				}
-			}
-		}
-	}
 }
 
 public abstract class UtilityAIBehaviour<T> : UtilityAIBehaviour where T : class

@@ -11,7 +11,7 @@ public class LazerShot : Lazer
 	private Rigidbody explosionRigidbody;
 	private ParticleSystem explosion;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 
@@ -119,38 +119,50 @@ public class LazerShot : Lazer
 		float dot, max;
 		RaycastHit hit;
 		Vector3 result, link;
+		Collider[] autoAimResults;
 
 		max = float.MinValue;
-		count = Physics.OverlapSphereNonAlloc(point, this.lazerData.autoAimRange, this.lazerData.autoAimResults, this.lazerData.autoAimLayerMask);
+		autoAimResults = Shared.colliderArray;
+		count = Physics.OverlapSphereNonAlloc(point, this.lazerData.autoAimRange, autoAimResults, this.lazerData.autoAimLayerMask);
 		result = dir;
 
-		if(count > 0)
+		for(int i = 0; i < autoAimResults.Length && count > 0; i++)
 		{
-			for(int i = 0; i < this.lazerData.autoAimResults.Length; i++) {
-				c = this.lazerData.autoAimResults[i];
-				if(c == null || IndexOf(colliders, c) > -1) {
-					continue;
-				}
+			c = autoAimResults[i];
 
-				// could use "c.ClosestPoint" instead of "c.transform.position" here...
-				link = (c.transform.position - point).normalized;
-
-				// check reachability
-				if(!Physics.Raycast(point, link, out hit, this.lazerData.autoAimRange + 10f, this.lazerData.autoAimLayerMask) || hit.collider != c) {
-					continue;
-				}
-
-				// alignment
-				dot = Vector3.Dot(dir, link);
-
-				if(dot >= this.lazerData.autoAimThreshold && dot > max) {
-					max = dot;
-					result = link;
-				}
-
-				// clear
-				this.lazerData.autoAimResults[i] = null;
+			if(c == null) {
+				continue;
 			}
+
+			if(IndexOf(colliders, c) > -1) {
+				// clean cache
+				autoAimResults[i] = null;
+				count --;
+				continue;
+			}
+
+			// could use "c.ClosestPoint" instead of "c.transform.position" here...
+			link = (c.transform.position - point).normalized;
+
+			// check reachability
+			if(!Physics.Raycast(point, link, out hit, this.lazerData.autoAimRange + 10f, this.lazerData.autoAimLayerMask) || hit.collider != c) {
+				// clean cache
+				autoAimResults[i] = null;
+				count --;
+				continue;
+			}
+
+			// alignment
+			dot = Vector3.Dot(dir, link);
+
+			if(dot >= this.lazerData.autoAimThreshold && dot > max) {
+				max = dot;
+				result = link;
+			}
+
+			// clean cache
+			autoAimResults[i] = null;
+			count --;
 		}
 
 		return result;
@@ -171,7 +183,7 @@ public class LazerShot : Lazer
 			return;
 		}
 
-		GroundImpactEffect impact = poolingManager.Get<GroundImpactEffect>(this.lazerData.groundImpactPrefab);
+		GroundImpactEffect impact = PoolingManager.instance.Get<GroundImpactEffect>(this.lazerData.groundImpactPrefab);
 
 		if(impact == null) {
 			return;
@@ -184,7 +196,7 @@ public class LazerShot : Lazer
 
 	private void SetLazerImpact(Vector3 position, Vector3 direction)
 	{
-		InstantParticleEffect impact = poolingManager.Get<InstantParticleEffect>(this.lazerData.lazerImpactPrefab);
+		InstantParticleEffect impact = PoolingManager.instance.Get<InstantParticleEffect>(this.lazerData.lazerImpactPrefab);
 
 		if(impact == null) {
 			return;
@@ -217,8 +229,7 @@ public class LazerShot : Lazer
 			yield return Yielders.Wait(delay);
 		}
 		
-		// stow
-		this.poolingManager.Stow(this);
+		PoolingManager.instance.Stow(this);
 	}
 
 	public override void Reset()
@@ -228,8 +239,8 @@ public class LazerShot : Lazer
 
 		// explosion
 		this.explosionRigidbody.isKinematic = true;
-		this.explosionRigidbody.velocity = Vector3Extension.ZERO;
-		this.explosionRigidbody.transform.localPosition = Vector3Extension.ZERO;
+		this.explosionRigidbody.velocity = Shared.vector3Zero;
+		this.explosionRigidbody.transform.localPosition = Shared.vector3Zero;
 
 		// reset
 		base.Reset();

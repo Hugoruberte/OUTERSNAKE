@@ -104,7 +104,7 @@ public class Grill
 		dir.Normalize();
 
 		for(int i = maxLength; i >= 1; i--) {
-			p = (c.position + dir * i).SetRoundToInt();
+			p = Vector3Int.RoundToInt(c.position + dir * i);
 			index = this.GetIndexFromPosition(p);
 
 			if(index >= 0) {

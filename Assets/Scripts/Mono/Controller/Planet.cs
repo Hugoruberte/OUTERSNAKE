@@ -6,7 +6,7 @@ public class Planet : MonoBehaviour
 {
 	public Surface surface;
 
-	void Awake()
+	private void Awake()
 	{
 		surface = new Surface(transform);
 	}
@@ -34,4 +34,9 @@ public class Planet : MonoBehaviour
 
 		return null;
 	}
+
+	// private void Update()
+	// {
+	// 	transform.Translate(Vector3.right * 0.1f * Time.deltaTime);
+	// }
 }

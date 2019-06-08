@@ -16,7 +16,7 @@ namespace Cameras
 		[SerializeField] private Rigidbody target = null;
 		public CameraMoveState state = CameraMoveState.Idle;
 
-		[Header("¨Parameters")]
+		[Header("Parameters")]
 		[SerializeField, Tooltip("Distance camera <-> target"), Range(5, 75)] private int height = 25;
 		[SerializeField] private AnimationCurve smoothCurve = new AnimationCurve();
 
@@ -31,13 +31,13 @@ namespace Cameras
 		private const float SMOOTH_LOCK_THRESHOLD = 20f;
 
 		private Vector3 targetPosition;
-		private Vector3 velocity = Vector3Extension.ZERO;
+		private Vector3 velocity = Shared.vector3Zero;
 		private IEnumerator smoothRotationCoroutine = null;
 		private Quaternion previousTarget;
 
 
 
-		protected override void Awake()
+		protected override private void Awake()
 		{
 			base.Awake();
 			
@@ -45,7 +45,7 @@ namespace Cameras
 			this.previousTarget = this.myTransform.rotation;
 		}
 
-		void Start()
+		private void Start()
 		{
 			HeartManager.instance.onRotate += this.OnHeartRotate;
 
@@ -54,7 +54,7 @@ namespace Cameras
 			}
 		}
 
-		void Update()
+		private void Update()
 		{
 			if(this.state == CameraMoveState.Idle || !this.target) {
 				return;
@@ -74,7 +74,7 @@ namespace Cameras
 		/* --------------------------------------------------------------------------------------------*/
 		private void SmoothPosition()
 		{
-			this.targetPosition = this.target.position + (this.target.rotation * Vector3Extension.UP) * this.height;
+			this.targetPosition = this.target.position + (this.target.rotation * Shared.vector3Up) * this.height;
 			this.myTransform.position = Vector3.SmoothDamp(
 				this.myTransform.position,
 				this.targetPosition,
@@ -117,7 +117,7 @@ namespace Cameras
 			float previousAngle, angle;
 
 
-			targetRight = this.target.rotation * Vector3Extension.RIGHT;
+			targetRight = this.target.rotation * Shared.vector3Right;
 			rightDot = Mathf.RoundToInt(Vector3.Dot(targetRight, current.right));
 			forwardDot = Mathf.RoundToInt(Vector3.Dot(previous.up, -rightDot * current.forward));
 			lookUp = current.forward + rightDot * forwardDot * current.up;
@@ -178,9 +178,9 @@ namespace Cameras
 
 			if(dot == 0)
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3Extension.RIGHT)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Shared.vector3Right)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3Extension.UP)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Shared.vector3Up)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);
@@ -188,9 +188,9 @@ namespace Cameras
 			}
 			else
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3Extension.RIGHT)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.right, Shared.vector3Right)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3Extension.UP)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.right, Shared.vector3Up)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);

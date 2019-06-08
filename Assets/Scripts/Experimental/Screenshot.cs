@@ -13,7 +13,7 @@ public class Screenshot : MonoBehaviour
 {
 	// public UnityEngine.UI.Image DesktopImage;
 
-	// void Start()
+	// private void Start()
 	// {
 	// 	StartCoroutine(Desktop());
 	// }

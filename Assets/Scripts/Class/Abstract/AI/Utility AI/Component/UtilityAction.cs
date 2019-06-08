@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using My.Tools;
+using My.Events;
 
 namespace Utility.AI
 {
@@ -51,6 +52,10 @@ namespace Utility.AI
 		}
 		public bool isStoppable = false;
 		public bool isRunning { get; private set; } = false;
+
+		// Event
+		public ActionEvent onStart = null;
+		public ActionEvent onEnd = null;
 		
 
 
@@ -73,9 +78,12 @@ namespace Utility.AI
 
 		public void Start(MovementController ctr, MonoBehaviour handler)
 		{
+			this.onStart?.Invoke();
+
 			if(this.action != null) {
 				this.isRunning = false;
 				this.action(ctr);
+				this.onEnd?.Invoke();
 			} else {
 				this.coroutine = this.HandlerCoroutine(ctr);
 				handler.StartCoroutine(this.coroutine);
@@ -90,6 +98,8 @@ namespace Utility.AI
 			}
 
 			handler.TryStopCoroutine(ref this.coroutine);
+
+			this.onEnd?.Invoke();
 		}
 
 
@@ -168,6 +178,7 @@ namespace Utility.AI
 			IEnumerator co = (this.coroutineFactory_2 == null) ? this.coroutineFactory_1(ctr) : this.coroutineFactory_2(ctr, this);
 			yield return co;
 
+			this.onEnd?.Invoke();
 			this.isRunning = false;
 		}
 

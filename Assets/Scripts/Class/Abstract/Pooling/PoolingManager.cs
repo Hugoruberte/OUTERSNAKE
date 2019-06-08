@@ -7,7 +7,7 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 
 	private Transform folder;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 
@@ -16,7 +16,7 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 		this.folder = g.transform;
 	}
 
-	void Start()
+	private void Start()
 	{
 		foreach(PoolingData d in this.poolingDatas) {
 			d.CreatePool(this.folder);

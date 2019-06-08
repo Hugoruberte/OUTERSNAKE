@@ -9,7 +9,7 @@ public class PathfindingManager : ScriptableObject
 {
 	private Dictionary<Surface, PlanetPathfinding> pathfinders;
 
-	void Start()
+	private void Start()
 	{
 		// Called in Start because planets need to initialize their surface in Awake
 		this.InitializePathfinders();

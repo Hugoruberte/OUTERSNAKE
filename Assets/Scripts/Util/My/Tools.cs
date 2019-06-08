@@ -1,22 +1,28 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
-using UnityEditor;
-using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
+using UnityEditor;
+using UnityEditorInternal;
+using UnityEditor.SceneManagement;
+
 using System.Linq;
 using System.Collections;
+using static System.Array;
 using System.Collections.Generic;
-using UnityEditorInternal;
+
 using My.Events;
+
+
 
 namespace My.Tools
 {
 	public class _Transform
 	{
-		public Vector3 right { get { return this.rotation * Vector3Extension.RIGHT; }}
-		public Vector3 up { get { return this.rotation * Vector3Extension.UP; }}
-		public Vector3 forward { get { return this.rotation * Vector3Extension.FORWARD; }}
+		public Vector3 right { get { return this.rotation * Shared.vector3Right; }}
+		public Vector3 up { get { return this.rotation * Shared.vector3Up; }}
+		public Vector3 forward { get { return this.rotation * Shared.vector3Forward; }}
 
 		private Vector3 _position;
 		public Vector3 position {
@@ -40,7 +46,7 @@ namespace My.Tools
 		public ActionEvent onRotate;
 
 		public _Transform() {
-			this._position = Vector3Extension.ZERO;
+			this._position = Shared.vector3Zero;
 			this._rotation = Quaternion.identity;
 		}
 
@@ -63,8 +69,6 @@ namespace My.Tools
 			this._rotation = tr.rotation;
 		}
 	}
-
-
 
 	public static class LayerMaskExtension
 	{
@@ -188,8 +192,6 @@ namespace My.Tools
 		}
 	}
 
-
-
 	public static class EditorGUILayoutExtension
 	{
 		public static LayerMask UserMaskField(string label, LayerMask current)
@@ -286,9 +288,6 @@ namespace My.Tools
 		}
 	}
 
-
-
-
 	public static class EditorUtilityExtension
 	{
 		public static void SetDirtyOnGUIChange(Object obj)
@@ -311,8 +310,6 @@ namespace My.Tools
 		}
 	}
 
-
-
 	public static class LayerExtension
 	{
 		public static void SetLayerWithChildren(this GameObject root, int layer)
@@ -330,20 +327,18 @@ namespace My.Tools
 		}
 	}
 
-
-
 	public static class CoroutineExtension
 	{
-		public static void StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, IEnumerator coroutine)
+		public static Coroutine StartAndStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler, IEnumerator coroutine)
 		{
 			if(!mono.gameObject.activeSelf) {
-				return;
+				return null;
 			}
 			if(handler != null) {
 				mono.StopCoroutine(handler);
 			}
 			handler = coroutine;
-			mono.StartCoroutine(handler);
+			return mono.StartCoroutine(handler);
 		}
 
 		public static void TryStopCoroutine(this MonoBehaviour mono, ref IEnumerator handler)
@@ -357,8 +352,6 @@ namespace My.Tools
 			}
 		}
 	}
-
-
 
 	public static class ParticleSystemExtension
 	{
@@ -386,8 +379,6 @@ namespace My.Tools
 			return current;
 		}
 	}
-
-
 
 	public static class TransformExtension
 	{
@@ -449,12 +440,12 @@ namespace My.Tools
 
 		public static Vector3 TransformPointUnscaled(this Transform pT, Vector3 position)
 		{
-			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3Extension.ONE);
+			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Shared.vector3One);
 			return localToWorldMatrix.MultiplyPoint3x4(position);
 		}
 		public static Vector3 InverseTransformPointUnscaled(this Transform pT, Vector3 pos)
 		{
-			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3Extension.ONE).inverse;
+			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Shared.vector3One).inverse;
 			return worldToLocalMatrix.MultiplyPoint3x4(pos);
 		}
 
@@ -550,6 +541,23 @@ namespace My.Tools
 		}
 
 
+
+		public static Quaternion AbsoluteRotation(this Transform pTransform, int degreeAcc = 90) => QuaternionExtension.AbsoluteRotation(pTransform.rotation, degreeAcc);
+
+		public static void SetAbsoluteRotation(this Transform pTransform, int degreeAcc = 90) => pTransform.rotation = AbsoluteRotation(pTransform, degreeAcc);
+		
+		public static Vector3 AbsolutePosition(this Transform pTransform)
+		{
+			Vector3 pos = pTransform.position;
+			pos.Set(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(pos.z));
+			return pos;
+		}
+
+		public static void SetAbsolutePosition(this Transform pTransform) => pTransform.position = AbsolutePosition(pTransform);
+	}
+
+	public static class QuaternionExtension
+	{
 		public static Quaternion AbsoluteRotation(this Quaternion qt, int degreeAcc = 90)
 		{
 			int signx = (int)Mathf.Sign(qt.eulerAngles.x);
@@ -576,62 +584,21 @@ namespace My.Tools
 
 			return Quaternion.Euler(qtx, qty, qtz);
 		}
-		public static Quaternion AbsoluteRotation(this Transform pTransform, int degreeAcc = 90)
-		{
-			Quaternion qt = pTransform.rotation;
-			
-			return (AbsoluteRotation(qt, degreeAcc));
-		}
-		public static void SetAbsoluteRotation(this Transform pTransform, int degreeAcc = 90)
-		{
-			Quaternion qt = pTransform.rotation;
-			Quaternion newQt = AbsoluteRotation(pTransform, degreeAcc);
-			pTransform.rotation = newQt;
-		}
-		public static Quaternion SetAbsoluteRotation(this Quaternion qt, int degreeAcc = 90)
-		{
-			qt = AbsoluteRotation(qt, degreeAcc);
-			return qt;
-		}
 
-
-		public static Vector3 AbsolutePosition(this Transform pTransform)
-		{
-			Vector3 pos = pTransform.position;
-			pos.Set(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(pos.z));
-			return pos;
-		}
-		public static void SetAbsolutePosition(this Transform pTransform)
-		{
-			pTransform.position = AbsolutePosition(pTransform);
-		}
+		public static Quaternion SetAbsoluteRotation(this Quaternion qt, int degreeAcc = 90) => AbsoluteRotation(qt, degreeAcc);
 	}
-
-
 
 	public static class Vector3Extension
 	{
-		public static readonly Vector3 ZERO = Vector3.zero;
-		public static readonly Vector3 ONE = Vector3.one;
-		public static readonly Vector3 RIGHT = Vector3.right;
-		public static readonly Vector3 UP = Vector3.up;
-		public static readonly Vector3 FORWARD = Vector3.forward;
-
-		public static Vector3 SetRoundToInt(this Vector3 vect)
-		{
-			vect.Set(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y), Mathf.RoundToInt(vect.z));
-			return vect;
-		}
-
 		public static bool IsWorldlyOrthogonal(this Vector3 v)
 		{
 			Vector3 n = v.normalized;
 
-			if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.RIGHT)) == 1)
+			if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Right)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.UP)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Up)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Vector3Extension.FORWARD)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Forward)) == 1)
 				return true;
 
 			return false;
@@ -643,10 +610,10 @@ namespace My.Tools
 			Vector3 n, res;
 			float max, value;
 
-			res = Vector3Extension.ZERO;
+			res = Shared.vector3Zero;
 			max = 0f;
 			n = v.normalized;
-			test = new Vector3[3] {Vector3Extension.RIGHT, Vector3Extension.UP, Vector3Extension.FORWARD};
+			test = new Vector3[3] {Shared.vector3Right, Shared.vector3Up, Shared.vector3Forward};
 
 			foreach(Vector3 t in test) {
 				value = Vector3.Dot(n, t);
@@ -661,8 +628,6 @@ namespace My.Tools
 		}
 	}
 
-
-
 	public static class Vector2Extension
 	{
 		public static void SetRoundToInt(this Vector2 vect)
@@ -670,8 +635,6 @@ namespace My.Tools
 			vect.Set(Mathf.RoundToInt(vect.x), Mathf.RoundToInt(vect.y));
 		}
 	}
-
-
 
 	public static class ListExtension
 	{
@@ -687,8 +650,6 @@ namespace My.Tools
 			}
 		}
 	}
-
-
 
 	public static class ArrayExtension
 	{
@@ -711,9 +672,9 @@ namespace My.Tools
 			}
 			return a;
 		}
+
+		public static void Clear(this System.Array array) => System.Array.Clear(array, 0, array.Length);
 	}
-
-
 
 	public static class ColorExtension
 	{
@@ -876,8 +837,6 @@ namespace My.Tools
 		}
 	}
 
-
-
 	public static class RectTransformExtension
 	{
 		public static RectTransform SetAnchoredPositionX(this RectTransform pAnchor, float pValue)
@@ -927,9 +886,6 @@ namespace My.Tools
 		}
 	}
 
-
-
-
 	public static class RendererExtensions
 	{
 		public static bool IsVisibleFrom(this Renderer renderer, Camera camera)
@@ -938,8 +894,6 @@ namespace My.Tools
 			return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
 		}
 	}
-
-
 
 	public static class DebugExtension
 	{
@@ -970,8 +924,8 @@ namespace My.Tools
 			Gizmos.DrawLine(from, to);
 			Vector3 direction = to - from;
 	 
-			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Vector3Extension.FORWARD;
-			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Vector3Extension.FORWARD;
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Shared.vector3Forward;
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Shared.vector3Forward;
 			Gizmos.DrawRay(to, right * arrowHeadLength);
 			Gizmos.DrawRay(to, left * arrowHeadLength);
 		}
@@ -993,6 +947,25 @@ namespace My.Tools
 			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0,180-arrowHeadAngle,0) * new Vector3(0,0,1);
 			Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
 			Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+		}
+	}
+
+	public static class RandomExtension
+	{
+		public static Vector2 onUnitCircle {
+			get {
+				Vector2 res = Random.insideUnitCircle;
+				return res.normalized;
+			}
+		}
+
+		public static Vector3 InsideUnitAxisCircle(Vector3 axis) => Vector3.ProjectOnPlane(Random.onUnitSphere, axis);
+		public static Vector3 OnUnitAxisCircle(Vector3 axis) => RandomExtension.InsideUnitAxisCircle(axis).normalized;
+
+		public static int randomSign {
+			get {
+				return (Random.Range(0, 2) * 2 - 1);
+			}
 		}
 	}
 }

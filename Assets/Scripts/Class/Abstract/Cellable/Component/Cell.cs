@@ -37,7 +37,7 @@ public class Cell
 	}
 	public readonly Grill grill;
 	public Surface surface {
-		get { return this.grill.surface; }
+		get => this.grill.surface;
 	}
 
 	public Cell(Grill g, Vector3 pos, Vector3 n, Vector3 l, Transform t, bool bound)

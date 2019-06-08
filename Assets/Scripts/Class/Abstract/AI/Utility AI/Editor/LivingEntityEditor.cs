@@ -76,6 +76,9 @@ public class LivingEntityEditor : InteractiveEntityEditor
 
 				this.acts = script.behaviour.GetCurrentActions(script);
 				foreach(UtilityAction a in this.acts) {
+					if(a == null) {
+						continue;
+					}
 					EditorGUILayout.LabelField($"{a.method} -> score: {a.score}", EditorStyles.centeredGreyMiniLabel);
 				}
 			} else {

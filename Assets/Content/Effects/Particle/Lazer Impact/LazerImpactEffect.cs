@@ -15,7 +15,7 @@ public class LazerImpactEffect : InstantParticleEffect
 	private bool shouldBeCancelled;
 
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 		

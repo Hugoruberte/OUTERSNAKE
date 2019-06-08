@@ -12,11 +12,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef614a81c5bbecc45a996423c7181ff9, type: 3}
   m_Name: White Rabbit AI
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - scorers:
+    - isCondition: 0
+      not: 0
+      score: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 1
+      method: DistanceToDanger
+      index: 0
+    - isCondition: 1
+      not: 1
+      score: 50
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 50
+      method: RabbitIsScared
+      index: 1
+    index: 2
+    score: 0
+    method: Wander
+    active: 1
+    discarded_active: 0
+    discarded_max: 0
+    _max: 51
+    _isParallelizable: 0
+    _isForceAlone: 0
+    isStoppable: 0
   updateRate: 0.02
   actionCandidates: []
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 
-  displayParameters: 
+  displayScorers: 01
+  displayParameters: 00

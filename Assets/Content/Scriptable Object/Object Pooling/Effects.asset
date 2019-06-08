@@ -15,7 +15,7 @@ MonoBehaviour:
   pools:
   - prefab: {fileID: 4102156173478112985, guid: 913098a1600ef1a49ad2d82a9910b18b,
       type: 3}
-    size: 25
+    size: 50
     entity: {fileID: 2093139867324701610, guid: 913098a1600ef1a49ad2d82a9910b18b,
       type: 3}
     show: 0
@@ -47,5 +47,11 @@ MonoBehaviour:
       type: 3}
     size: 25
     entity: {fileID: 2440856244385068617, guid: 430e3360ed4ea0643ac1b0051f7ec529,
+      type: 3}
+    show: 0
+  - prefab: {fileID: 3637674703945018889, guid: 0c0cf4d97f830a04f88f4b7a93dc5b7c,
+      type: 3}
+    size: 25
+    entity: {fileID: 3637674703945018891, guid: 0c0cf4d97f830a04f88f4b7a93dc5b7c,
       type: 3}
     show: 0

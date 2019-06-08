@@ -8,7 +8,7 @@ public abstract class ParticleEffect : Effect
 	public ParticleSystem main { get; private set; }
 	protected ParticleSystem[] all;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 
@@ -79,18 +79,11 @@ public abstract class ParticleEffect : Effect
 		this.main.Play();
 	}
 
-	public virtual void Launch(Vector3 position, Vector3 direction = default(Vector3))
-	{
-		this.SetOrientation(position, direction);
-
-		this.Launch();
-	}
-
 	public virtual void Stop(ParticleSystemStopBehavior stopBehavior = ParticleSystemStopBehavior.StopEmitting)
 	{
 		this.main.Stop();
 
-		this.poolingManager?.Stow(this);
+		PoolingManager.instance?.Stow(this);
 	}
 
 	public override void Reset()

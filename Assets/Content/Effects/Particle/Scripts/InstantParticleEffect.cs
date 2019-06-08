@@ -41,7 +41,7 @@ public class InstantParticleEffect : ParticleEffect
 		this.isDone = true;
 
 		// stow
-		this.poolingManager.Stow(this);
+		PoolingManager.instance.Stow(this);
 	}
 
 	public void SetDuration(float value)

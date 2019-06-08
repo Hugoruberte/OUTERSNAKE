@@ -17,7 +17,7 @@ public class WindowScript : MonoBehaviour
 	}
 	#endif
 
-	void Awake()
+	private void Awake()
 	{
 		SetPosition(0,0, 896, 504);
 	}

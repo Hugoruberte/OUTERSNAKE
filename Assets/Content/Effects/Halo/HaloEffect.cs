@@ -24,7 +24,7 @@ public class HaloEffect : Effect
 	[SerializeField, Range(HALO_MIN_SIZE, 10f)] private float editorWidth = 0.1f;
 	
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 
@@ -73,7 +73,7 @@ public class HaloEffect : Effect
 		
 		while(step < 1f) {
 			radius = Mathf.Lerp(from, to, step);
-			this.body.localScale = Vector3Extension.ONE * (radius * 2f);
+			this.body.localScale = Shared.vector3One * (radius * 2f);
 			this.UpdateWidth(ref width, radius);
 
 			step += speed * Time.deltaTime;
@@ -90,7 +90,7 @@ public class HaloEffect : Effect
 
 			while(step < 1f) {
 				radius += speed * Time.deltaTime;
-				this.body.localScale = Vector3Extension.ONE * (radius * 2f);
+				this.body.localScale = Shared.vector3One * (radius * 2f);
 
 				width = Mathf.Lerp(from, to, step);
 				this.UpdateWidth(ref width, radius);
@@ -100,7 +100,7 @@ public class HaloEffect : Effect
 			}
 		}
 
-		this.poolingManager.Stow(this);
+		PoolingManager.instance.Stow(this);
 	}
 
 	private IEnumerator FadeCoroutine(float fadeSpeed, bool fadeOut)
@@ -138,7 +138,7 @@ public class HaloEffect : Effect
 	private void UpdateWidth(ref float w, float r)
 	{
 		w = Mathf.Max(HALO_MIN_SIZE, Mathf.Min(r, w));
-		this.mask.localScale = Vector3Extension.ONE * ((r - w) * 2f);
+		this.mask.localScale = Shared.vector3One * ((r - w) * 2f);
 	}
 
 	private void OnValidate()
@@ -150,7 +150,7 @@ public class HaloEffect : Effect
 			this.body = transform.Find("Body");
 		}
 
-		this.body.localScale = Vector3Extension.ONE * (this.editorRadius * 2f);
+		this.body.localScale = Shared.vector3One * (this.editorRadius * 2f);
 		this.UpdateWidth(ref this.editorWidth, this.editorRadius);
 	}
 }

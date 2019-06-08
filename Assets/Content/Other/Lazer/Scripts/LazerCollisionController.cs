@@ -9,7 +9,7 @@ public class LazerCollisionController : MonoBehaviour
 	private Collider[] cache = new Collider[1];
 	private Lazer lazer;
 
-	void Awake()
+	private void Awake()
 	{
 		this.myTransform = transform;
 		this.lazer = GetComponentInParent<Lazer>();

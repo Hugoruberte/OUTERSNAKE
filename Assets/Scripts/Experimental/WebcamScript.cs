@@ -2,7 +2,7 @@
 
 public class DisplayWebcam : MonoBehaviour
 {
-	void Start()
+	private void Start()
 	{
 		Debug.Log("DisplayWebcam Initialize");
 		// Transform values of the plane to get you started:

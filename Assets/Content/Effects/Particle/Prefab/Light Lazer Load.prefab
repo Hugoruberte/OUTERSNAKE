@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3017055663255704845}
   - component: {fileID: 3017055663255704846}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Light Lazer Load
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 3017055663499524274}
   - component: {fileID: 3017055663499524272}
   - component: {fileID: 3017055663499524273}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4721,7 +4721,7 @@ ParticleSystem:
 --- !u!199 &3017055663499524273
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4791,7 +4791,7 @@ GameObject:
   - component: {fileID: 3017055663945805983}
   - component: {fileID: 3017055663945805981}
   - component: {fileID: 3017055663945805982}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9456,7 +9456,7 @@ ParticleSystem:
 --- !u!199 &3017055663945805982
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9526,7 +9526,7 @@ GameObject:
   - component: {fileID: 3017055664055015963}
   - component: {fileID: 3017055664055015961}
   - component: {fileID: 3017055664055015962}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Rays
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14192,7 +14192,7 @@ ParticleSystem:
 --- !u!199 &3017055664055015962
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -14262,7 +14262,7 @@ GameObject:
   - component: {fileID: 3017055664807002258}
   - component: {fileID: 3017055664807002256}
   - component: {fileID: 3017055664807002257}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18893,7 +18893,7 @@ ParticleSystem:
 --- !u!199 &3017055664807002257
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -18963,7 +18963,7 @@ GameObject:
   - component: {fileID: 1273021709661112777}
   - component: {fileID: 4213198464078629652}
   - component: {fileID: 9203875832835676721}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23591,7 +23591,7 @@ ParticleSystem:
 --- !u!199 &9203875832835676721
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}

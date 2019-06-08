@@ -7,7 +7,6 @@ using My.Tools;
 public abstract class MovementController
 {
 	public readonly LivingEntity entity;
-
 	public Vector3 position { get { return this.entity.myTransform.position; } }
 	public Quaternion rotation { get { return this.entity.myTransform.rotation; } }
 
@@ -15,7 +14,6 @@ public abstract class MovementController
 	{
 		this.entity = e;
 	}
-
 
 
 

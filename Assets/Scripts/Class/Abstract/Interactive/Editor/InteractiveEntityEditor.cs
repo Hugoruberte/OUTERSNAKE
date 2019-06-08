@@ -32,12 +32,12 @@ public class InteractiveEntityEditor : Editor
 		rect.height += 20;
 		EditorGUI.LabelField(rect, "Interactive Information", EditorStyles.boldLabel);
 
-		/*Rect n = new Rect();
-		n.x = rect.x;
-		n.y += 500;
-		n.width = 200;
-		n.height = 16;
-		val = EditorGUI.FloatField(n, "Val", val);*/
+		// Rect n = new Rect();
+		// n.x = rect.x;
+		// n.y += 500;
+		// n.width = 200;
+		// n.height = 16;
+		// val = EditorGUI.FloatField(n, "Val", val);
 
 		if(showInteractiveInfo) {
 			EditorGUI.indentLevel++;
@@ -47,17 +47,17 @@ public class InteractiveEntityEditor : Editor
 
 			if(EditorApplication.isPlaying) {
 				// physical state
-				rect.y += 55;
+				rect.y += 19;
 				EditorGUILayout.LabelField("Physical state");
 				EditorGUI.LabelField(rect, script.physical.ToString(), EditorStyles.boldLabel);
 
 				// chemical element
-				rect.y += -18;
+				rect.y += 18;
 				EditorGUILayout.LabelField("Chemical element");
 				EditorGUI.LabelField(rect, script.chemical.ToString(), EditorStyles.boldLabel);
 
 				// chemical material
-				rect.y += -18;
+				rect.y += 18;
 				EditorGUILayout.LabelField("Chemical material");
 				EditorGUI.LabelField(rect, script.material.ToString(), EditorStyles.boldLabel);
 			}

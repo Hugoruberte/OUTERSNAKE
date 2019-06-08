@@ -16,10 +16,8 @@ namespace Interactive.Engine
 		private static ChemistryEngine chemistry = new ChemistryEngine();
 		private static PhysicEngine physic = new PhysicEngine();
 
-		protected override void OnEnable()
+		public void OnAwake()
 		{
-			base.OnEnable();
-			
 			extensions.Add(new FoodChainEngine());
 		}
 

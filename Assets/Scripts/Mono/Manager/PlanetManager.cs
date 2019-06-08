@@ -7,7 +7,7 @@ public class PlanetManager : MonoSingleton<PlanetManager>
 {
 	[HideInInspector] public Planet[] planets;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 		

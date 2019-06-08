@@ -10,10 +10,8 @@ public abstract class Effect : PoolableEntity
 	private Vector3 followOffset;
 
 
-	protected override void Awake()
+	protected virtual private void Awake()
 	{
-		base.Awake();
-
 		this.myTransform = transform;
 	}
 
@@ -21,9 +19,15 @@ public abstract class Effect : PoolableEntity
 
 	public void SetPosition(Vector3 position) => this.transform.position = position;
 
-	public void SetDirection(Vector3 direction, Vector3 up = default(Vector3)) => this.transform.rotation = Quaternion.LookRotation(direction, up);
+	public void SetDirection(Vector3 direction) => this.SetDirection(direction, Shared.vector3Up);
+	public void SetDirection(Vector3 direction, Vector3 up)
+	{
+		// only does that
+		this.transform.rotation = Quaternion.LookRotation(direction, up);
+	}
 
-	public void SetOrientation(Vector3 position, Vector3 direction, Vector3 up = default(Vector3))
+	public void SetOrientation(Vector3 position, Vector3 direction) => this.SetOrientation(position, direction, Shared.vector3Up);
+	public void SetOrientation(Vector3 position, Vector3 direction, Vector3 up)
 	{
 		this.SetPosition(position);
 		this.SetDirection(direction, up);

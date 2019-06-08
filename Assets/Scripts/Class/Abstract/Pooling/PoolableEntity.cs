@@ -3,25 +3,11 @@ using UnityEngine.Events;
 
 public abstract class PoolableEntity : MonoBehaviour
 {
-	protected GameObject myGameObject;
-	protected PoolingManager poolingManager { get; private set; }
-
 	[HideInInspector] public bool isActive = false;
-
-
-	protected virtual void Awake()
-	{
-		this.myGameObject = gameObject;
-	}
-
-	protected virtual void Start()
-	{
-		this.poolingManager = PoolingManager.instance;
-	}
 
 	public virtual void Launch()
 	{
-		this.myGameObject.SetActive(true);
+		gameObject.SetActive(true);
 
 		this.StopAllCoroutines();
 
@@ -34,6 +20,6 @@ public abstract class PoolableEntity : MonoBehaviour
 
 		this.StopAllCoroutines();
 
-		this.myGameObject.SetActive(false);
+		gameObject.SetActive(false);
 	}
 }

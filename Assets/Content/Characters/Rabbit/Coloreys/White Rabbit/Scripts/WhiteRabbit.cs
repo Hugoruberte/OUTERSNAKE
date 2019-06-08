@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WhiteRabbit : RabbitEntity
 {
-	protected override void Start()
+	protected override private void Start()
 	{
 		base.Start();
 

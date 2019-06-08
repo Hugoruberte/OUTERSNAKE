@@ -11,7 +11,7 @@ public class LazerRay : Lazer
 
 	private bool[] widthPoints;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 
@@ -72,7 +72,7 @@ public class LazerRay : Lazer
 			return;
 		}
 
-		this.headRigidbody.velocity = Vector3Extension.ZERO;
+		this.headRigidbody.velocity = Shared.vector3Zero;
 			
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}*/
@@ -97,7 +97,7 @@ public class LazerRay : Lazer
 		// 	return;
 		// }
 
-		// this.headRigidbody.velocity = Vector3Extension.ZERO;
+		// this.headRigidbody.velocity = Shared.vector3Zero;
 			
 		// this.Death(false);
 	}
@@ -150,7 +150,7 @@ public class LazerRay : Lazer
 
 	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)
 	{
-		this.headRigidbody.velocity = Vector3Extension.ZERO;
+		this.headRigidbody.velocity = Shared.vector3Zero;
 
 		// width point
 		this.InitializeWidthPoint();
@@ -158,7 +158,7 @@ public class LazerRay : Lazer
 		yield return this.WidthCoroutine();
 
 		// stow
-		this.poolingManager.Stow(this);
+		PoolingManager.instance.Stow(this);
 	}
 
 	public override void Reset()

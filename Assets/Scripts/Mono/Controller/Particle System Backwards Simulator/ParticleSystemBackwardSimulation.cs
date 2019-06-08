@@ -14,7 +14,7 @@ public class ParticleSystemBackwardSimulation : MonoBehaviour
 	[HideInInspector] public float simulationSpeedScale = 1.0f;
 
 
-	void Awake()
+	private void Awake()
 	{
 		this.particle = GetComponentInChildren<ParticleSystem>();
 

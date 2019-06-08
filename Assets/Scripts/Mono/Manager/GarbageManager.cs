@@ -4,7 +4,7 @@ public class GarbageManager : MonoSingleton<GarbageManager>
 {
 	private Transform garbage;
 
-	protected override void Awake()
+	protected override private void Awake()
 	{
 		base.Awake();
 

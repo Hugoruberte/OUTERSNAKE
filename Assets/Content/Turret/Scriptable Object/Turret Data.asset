@@ -20,15 +20,19 @@ MonoBehaviour:
     type: 3}
   haloPrefab: {fileID: 6430371367858408622, guid: 4984c22f9996ede4c8759213e400020f,
     type: 3}
-  rangeOfView: 50
+  rangeOfView: 11
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 512
   aimOmega: 500
+  aimDuration: 1
+  aimTargetSmooth: 7.5
+  targetPrefab: {fileID: 3637674703945018889, guid: 0c0cf4d97f830a04f88f4b7a93dc5b7c,
+    type: 3}
   wanderOmega: 50
   wanderRotationDurationInterval:
   - 1
   - 5
   wanderMaxPauseQuarter: 3
-  loadDuration: 0.45
-  shootDelay: 0.75
+  loadDuration: 0.5
+  shootDelay: 0.25

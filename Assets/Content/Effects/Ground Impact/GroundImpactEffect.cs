@@ -21,10 +21,8 @@ public class GroundImpactEffect : PoolableEntity
 	private Material mat;
 
 
-	protected override void Awake()
+	private void Awake()
 	{
-		base.Awake();
-
 		this.particle = this.GetComponentInChildrenWithName<ParticleSystem>("Effect");
 		this.cam = GetComponentInChildren<Camera>();
 		this.mat = new Material(this.impactProjector.material);
@@ -64,14 +62,14 @@ public class GroundImpactEffect : PoolableEntity
 		yield return delay;
 
 		// stow
-		this.poolingManager.Stow(this);
+		PoolingManager.instance.Stow(this);
 	}
 
 	public override void Reset()
 	{
 		FarAwayManager.instance?.ReleaseFarAwayPosition(gameObject);
 
-		this.cameraTransform.localPosition = Vector3Extension.ZERO;
+		this.cameraTransform.localPosition = Shared.vector3Zero;
 		this.renderTexture?.Release();
 
 		base.Reset();
