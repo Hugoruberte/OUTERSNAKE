@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
+using My.Events;
 
 [System.Serializable]
 public abstract class MovementController
@@ -9,6 +10,10 @@ public abstract class MovementController
 	public readonly LivingEntity entity;
 	public Vector3 position { get { return this.entity.myTransform.position; } }
 	public Quaternion rotation { get { return this.entity.myTransform.rotation; } }
+
+	public delegate void UtilityActionsEvent(string[] chosens);
+	public UtilityActionsEvent onChooseAction = null;
+
 
 	public MovementController(LivingEntity e)
 	{
@@ -33,4 +38,6 @@ public abstract class MovementController
 		// empty
 		yield break;
 	}
+
+	public void OnChooseAction(string[] chosens) => this.onChooseAction?.Invoke(chosens);
 }

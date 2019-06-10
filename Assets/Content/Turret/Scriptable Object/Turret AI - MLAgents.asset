@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c774e24fdc849042b38952b2ce2682e, type: 3}
+  m_Name: Turret AI - MLAgents
+  m_EditorClassIdentifier: 
+  updateRate: 0.02
+  actions:
+  - scorers:
+    - isCondition: 1
+      not: 1
+      score: -1
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 100
+      method: IsThereTargetAround
+      index: 0
+    index: 0
+    score: -1
+    method: Wander
+    active: 1
+    discarded_active: 0
+    discarded_max: 0
+    _max: 100
+    _isParallelizable: 0
+    _isForceAlone: 1
+    isStoppable: 1
+  - scorers:
+    - isCondition: 1
+      not: 1
+      score: -1
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 75
+      method: IsThereTargetAround
+      index: 0
+    index: 1
+    score: -1
+    method: Aim
+    active: 1
+    discarded_active: 0
+    discarded_max: 0
+    _max: 75
+    _isParallelizable: 0
+    _isForceAlone: 0
+    isStoppable: 1
+  - scorers:
+    - isCondition: 1
+      not: 1
+      score: 2
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 50
+      method: Aim is running
+      index: 4
+    - isCondition: 1
+      not: 1
+      score: 0
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: -100
+      method: CouldShoot
+      index: 2
+    - isCondition: 1
+      not: 1
+      score: -3
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _max: 2147483647
+      method: IsTargetInSight
+      index: 1
+    index: 2
+    score: -3
+    method: Shoot
+    active: 1
+    discarded_active: 0
+    discarded_max: 0
+    _max: 100
+    _isParallelizable: 1
+    _isForceAlone: 0
+    isStoppable: 0
+  actionCandidates: []
+  scorerCandidates: []
+  scorerConditionCandidates: []
+  scorerCurveCandidates: []
+  displayScorers: 010101
+  displayParameters: 000000

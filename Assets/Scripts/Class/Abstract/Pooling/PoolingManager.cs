@@ -29,6 +29,10 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 		PoolingData.Pool pool;
 		int index;
 
+		if(!this.enabled) {
+			return null;
+		}
+
 		index = 0;
 		do {
 			pool = this.poolingDatas[index ++].pools.Find(x => x.entity is T && x.prefab.name == name);
@@ -40,8 +44,11 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 			return null;
 		}
 
-		entity = null;
+		if(pool.entities == null) {
+			return null;
+		}
 
+		entity = null;
 		foreach(PoolableEntity e in pool.entities) {
 			if(!e.isActive) {
 				entity = e;

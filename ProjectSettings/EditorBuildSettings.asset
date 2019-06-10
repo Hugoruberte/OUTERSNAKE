@@ -6,21 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scene/Intro.unity
+    path: Assets/Scenes/Intro.unity
     guid: 4f5436a58da9c934080bc71f98e943d8
   - enabled: 1
-    path: Assets/Scene/Arcade.unity
+    path: Assets/Scenes/Arcade.unity
     guid: 5092516c8c1ed9f4ca9018107416575b
   - enabled: 0
-    path: Assets/Scene/RebootSystem.unity
+    path: Assets/Scenes/RebootSystem.unity
     guid: f29d5ce37b928094694697d114a5dee1
   - enabled: 0
-    path: Assets/Scene/TrueHell.unity
+    path: Assets/Scenes/TrueHell.unity
     guid: 95cfbbcd31620c14690d6e7bd71af140
   - enabled: 0
-    path: Assets/Scene/Demo.unity
+    path: Assets/Scenes/Demo.unity
     guid: 3a16e16a898ec104493e00ddf78a2502
   - enabled: 0
-    path: Assets/Scene/Garage.unity
+    path: Assets/Scenes/Garage.unity
     guid: 044fb8eb247e61348905439e71d20d44
   m_configObjects: {}

@@ -139,7 +139,10 @@ public class TurretController : MovementController
 	{
 		// Get effect
 		this.targetEffect = PoolingManager.instance.Get<TargetEffect>(this.turret.turretData.targetPrefab);
-		this.turret.StartAndStopCoroutine(ref this.onAimCoroutine, this.OnStartAimAtCoroutine(this.targetEffect));
+
+		if(this.targetEffect) {
+			this.turret.StartAndStopCoroutine(ref this.onAimCoroutine, this.OnStartAimAtCoroutine(this.targetEffect));
+		}
 	}
 
 	public void OnEndAimAt()
@@ -153,6 +156,10 @@ public class TurretController : MovementController
 		Vector3 ps, up, dest, dir;
 		float force = 0f;
 		Rigidbody rb;
+
+		if(!this.target) {
+			yield break;
+		}
 
 		// Initialize
 		force = 5f;

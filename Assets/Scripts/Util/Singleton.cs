@@ -59,8 +59,6 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 	{
 		if(_instance == null) {
 			instance = this as T;
-		} else {
-			Destroy(gameObject);
 		}
 	}
 

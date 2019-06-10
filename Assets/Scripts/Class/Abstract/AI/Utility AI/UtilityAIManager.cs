@@ -37,4 +37,22 @@ public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 			b.UpdateUtilityActions();
 		}
 	}
+
+
+
+	public T Get<T>() where T : class
+	{
+		UtilityAIBehaviour b;
+
+		for(int i = 0; i < this.behaviours.Length; i++)
+		{
+			b = this.behaviours[i];
+
+			if(b is T) {
+				return b as T;
+			}
+		}
+
+		return null;
+	}
 }

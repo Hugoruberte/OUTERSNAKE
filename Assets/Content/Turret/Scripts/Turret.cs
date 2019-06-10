@@ -14,14 +14,9 @@ public class Turret : TrapEntity
 		base.Awake();
 
 		this.muzzle = transform.DeepFind("Muzzle");
-	}
-
-	protected override void Start()
-	{
-		base.Start();
 
 		// Initialize AI behaviour (this will launch the AI)
-		this.behaviour = TurretAI.instance.Launch(this);
+		this.behaviour = UtilityAIManager.instance.Get<TurretAI>().Launch(this);
 	}
 
 	public void Shoot()
@@ -33,7 +28,7 @@ public class Turret : TrapEntity
 
 	private void OnHit(LazerHit other)
 	{
-		Debug.Log("TO DO");
+		// Debug.Log("TO DO");
 	}
 
 

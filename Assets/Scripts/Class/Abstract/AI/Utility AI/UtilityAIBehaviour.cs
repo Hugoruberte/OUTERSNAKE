@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility.AI;
@@ -65,6 +66,9 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 				// start selected action
 				caa.StartAction(selected);
 			}
+
+			// EXPERIMENTAL
+			caa.ctr.OnChooseAction(this.GetCurrentActionsName(caa));
 		}
 	}
 
@@ -109,6 +113,8 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		caa.StopAllActions();
 	}
 
+	public MovementController GetController(LivingEntity ent) => this.caas.Find(x => x.ctr.entity == ent)?.ctr;
+
 	public void AddStartListener(string methodName, ActionEvent callback)
 	{
 		UtilityAction act = this.actions.Find(x => x.method.Equals(methodName));
@@ -130,6 +136,22 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 
 		act.onEnd += callback;
+	}
+
+	public bool IsActionRunning(MovementController ctr, string name)
+	{
+		UtilityAction[] acts = this.GetCurrentActions(ctr.entity);
+		foreach(UtilityAction a in acts) {
+			if(a == null) {
+				continue;
+			}
+			
+			if(a.method.Equals(name)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 
@@ -201,26 +223,21 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 
 		public void StopAllStoppableAction() {
-			this.CleanActions();
 			if(this.main != null && this.main.isStoppable) {
 				this.main.Stop(this.ctr.entity);
 			}
-			int stopped = 0;
 			foreach(UtilityAction a in this.parallelizables) {
 				if(a.isStoppable) {
-					stopped ++;
 					a.Stop(this.ctr.entity);
 				}
 			}
-			if(stopped == this.parallelizables.Count) {
-				this.parallelizables.Clear();
-			}
+			this.CleanActions();
 		}
 
 		public bool IsRunning(UtilityAction act) {
 			this.CleanActions();
 
-			if(this.main.method.Equals(act.method)) {
+			if(this.main != null && this.main.method.Equals(act.method)) {
 				return true;
 			}
 
@@ -233,7 +250,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			return false;
 		}
 
-		private void CleanActions() {
+		public void CleanActions() {
 			if(this.main != null && !this.main.isRunning) {
 				this.main = null;
 			}
@@ -289,17 +306,33 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		_all.Clear();
 		return result;
 	}
+	private static string UtilityActionToString(UtilityAction act) {
+		if(act == null) {
+			return string.Empty;
+		} else {
+			return act.method;
+		}
+	}
+	private string[] GetCurrentActionsName(CAA caa) {
+		caa.CleanActions();
+		_all.AddRange(caa.parallelizables);
+		_all.Add(caa.main);
+		string[] result = _all.ConvertAll(new Converter<UtilityAction, string>(UtilityActionToString)).ToArray();
+		_all.Clear();
+		return result;
+	}
 	public void UpdateAllMaxCache() {
 		foreach(UtilityAction a in this.actions) {
 			a.UpdateCacheMax();
 		}
 	}
+
 	// inspector function //
 }
 
 public abstract class UtilityAIBehaviour<T> : UtilityAIBehaviour where T : class
 {
-	public static T instance;
+	public static T instance = null;
 
 	public override void OnAwake()
 	{
