@@ -32,6 +32,8 @@ public class TurretAgent : Agent
 	{
 		this.snake.position = new Vector3(Random.Range(-14f, 9f), this.snake.position.y, Random.Range(-45f, -22f));
 		this.transform.position = new Vector3(Random.Range(-14f, 9f), this.transform.position.y, Random.Range(-45f, -22f));
+
+		this.RequestDecision();
 	}
 
 	public override void CollectObservations()
@@ -90,6 +92,8 @@ public class TurretAgent : Agent
 		{
 			if(IndexOf(chosens, "Wander") > -1) {
 				this.AddReward(1.0f);
+			} else {
+				this.Done();
 			}
 		}
 		
@@ -98,6 +102,8 @@ public class TurretAgent : Agent
 		{
 			if(IndexOf(chosens, "Aim") > -1) {
 				this.AddReward(1.0f);
+			} else {
+				this.Done();
 			}
 		}
 
@@ -106,9 +112,9 @@ public class TurretAgent : Agent
 		{
 			if(IndexOf(chosens, "Shoot") > -1) {
 				this.AddReward(1.0f);
+			} else {
+				this.Done();
 			}
 		}
-
-		this.Done();
 	}
 }

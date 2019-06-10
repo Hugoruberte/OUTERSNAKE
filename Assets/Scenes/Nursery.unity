@@ -191,9 +191,9 @@ MonoBehaviour:
   agentParameters:
     agentCameras: []
     agentRenderTextures: []
-    maxStep: 10000
-    resetOnDone: 0
-    onDemandDecision: 0
+    maxStep: 100000
+    resetOnDone: 1
+    onDemandDecision: 1
     numberOfActionsBetweenDecisions: 1
   snake: {fileID: 7664170201136481253}
 --- !u!1 &9684326
@@ -1743,7 +1743,8 @@ MonoBehaviour:
   broadcastHub:
     broadcastingBrains:
     - {fileID: 11400000, guid: 5f08db08c39c6f0419303e2ce379fcfc, type: 2}
-    _brainsToControl: []
+    _brainsToControl:
+    - {fileID: 11400000, guid: 5f08db08c39c6f0419303e2ce379fcfc, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 10
