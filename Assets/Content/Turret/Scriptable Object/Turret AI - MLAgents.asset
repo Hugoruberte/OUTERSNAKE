@@ -24,7 +24,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 100
+      _max: -1
       method: IsThereTargetAround
       index: 0
     index: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
     active: 1
     discarded_active: 0
     discarded_max: 0
-    _max: 100
+    _max: 0
     _isParallelizable: 0
     _isForceAlone: 1
     isStoppable: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 75
+      _max: -1
       method: IsThereTargetAround
       index: 0
     index: 1
@@ -56,7 +56,7 @@ MonoBehaviour:
     active: 1
     discarded_active: 0
     discarded_max: 0
-    _max: 75
+    _max: 0
     _isParallelizable: 0
     _isForceAlone: 0
     isStoppable: 1
@@ -70,7 +70,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 50
+      _max: 2
       method: Aim is running
       index: 4
     - isCondition: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: -100
+      _max: 0
       method: CouldShoot
       index: 2
     - isCondition: 1
@@ -94,7 +94,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 2147483647
+      _max: -3
       method: IsTargetInSight
       index: 1
     index: 2
@@ -103,7 +103,7 @@ MonoBehaviour:
     active: 1
     discarded_active: 0
     discarded_max: 0
-    _max: 100
+    _max: 2
     _isParallelizable: 1
     _isForceAlone: 0
     isStoppable: 0
@@ -111,5 +111,5 @@ MonoBehaviour:
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 010101
-  displayParameters: 000000
+  displayScorers: 000000
+  displayParameters: 010101

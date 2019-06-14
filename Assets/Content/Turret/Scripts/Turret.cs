@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
+using My.Events;
 using Lazers;
 
 public class Turret : TrapEntity
 {
 	public Transform muzzle { get; private set; }
 	public TurretData turretData = null;
+	public ActionEvent onHit = null;
 
 	protected override void Awake()
 	{
@@ -29,6 +31,7 @@ public class Turret : TrapEntity
 	private void OnHit(LazerHit other)
 	{
 		// Debug.Log("TO DO");
+		this.onHit?.Invoke();
 	}
 
 

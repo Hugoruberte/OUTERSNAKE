@@ -40,7 +40,7 @@ public class PoolingManager : MonoSingleton<PoolingManager>
 		while(!pool.prefab && index < this.poolingDatas.Length);
 
 		if(!pool.prefab) {
-			Debug.LogError($"ERROR : No matching pool found with name '{name}' and type '{typeof(T)}' in pooling data !");
+			// Debug.LogError($"ERROR : No matching pool found with name '{name}' and type '{typeof(T)}' in pooling data !");
 			return null;
 		}
 

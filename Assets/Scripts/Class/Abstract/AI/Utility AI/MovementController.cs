@@ -11,8 +11,7 @@ public abstract class MovementController
 	public Vector3 position { get { return this.entity.myTransform.position; } }
 	public Quaternion rotation { get { return this.entity.myTransform.rotation; } }
 
-	public delegate void UtilityActionsEvent(string[] chosens);
-	public UtilityActionsEvent onChooseAction = null;
+	public StringEvent onStartNewAction = null;
 
 
 	public MovementController(LivingEntity e)
@@ -39,5 +38,5 @@ public abstract class MovementController
 		yield break;
 	}
 
-	public void OnChooseAction(string[] chosens) => this.onChooseAction?.Invoke(chosens);
+	public void OnStartNewAction(string chosen) => this.onStartNewAction?.Invoke(chosen);
 }

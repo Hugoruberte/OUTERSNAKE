@@ -88,6 +88,8 @@ namespace Utility.AI
 				this.coroutine = this.HandlerCoroutine(ctr);
 				handler.StartCoroutine(this.coroutine);
 			}
+
+			ctr.OnStartNewAction(this.method);
 		}
 
 		public void Stop(MonoBehaviour handler)

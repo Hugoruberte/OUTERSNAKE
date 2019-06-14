@@ -15,60 +15,49 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 	[HideInInspector] public List<UtilityAction> actions = new List<UtilityAction>();
 	
 
-	public void UpdateUtilityActions()
+	public void UpdateUtilityActions(MovementController ctr, UtilityAction selected)
 	{
 		CAA caa;
-		UtilityAction selected;
 
-		// foreach controller
-		for(int i = 0; i < this.caas.Count; i++) {
+		// caa links a controller to its currently running actions
+		// -> its 'ctr' field is the controller (i.e. a bunny)
+		// -> its 'main' field contains a running action which cannot be parallelizable
+		// -> its 'parallelizables' field contains all possible running parallelizables actions
+		caa = this.caas.Find(x => x.ctr == ctr);
+		
+		// if there is already an action running (i.e. it is a coroutine)
+		if(caa.main != null && caa.main.isRunning)
+		{
+			// if best action is not one of the current actions
+			if(!caa.IsRunning(selected)) {
 
-			// caa links a controller to its currently running actions
-			// -> its 'ctr' field is the controller (i.e. a bunny)
-			// -> its 'main' field contains a running action which cannot be parallelizable
-			// -> its 'parallelizables' field contains all possible running parallelizables actions
-			caa = this.caas[i];
-
-			// select best action by score
-			selected = UtilityAI.Select(caa.ctr, this.actions);
-			
-			// if there is already an action running (i.e. it is a coroutine)
-			if(caa.main != null && caa.main.isRunning)
-			{
-				// if best action is not one of the current actions
-				if(!caa.IsRunning(selected)) {
-
-					// if selected is parallelizable && current allows it
-					if(selected.isParallelizable && !caa.main.isForceAlone) {
-						// start selected action
-						caa.StartAction(selected);
-					}
-
-					// if current is stoppable
-					else if(caa.main.isStoppable) {
-						// stop current action
-						caa.StopMainAction();
-
-						// start selected action
-						caa.StartAction(selected);
-					}
+				// if selected is parallelizable && current allows it
+				if(selected.isParallelizable && !caa.main.isForceAlone) {
+					// start selected action
+					caa.StartAction(selected);
 				}
 
-				// here either :
-				// - current is unstoppable or
-				// - current does not allow parallelization or
-				// - selected is already running or
-				// - selected has been launch.
-			}
-			// if current is not running (i.e. there is no 'current' or it is not a coroutine)
-			else
-			{
-				// start selected action
-				caa.StartAction(selected);
+				// if current is stoppable
+				else if(caa.main.isStoppable) {
+					// stop current action
+					caa.StopMainAction();
+
+					// start selected action
+					caa.StartAction(selected);
+				}
 			}
 
-			// EXPERIMENTAL
-			caa.ctr.OnChooseAction(this.GetCurrentActionsName(caa));
+			// here either :
+			// - current is unstoppable or
+			// - current does not allow parallelization or
+			// - selected is already running or
+			// - selected has been launch.
+		}
+		// if current is not running (i.e. there is no 'current' or it is not a coroutine)
+		else
+		{
+			// start selected action
+			caa.StartAction(selected);
 		}
 	}
 

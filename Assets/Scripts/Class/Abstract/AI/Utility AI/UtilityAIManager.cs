@@ -23,20 +23,20 @@ public class UtilityAIManager : MonoSingleton<UtilityAIManager>
 		}
 	}
 
-	private void Update()
-	{
-		foreach(UtilityAIBehaviour b in this.behaviours) {
-			b.OnUpdate();
+	// private void Update()
+	// {
+	// 	foreach(UtilityAIBehaviour b in this.behaviours) {
+	// 		b.OnUpdate();
 
-			if(Time.time - b.lastUpdate < b.updateRate) {
-				continue;
-			}
+	// 		if(Time.time - b.lastUpdate < b.updateRate) {
+	// 			continue;
+	// 		}
 
-			b.lastUpdate = Time.time;
+	// 		b.lastUpdate = Time.time;
 
-			b.UpdateUtilityActions();
-		}
-	}
+	// 		b.UpdateUtilityActions();
+	// 	}
+	// }
 
 
 

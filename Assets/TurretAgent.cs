@@ -11,7 +11,8 @@ public class TurretAgent : Agent
 {
 	private Turret turret;
 	private TurretAI behaviour;
-	private MovementController ctr;
+	private TurretController ctr;
+	private int previous = 0;
 
 	[SerializeField] private Rigidbody snake = null;
 
@@ -19,102 +20,82 @@ public class TurretAgent : Agent
 	private void Awake()
 	{
 		this.turret = this.GetComponent<Turret>();
-		this.behaviour = this.turret.behaviour as TurretAI;
+		
 	}
 
 	private void Start()
 	{
-		this.ctr = this.behaviour.GetController(this.turret);
-		this.ctr.onChooseAction += this.OnChooseUtilityAction;
+		this.behaviour = this.turret.behaviour as TurretAI;
+		
+		// Debug.Log(this.behaviour, transform);
+		// Debug.Log(this.turret, transform);
+		this.ctr = this.behaviour.GetController(this.turret) as TurretController;
+
+		this.ctr.onStartNewAction += this.RewardOnNewAction;
+		this.turret.onHit += this.RewardOnHit;
 	}
 
 	public override void AgentReset()
 	{
-		this.snake.position = new Vector3(Random.Range(-14f, 9f), this.snake.position.y, Random.Range(-45f, -22f));
-		this.transform.position = new Vector3(Random.Range(-14f, 9f), this.transform.position.y, Random.Range(-45f, -22f));
+		this.snake.position = this.transform.parent.position + new Vector3(Random.Range(-11f, 11f), this.snake.transform.localPosition.y, Random.Range(-11f, 11f));
+		this.transform.localPosition = new Vector3(Random.Range(-11f, 11f), this.transform.localPosition.y, Random.Range(-11f, 11f));
 
-		this.RequestDecision();
+		if(this.ctr != null) {
+			this.ctr.target = null;
+			this.ctr.lastShootTime = 0f;
+			this.ctr.aimStartTime = 0f;
+		}
 	}
 
 	public override void CollectObservations()
 	{
-		bool isTargetAround, isTargetSight, couldShoot, aimIsRunning;
+		bool isTargetAround, isTargetSight, couldShoot;
 
 		isTargetAround = this.behaviour.IsThereTargetAround(this.ctr);
 		isTargetSight = this.behaviour.IsTargetInSight(this.ctr);
 		couldShoot = this.behaviour.CouldShoot(this.ctr);
-		aimIsRunning = this.behaviour.IsActionRunning(this.ctr, "Aim");
 
 		this.AddVectorObs(isTargetAround);
 		this.AddVectorObs(isTargetSight);
 		this.AddVectorObs(couldShoot);
-		this.AddVectorObs(aimIsRunning);
 	}
 
 	public override void AgentAction(float[] vectorAction, string textAction)
 	{
-		UtilityAction action;
-		UtilityScorer scorer;
-		int index;
+		int current = (int)vectorAction[0];
 
-		index = 0;
-		for(int i = 0; i < this.behaviour.actions.Count; i++)
+		// CHANGE OF STATE -> Turret should switch action the less possible
+		if(current != this.previous) {
+			this.AddReward(-0.001f);
+		}
+		this.previous = current;
+
+		// Choose action and launch it with old UtilityAI
+		UtilityAction selected = this.behaviour.actions[current];
+		this.behaviour.UpdateUtilityActions(this.ctr, selected);
+
+
+		// AIM -> Turret should aim the less possible
+		if(this.behaviour.IsActionRunning(this.ctr, "Aim") && this.ctr.target == null)
 		{
-			action = this.behaviour.actions[i];
-
-			for(int j = 0; j < action.scorers.Count; j++)
-			{
-				scorer = action.scorers[j];
-
-				if(!scorer.isCondition) {
-					continue;
-				}
-
-				scorer.score = Mathf.RoundToInt(vectorAction[index++] * 10);
-				scorer.not = (vectorAction[index++] > 0f);
-			}
+			this.AddReward(-0.1f);
 		}
 	}
 
-	private void OnChooseUtilityAction(string[] chosens)
+	private void RewardOnNewAction(string actionName)
 	{
-		bool isTargetAround, isTargetSight, couldShoot, aimIsRunning;
-
-		isTargetAround = this.behaviour.IsThereTargetAround(this.ctr);
-		isTargetSight = this.behaviour.IsTargetInSight(this.ctr);
-		couldShoot = this.behaviour.CouldShoot(this.ctr);
-		aimIsRunning = this.behaviour.IsActionRunning(this.ctr, "Aim");
-
-		this.SetReward(0f);
-
-		// WANDER
-		if(!isTargetAround)
+		switch(actionName)
 		{
-			if(IndexOf(chosens, "Wander") > -1) {
-				this.AddReward(1.0f);
-			} else {
-				this.Done();
-			}
+			// SHOOT -> Turret should shoot the less possible
+			case "Shoot":
+				this.AddReward(-0.01f);
+				break;
 		}
-		
-		// AIM
-		if(isTargetAround)
-		{
-			if(IndexOf(chosens, "Aim") > -1) {
-				this.AddReward(1.0f);
-			} else {
-				this.Done();
-			}
-		}
+	}
 
-		// SHOOT
-		if(aimIsRunning && couldShoot && isTargetSight)
-		{
-			if(IndexOf(chosens, "Shoot") > -1) {
-				this.AddReward(1.0f);
-			} else {
-				this.Done();
-			}
-		}
+	public void RewardOnHit()
+	{
+		// HIT -> Turret receives huge reward when hiting something
+		this.AddReward(5f);
 	}
 }

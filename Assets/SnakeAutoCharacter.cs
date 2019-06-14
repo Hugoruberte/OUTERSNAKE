@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SnakeController))]
 public class SnakeAutoCharacter : SnakeCharacter
 {
 	private SnakeController ctr;

@@ -38,7 +38,7 @@ public class TurretController : MovementController
 
 		while(true)
 		{
-			axis = this.gun.up * (((Random.value >= 0.5f) ? 1 : -1) * this.turret.turretData.wanderOmega);
+			axis = this.gun.up * (RandomExtension.randomSign * this.turret.turretData.wanderOmega);
 			clock = this.turret.turretData.wanderRotationDurationInterval[0] + Random.value * (this.turret.turretData.wanderRotationDurationInterval[1] - this.turret.turretData.wanderRotationDurationInterval[0]);
 
 			while(clock > 0f) {

@@ -8,17 +8,6 @@ using Lazers;
 
 public class LazerShot : Lazer
 {
-	private Rigidbody explosionRigidbody;
-	private ParticleSystem explosion;
-
-	protected override void Awake()
-	{
-		base.Awake();
-
-		this.explosion = GetComponentInChildren<ParticleSystem>();
-		this.explosionRigidbody = explosion.GetComponent<Rigidbody>();
-	}
-
 	public override void Launch(Transform from, Vector3 towards, OnLazerHit callback)
 	{
 		base.Launch(from, towards, callback);
@@ -208,15 +197,6 @@ public class LazerShot : Lazer
 		impact.Launch();
 	}
 
-	protected override void Kill()
-	{
-		this.explosionRigidbody.isKinematic = false;
-		this.explosionRigidbody.velocity = this.direction * this.lazerData.speed;
-		this.explosion.Play();
-
-		base.Kill();
-	}
-
 	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)
 	{
 		this.dying = true;
@@ -224,9 +204,7 @@ public class LazerShot : Lazer
 		if(deathOfOldAge) {
 			yield return this.WidthCoroutine();
 		} else {
-			ParticleSystem.MainModule main = this.explosion.main;
-			float delay = Mathf.Max(this.headRenderer.time + 0.2f, main.duration);
-			yield return Yielders.Wait(delay);
+			yield return Yielders.Wait(1f);
 		}
 		
 		PoolingManager.instance.Stow(this);
@@ -236,11 +214,6 @@ public class LazerShot : Lazer
 	{
 		// time
 		this.headRenderer.time = this.lazerData.length / this.lazerData.speed;
-
-		// explosion
-		this.explosionRigidbody.isKinematic = true;
-		this.explosionRigidbody.velocity = Shared.vector3Zero;
-		this.explosionRigidbody.transform.localPosition = Shared.vector3Zero;
 
 		// reset
 		base.Reset();

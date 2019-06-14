@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b978112ff9e8c479a62cf06234e2f1, type: 3}
   m_Name: Snake Data
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 5
   accuracy: 0.05
   _state: 2
