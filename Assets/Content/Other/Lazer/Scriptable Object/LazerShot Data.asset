@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 75
   lifetime: 0.25
-  bounce: 0
+  bounce: 1
   flatten: 0
   mode: 0
   lazerImpactPrefab: {fileID: 8336235860199268992, guid: b3009b19c6455f742a52e308660368a5,
@@ -23,10 +23,10 @@ MonoBehaviour:
     type: 3}
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
   bounceLayerMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
   maxBounceCount: 1
   lastBounceMode: 2
   coneAngle: 10

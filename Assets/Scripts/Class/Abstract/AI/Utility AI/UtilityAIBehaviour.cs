@@ -29,7 +29,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		if(caa.main != null && caa.main.isRunning)
 		{
 			// if best action is not one of the current actions
-			if(!caa.IsRunning(selected)) {
+			if(!caa.IsCurrentlyRunning(selected)) {
 
 				// if selected is parallelizable && current allows it
 				if(selected.isParallelizable && !caa.main.isForceAlone) {
@@ -170,12 +170,8 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			this.parallelizables = new List<UtilityAction>();
 		}
 
-		public void AddAction(UtilityAction act)
+		private void AddAction(UtilityAction act)
 		{
-			if(act == null) {
-				return;
-			}
-
 			this.CleanActions();
 
 			if(act.isParallelizable) {
@@ -185,8 +181,8 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			}
 		}
 
-		public void StartAction(UtilityAction act)
-		{
+		public void StartAction(UtilityAction act) {
+			// Debug.Log("Started '" + act.method + "' at " + Time.time);
 			// if action need to run alone
 			if(act.isForceAlone) {
 				// stop all other stoppable running actions
@@ -199,11 +195,15 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 
 		public void StopMainAction() {
+			if(main != null) {
+				// Debug.Log("Stopped '" + this.main.method + "' at " + Time.time);
+			}
 			this.main?.Stop(this.ctr.entity);
 			this.main = null;
 		}
 
 		public void StopAllActions() {
+			// Debug.Log("Stopped all actions at " + Time.time);
 			this.main?.Stop(this.ctr.entity);
 			foreach(UtilityAction a in this.parallelizables) {
 				a?.Stop(this.ctr.entity);
@@ -212,6 +212,7 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 		}
 
 		public void StopAllStoppableAction() {
+			// Debug.Log("Stopped all stoppable actions at " + Time.time);
 			if(this.main != null && this.main.isStoppable) {
 				this.main.Stop(this.ctr.entity);
 			}
@@ -223,7 +224,13 @@ public abstract class UtilityAIBehaviour : ScriptableObject
 			this.CleanActions();
 		}
 
-		public bool IsRunning(UtilityAction act) {
+		public bool IsCurrentlyRunning(UtilityAction act) {
+			// if(this.main != null) {
+			// 	Debug.Log("Check if '" + act.method + "' is running at " + Time.time + "(main -> '" + this.main.method + "')");
+			// } else {
+			// 	Debug.Log("Check if '" + act.method + "' is running at " + Time.time + "(no main)");
+			// }
+			
 			this.CleanActions();
 
 			if(this.main != null && this.main.method.Equals(act.method)) {

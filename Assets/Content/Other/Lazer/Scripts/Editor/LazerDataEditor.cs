@@ -32,7 +32,7 @@ public class LazerDataEditor : Editor
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
 		script.speed = EditorGUILayout.Slider("Speed", script.speed, 0.1f, 100f);
-		script.lifetime = EditorGUILayout.Slider("Lifetime", script.lifetime, 0.1f, 100f);
+		script.lifetime = EditorGUILayout.Slider("Lifetime", script.lifetime, 0.01f, 100f);
 		script.flatten = EditorGUILayout.Toggle("Flatten", script.flatten);
 		script.bounce = EditorGUILayout.Toggle("Bounce", script.bounce);
 

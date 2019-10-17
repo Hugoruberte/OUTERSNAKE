@@ -17,8 +17,8 @@ MonoBehaviour:
     type: 2}
   m_FrameSettings:
     overrides: 0
-    enableShadow: 1
-    enableContactShadows: 1
+    enableShadow: 0
+    enableContactShadows: 0
     enableShadowMask: 1
     enableSSR: 1
     enableSSAO: 1
@@ -32,16 +32,16 @@ MonoBehaviour:
     specularGlobalDimmer: 1
     shaderLitMode: 1
     enableDepthPrepassWithDeferredRendering: 0
-    enableTransparentPrepass: 1
+    enableTransparentPrepass: 0
     enableMotionVectors: 1
     enableObjectMotionVectors: 1
     enableDecals: 1
     enableRoughRefraction: 0
-    enableTransparentPostpass: 1
+    enableTransparentPostpass: 0
     enableDistortion: 1
     enablePostprocess: 0
     enableOpaqueObjects: 1
-    enableTransparentObjects: 1
+    enableTransparentObjects: 0
     enableRealtimePlanarReflection: 0
     enableMSAA: 1
     enableAsyncCompute: 1
@@ -157,9 +157,9 @@ MonoBehaviour:
     increaseResolutionOfVolumetrics: 1
     supportLightLayers: 0
     supportDistortion: 0
-    supportTransparentBackface: 1
-    supportTransparentDepthPrepass: 1
-    supportTransparentDepthPostpass: 1
+    supportTransparentBackface: 0
+    supportTransparentDepthPrepass: 0
+    supportTransparentDepthPostpass: 0
     supportedLitShaderMode: 1
     supportDecals: 0
     msaaSampleCount: 1

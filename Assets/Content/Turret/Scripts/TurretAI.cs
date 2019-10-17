@@ -123,7 +123,7 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 		ltr = ctr as TurretController;
 		dir = ltr.turret.muzzle.forward;
 		
-		count = this.SphereCastTowards(ltr, dir, this.turretData.targetLayerMask, 0.45f);
+		count = this.SphereCastTowards(ltr, dir, this.turretData.targetLayerMask, 0.2f);
 
 		return (count > 0);
 	}

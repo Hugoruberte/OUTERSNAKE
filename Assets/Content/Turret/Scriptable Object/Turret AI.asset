@@ -27,18 +27,6 @@ MonoBehaviour:
       _max: 100
       method: IsThereTargetAround
       index: 0
-    - isCondition: 1
-      not: 0
-      score: 0
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      _max: 2147483647
-      method: IsTargetInSight
-      index: 1
     index: 0
     score: 100
     method: Wander
@@ -123,5 +111,5 @@ MonoBehaviour:
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 010101
-  displayParameters: 000000
+  displayScorers: 010000
+  displayParameters: 000001
