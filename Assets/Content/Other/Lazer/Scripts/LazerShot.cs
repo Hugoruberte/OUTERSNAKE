@@ -1,9 +1,6 @@
 using static System.Array;
-using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using My.Tools;
 using Lazers;
 
 public class LazerShot : Lazer
@@ -27,7 +24,7 @@ public class LazerShot : Lazer
 		this.onLazerHit(hit);
 
 		// Impact
-		this.SetGroundImpact(hit, pos);
+		this.SetGroundImpactIfRequired(hit, pos);
 
 		// Bounce
 		if(this.lazerData.bounce && this.bounceCount < this.lazerData.maxBounceCount)
@@ -58,7 +55,7 @@ public class LazerShot : Lazer
 		}
 		// Last bounce
 		else
-		{
+		{			
 			// Physics
 			foreach(Collider c in colliders) {
 				this.ignoredCollider.Add(c);
@@ -83,7 +80,14 @@ public class LazerShot : Lazer
 			}
 		}
 
-		this.SetLazerImpact(this.headRigidbody.position, impactDirection);
+		// Effect
+		InstantParticleEffect impact = PoolingManager.instance.Get<InstantParticleEffect>(this.lazerData.lazerImpactPrefab);
+		if(impact != null) {
+			impact.SetOrientation(this.headRigidbody.position, impactDirection);
+			impact.SetColor(Color.red);
+			impact.Launch();
+		}
+
 		this.bounceCount ++;
 		this.hiting = false;
 	}
@@ -115,7 +119,7 @@ public class LazerShot : Lazer
 		count = Physics.OverlapSphereNonAlloc(point, this.lazerData.autoAimRange, autoAimResults, this.lazerData.autoAimLayerMask);
 		result = dir;
 
-		for(int i = 0; i < autoAimResults.Length && count > 0; i++)
+		for(int i = 0; i < autoAimResults.Length && count > 0; ++i)
 		{
 			c = autoAimResults[i];
 
@@ -157,11 +161,12 @@ public class LazerShot : Lazer
 		return result;
 	}
 
-	private void SetGroundImpact(LazerHit hit, Vector3 position)
+	private void SetGroundImpactIfRequired(LazerHit hit, Vector3 position)
 	{
 		bool found = false;
 
-		for(int i = 0; i < hit.impacts.Length; i++) {
+		for(int i = 0; i < hit.impacts.Length; ++i)
+		{
 			if(hit.impacts[i].other.layer == LayerMask.NameToLayer("Ground")) {
 				found = true;
 				break;
@@ -173,28 +178,10 @@ public class LazerShot : Lazer
 		}
 
 		GroundImpactEffect impact = PoolingManager.instance.Get<GroundImpactEffect>(this.lazerData.groundImpactPrefab);
-
-		if(impact == null) {
-			return;
+		if(impact != null) {
+			impact.Initialize(position, -hit.bounceNormal);
+			impact.Launch();
 		}
-
-		impact.Initialize(position, -hit.bounceNormal);
-
-		impact.Launch();
-	}
-
-	private void SetLazerImpact(Vector3 position, Vector3 direction)
-	{
-		InstantParticleEffect impact = PoolingManager.instance.Get<InstantParticleEffect>(this.lazerData.lazerImpactPrefab);
-
-		if(impact == null) {
-			return;
-		}
-
-		impact.SetOrientation(position, direction);
-		impact.SetColor(Color.red);
-
-		impact.Launch();
 	}
 
 	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)

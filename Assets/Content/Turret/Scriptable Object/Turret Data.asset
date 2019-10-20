@@ -20,7 +20,7 @@ MonoBehaviour:
     type: 3}
   haloPrefab: {fileID: 6430371367858408622, guid: 4984c22f9996ede4c8759213e400020f,
     type: 3}
-  rangeOfView: 11
+  rangeOfView: 30
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 512

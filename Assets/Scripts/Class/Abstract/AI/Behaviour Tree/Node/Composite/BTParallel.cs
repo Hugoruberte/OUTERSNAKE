@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using BehaviourTreeAI;
 
 public class BTParallel : BTComposite
@@ -12,7 +10,7 @@ public class BTParallel : BTComposite
 	public BTParallel(params BTNode[] cs) : base(cs)
 	{
 		this.remaining = new List<int>();
-		for(int i = 0; i < cs.Length; i++) {
+		for(int i = 0; i < cs.Length; ++i) {
 			this.remaining.Add(i);
 		}
 

@@ -1,5 +1,4 @@
 using UnityEngine;
-using My.Events;
 
 [CreateAssetMenu(fileName = "Float", menuName = "Scriptable Object/Variable/Float", order = 3)]
 public class FloatVar : Variable

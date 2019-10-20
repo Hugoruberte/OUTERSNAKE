@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Snakes;
 using Utility.AI;
 
 [System.Serializable]
@@ -121,10 +120,11 @@ public class WhiteRabbitAI : UtilityAIBehaviour<WhiteRabbitAI>
 
 	public IEnumerator Wander(MovementController ctr, UtilityAction act)
 	{
-		yield return ctr.Wander();
+		RabbitController rtr = ctr as RabbitController;
 
+		yield return rtr.Wander();
 		act.isStoppable = true;
-		yield return ctr.Rest();
+		yield return rtr.Rest();
 	}
 
 	public IEnumerator RunAway(MovementController ctr)

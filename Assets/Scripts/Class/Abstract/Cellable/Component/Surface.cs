@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Surface
@@ -36,7 +35,7 @@ public class Surface
 
 		dgcs = new Dictionary<Grill, Cell[,]>();
 
-		for(int i = 0; i < this.grills.Count; i++) {
+		for(int i = 0; i < this.grills.Count; ++i) {
 
 			g = this.grills[i];
 			gwidth = g.width;
@@ -44,8 +43,8 @@ public class Surface
 
 			cs = new Cell[gheight, gwidth];
 
-			for(int w = 0; w < gwidth; w++) {
-				for(int h = 0; h < gheight; h++) {
+			for(int w = 0; w < gwidth; ++w) {
+				for(int h = 0; h < gheight; ++h) {
 					cs[h, w] = g.cells[w * gheight + h];
 				}
 			}

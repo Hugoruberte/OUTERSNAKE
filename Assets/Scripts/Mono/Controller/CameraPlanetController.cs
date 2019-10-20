@@ -31,7 +31,7 @@ namespace Cameras
 		private const float SMOOTH_LOCK_THRESHOLD = 20f;
 
 		private Vector3 targetPosition;
-		private Vector3 velocity = Shared.vector3Zero;
+		private Vector3 velocity = Vector3.zero;
 		private IEnumerator smoothRotationCoroutine = null;
 		private Quaternion previousTarget;
 
@@ -74,7 +74,7 @@ namespace Cameras
 		/* --------------------------------------------------------------------------------------------*/
 		private void SmoothPosition()
 		{
-			this.targetPosition = this.target.position + (this.target.rotation * Shared.vector3Up) * this.height;
+			this.targetPosition = this.target.position + (this.target.rotation * Vector3.up) * this.height;
 			this.myTransform.position = Vector3.SmoothDamp(
 				this.myTransform.position,
 				this.targetPosition,
@@ -117,7 +117,7 @@ namespace Cameras
 			float previousAngle, angle;
 
 
-			targetRight = this.target.rotation * Shared.vector3Right;
+			targetRight = this.target.rotation * Vector3.right;
 			rightDot = Mathf.RoundToInt(Vector3.Dot(targetRight, current.right));
 			forwardDot = Mathf.RoundToInt(Vector3.Dot(previous.up, -rightDot * current.forward));
 			lookUp = current.forward + rightDot * forwardDot * current.up;
@@ -178,9 +178,9 @@ namespace Cameras
 
 			if(dot == 0)
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Shared.vector3Right)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3.right)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Shared.vector3Up)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.forward, Vector3.up)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);
@@ -188,9 +188,9 @@ namespace Cameras
 			}
 			else
 			{
-				if(Mathf.RoundToInt(Vector3.Dot(previous.right, Shared.vector3Right)) != 0) {
+				if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3.right)) != 0) {
 					tgtp.Set(this.myTransform.position.x, tgtp.y, tgtp.z);
-				} else if(Mathf.RoundToInt(Vector3.Dot(previous.right, Shared.vector3Up)) != 0) {
+				} else if(Mathf.RoundToInt(Vector3.Dot(previous.right, Vector3.up)) != 0) {
 					tgtp.Set(tgtp.x, this.myTransform.position.y, tgtp.z);
 				} else {
 					tgtp.Set(tgtp.x, tgtp.y, this.myTransform.position.z);

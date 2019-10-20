@@ -81,6 +81,8 @@ namespace Utility.AI
 
 			DrawDefaultInspector();
 
+			EditorGUI.BeginChangeCheck();
+
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Utility AI", EditorStyles.boldLabel);
 			baserect = EditorGUILayout.GetControlRect(true, 0);
@@ -101,7 +103,7 @@ namespace Utility.AI
 			baserect.height += 49;
 
 			// Actions field
-			for(int act = 0; act < actions.arraySize; act++)
+			for(int act = 0; act < actions.arraySize; ++act)
 			{
 				actionRef = actions.GetArrayElementAtIndex(act);
 				scorers = actionRef.FindPropertyRelative("scorers");
@@ -205,7 +207,7 @@ namespace Utility.AI
 					EditorGUI.DrawRect(actionrect, actionColor);
 
 					// Display scorers fields
-					for(int sco = 0; sco < scorers.arraySize; sco++)
+					for(int sco = 0; sco < scorers.arraySize; ++sco)
 					{
 						scorerect = actionrect;
 						scoreRef = scorers.GetArrayElementAtIndex(sco);
@@ -327,19 +329,11 @@ namespace Utility.AI
 			}
 			if(EditorApplication.isPlaying){GUI.enabled = true;}
 
-			actionrect.y += 50;
-			EditorGUI.LabelField(actionrect, "Options", EditorStyles.boldLabel);
 
-			this.buttonStyle.fontSize = 9;
-			actionrect.y += 20;
-			actionrect.width = 115;
-			actionrect.height = 19;
-			if(GUI.Button(actionrect, "Update max's cache", this.buttonStyle)) {
+			if (EditorGUI.EndChangeCheck()){
 				script.UpdateAllMaxCache();
 			}
-
 			EditorUtilityExtension.SetDirtyOnGUIChange(script);
-			
 			serializedObject.ApplyModifiedProperties();
 		}
 
@@ -504,7 +498,7 @@ namespace Utility.AI
 
 		private int GetNextAvailableScorer(List<UtilityScorer> ls)
 		{
-			for(int i = 0; i < this.scorerMethodNames.Length; i++) {
+			for(int i = 0; i < this.scorerMethodNames.Length; ++i) {
 				if(!ls.Exists(x => x.method.Equals(this.scorerMethodNames[i]))) {
 					return i;
 				}
@@ -515,7 +509,7 @@ namespace Utility.AI
 
 		private bool IsScorerCondition(string name)
 		{
-			for(int i = 0; i < this.scorerConditionMethodNames.Length; i++) {
+			for(int i = 0; i < this.scorerConditionMethodNames.Length; ++i) {
 				if(this.scorerConditionMethodNames[i].Equals(name)) {
 					return true;
 				}

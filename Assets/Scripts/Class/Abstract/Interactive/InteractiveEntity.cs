@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interactive.Engine
 {
-	[RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(Collider))]
 	public abstract class InteractiveEntity : MonoBehaviour
 	{
 		public Transform myTransform { get; private set; }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Reflection;
 
 
 public abstract class Singleton<T> where T : Singleton<T>

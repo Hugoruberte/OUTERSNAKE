@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace BehaviourTreeAI
 {
-	public enum BTState
+    public enum BTState
 	{
 		Success = 0,
 		Failure,

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -35,7 +34,7 @@ public class TargetEffect : Effect
 
 		GeometricShapeController[] ctrs = this.GetComponentsInChildren<GeometricShapeController>(true);
 		this.gsds = new GeometricShapeData[ctrs.Length];
-		for(int i = 0; i < ctrs.Length; i++) {
+		for(int i = 0; i < ctrs.Length; ++i) {
 			this.gsds[i] = new GeometricShapeData(ctrs[i]);
 		}
 
@@ -91,7 +90,7 @@ public class TargetEffect : Effect
 				yield return null;
 			}
 
-			this.rb.angularVelocity = Shared.vector3Zero;
+			this.rb.angularVelocity = Vector3.zero;
 
 			yield return Yielders.Wait(1f);
 		}
@@ -181,7 +180,7 @@ public class TargetEffect : Effect
 		base.Reset();
 
 		this.rb.drag = 0f;
-		this.rb.angularVelocity = Shared.vector3Zero;
+		this.rb.angularVelocity = Vector3.zero;
 		this.SetColor(new Color(1f,1f,1f,0f));
 
 		foreach(GeometricShapeData gsd in this.gsds) {

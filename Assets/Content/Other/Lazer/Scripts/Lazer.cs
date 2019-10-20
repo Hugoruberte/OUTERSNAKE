@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
@@ -7,7 +6,7 @@ using Lazers;
 
 namespace Lazers
 {
-	public delegate void OnLazerHit(LazerHit other);
+    public delegate void OnLazerHit(LazerHit other);
 
 	public struct LazerImpact {
 		public readonly GameObject other;
@@ -27,12 +26,12 @@ namespace Lazers
 
 		public LazerHit(Collider[] colliders, Vector3 pos, LayerMask bounceLayerMask) {
 			this.impacts = new LazerImpact[colliders.Length];
-			this.bounceNormal = Shared.vector3Zero;
+			this.bounceNormal = Vector3.zero;
 
 			GameObject other;
 			Vector3 point;
 			Vector3 normal;
-			for(int i = 0; i < colliders.Length; i++) {
+			for(int i = 0; i < colliders.Length; ++i) {
 				other = colliders[i].transform.gameObject;
 				point = colliders[i].ClosestPoint(pos);
 				normal = (pos - point).normalized;
@@ -167,7 +166,7 @@ public abstract class Lazer : PoolableEntity
 
 		// compute 'up' and 'forward' forces
 		project = Vector3.ProjectOnPlane(up, this.headRigidbody.transform.up).normalized;
-		forward = Vector3.Cross(project, up).normalized * (2 * Random.Range(0, 2) - 1);
+		forward = Vector3.Cross(project, up).normalized * RandomExtension.randomSign;
 		if(forward.magnitude == 0) { forward = fd; }
 
 		// movement
@@ -192,7 +191,7 @@ public abstract class Lazer : PoolableEntity
 
 		// parameter
 		this.bounceCount = 0;
-		this.direction = Shared.vector3Zero;
+		this.direction = Vector3.zero;
 
 		// callback
 		this.onLazerHit = null;
@@ -202,8 +201,9 @@ public abstract class Lazer : PoolableEntity
 		this.dying = false;
 		
 		// rigidbody
-		this.headRigidbody.velocity = Shared.vector3Zero;
-		this.headRigidbody.transform.localPosition = Shared.vector3Zero;
+		this.headRigidbody.velocity = Vector3.zero;
+		this.headRigidbody.transform.localPosition = Vector3.zero;
+		this.headRigidbody.transform.localRotation = Quaternion.identity;
 		this.headRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 		// collider

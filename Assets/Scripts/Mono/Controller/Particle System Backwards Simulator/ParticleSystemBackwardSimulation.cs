@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
- 
+
 public class ParticleSystemBackwardSimulation : MonoBehaviour
 {
 	private ParticleSystem particle;

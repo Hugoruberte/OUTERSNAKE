@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Snakes;
 
@@ -168,7 +167,7 @@ public class SnakeBodyManager : MonoSingleton<SnakeBodyManager>
 
 		if(this.bodyLength > SNAKE_MINIMAL_LENGTH)
 		{
-			for(int i = index; i < this.snakeBody.childCount; i++)
+			for(int i = index; i < this.snakeBody.childCount; ++i)
 			{
 				this.snakePartCharacters[this.snakeBody.GetChild(i).GetInstanceID()].Explosion();
 			}

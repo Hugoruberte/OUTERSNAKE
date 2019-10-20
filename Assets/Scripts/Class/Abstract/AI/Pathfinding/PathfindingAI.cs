@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 
 namespace PathfindingAI
 {
-	public enum AstarMoveMode {
+    public enum AstarMoveMode {
 		Diagonal = 0,
 		Euclidean,
 		DiagonalFree,
@@ -180,8 +179,8 @@ namespace PathfindingAI
 
 				ins = new int[gheight, gwidth];
 
-				for(int w = 0; w < gwidth; w++) {
-					for(int h = 0; h < gheight; h++) {
+				for(int w = 0; w < gwidth; ++w) {
+					for(int h = 0; h < gheight; ++h) {
 						ins[h, w] = (cs[h, w].isWalkable) ? 0 : 1;
 					}
 				}
@@ -204,8 +203,8 @@ namespace PathfindingAI
 			gheight = cs.GetLength(0);
 			gwidth = cs.GetLength(1);
 
-			for(int w = 0; w < gwidth; w++) {
-				for(int h = 0; h < gheight; h++) {
+			for(int w = 0; w < gwidth; ++w) {
+				for(int h = 0; h < gheight; ++h) {
 					ins[h, w] = (cs[h, w].isWalkable) ? 0 : 1;
 				}
 			}
@@ -282,7 +281,7 @@ namespace PathfindingAI
 			this.astar.FindPathNonAlloc(indexes, this.grids[fromgrill], from, mids[0], mode);
 			this.ConvertIndexesToStepsAmongGrill(steps, indexes, fromgrill);
 
-			for(int i = 1; i < count - 1; i++) {
+			for(int i = 1; i < count - 1; ++i) {
 				g = grills[i];
 				mids = this.GetIndexesTransitionBetweenGrills(g, grills[i+1]);
 				this.astar.FindPathNonAlloc(indexes, this.grids[g], mids[0], mids[1], mode);

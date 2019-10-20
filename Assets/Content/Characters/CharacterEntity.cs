@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class CharacterEntity : LivingEntity, IFoodChainEntity
+﻿public abstract class CharacterEntity : LivingEntity, IFoodChainEntity
 {
 	/* ---------------------------------------------------------------------------------------------*/
 	/* ---------------------------------------------------------------------------------------------*/

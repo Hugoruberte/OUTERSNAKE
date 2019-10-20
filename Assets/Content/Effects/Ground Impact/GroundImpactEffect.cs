@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -69,7 +68,7 @@ public class GroundImpactEffect : PoolableEntity
 	{
 		FarAwayManager.instance?.ReleaseFarAwayPosition(gameObject);
 
-		this.cameraTransform.localPosition = Shared.vector3Zero;
+		this.cameraTransform.localPosition = Vector3.zero;
 		this.renderTexture?.Release();
 
 		base.Reset();

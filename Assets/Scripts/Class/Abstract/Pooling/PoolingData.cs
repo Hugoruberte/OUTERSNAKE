@@ -62,7 +62,7 @@ public class PoolingData : ScriptableObject
 		folder = g.transform;
 		folder.parent = f;
 
-		for(int k = 0; k < this.pools.Count; k++) {
+		for(int k = 0; k < this.pools.Count; ++k) {
 
 			pp = this.pools[k];
 			objs = new PoolableEntity[pp.size];
@@ -83,7 +83,7 @@ public class PoolingData : ScriptableObject
 			inactiveFolder = g.transform;
 			inactiveFolder.parent = objectFolder;
 
-			for(int i = 0; i < pp.size; i++) {
+			for(int i = 0; i < pp.size; ++i) {
 				g = Instantiate(pp.prefab);
 				p = g.GetComponent<PoolableEntity>();
 

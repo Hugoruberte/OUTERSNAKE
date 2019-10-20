@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -65,7 +63,7 @@ public abstract class CellableMovementController : MovementController
 
 		relative = this.entity.cellable.currentCell.local - c.local;
 
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 3; ++i) {
 			if(relative[i] > maxStepDistance) {
 				Debug.LogWarning($"Target is too far away ! Entity cannot walk it in only one step ! (max step distance = {maxStepDistance} and relative = {relative[i]}", entity.myTransform);
 				return true;
@@ -152,7 +150,7 @@ public abstract class CellableMovementController : MovementController
 		rot = look * Quaternion.Euler(sign * 90, 0, 0);
 
 		transition = (pos - bound.position).normalized;
-		up = Vector3.Cross(transition, look * Shared.vector3Right).normalized;
+		up = Vector3.Cross(transition, look * Vector3.right).normalized;
 
 		return new StepOver(cell, up, rot);
 	}

@@ -1,5 +1,4 @@
 using UnityEngine;
-using My.Events;
 
 [CreateAssetMenu(fileName = "Quaternion", menuName = "Scriptable Object/Variable/Quaternion", order = 3)]
 public class QuaternionVar : Variable

@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
-public class PlanetManager : MonoSingleton<PlanetManager>
+﻿public class PlanetManager : MonoSingleton<PlanetManager>
 {
 	private Planet[] _planets = null;
 	public Planet[] planets {

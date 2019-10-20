@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class FoodEntity : CharacterEntity
+﻿public abstract class FoodEntity : CharacterEntity
 {
 
 }

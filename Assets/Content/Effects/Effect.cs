@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using My.Tools;
 
 public abstract class Effect : PoolableEntity
 {
@@ -19,14 +17,14 @@ public abstract class Effect : PoolableEntity
 
 	public void SetPosition(Vector3 position) => this.transform.position = position;
 
-	public void SetDirection(Vector3 direction) => this.SetDirection(direction, Shared.vector3Up);
+	public void SetDirection(Vector3 direction) => this.SetDirection(direction, Vector3.up);
 	public void SetDirection(Vector3 direction, Vector3 up)
 	{
 		// only does that
 		this.transform.rotation = Quaternion.LookRotation(direction, up);
 	}
 
-	public void SetOrientation(Vector3 position, Vector3 direction) => this.SetOrientation(position, direction, Shared.vector3Up);
+	public void SetOrientation(Vector3 position, Vector3 direction) => this.SetOrientation(position, direction, Vector3.up);
 	public void SetOrientation(Vector3 position, Vector3 direction, Vector3 up)
 	{
 		this.SetPosition(position);

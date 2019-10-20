@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Snakes;
 using Interactive.Engine;
@@ -72,9 +71,9 @@ public class SnakePartCharacter : SnakeEntity
 		this.myTransform.SetAsFirstSibling();
 
 		this.body.gameObject.SetActive(true);
-		this.body.localScale = Shared.vector3One;
+		this.body.localScale = Vector3.one;
 		this.myCollider.enabled = true;
-		this.myCollider.size = Shared.vector3One * BOXCOLLIDER_STANDARD_SIZE_VALUE;
+		this.myCollider.size = Vector3.one * BOXCOLLIDER_STANDARD_SIZE_VALUE;
 
 		this.snakePartState = SnakePartState.Alive;
 	}
@@ -108,7 +107,7 @@ public class SnakePartCharacter : SnakeEntity
 
 		from = this.body.localScale;
 		cfrom = this.myCollider.size;
-		to = Shared.vector3Zero;
+		to = Vector3.zero;
 		step = 0f;
 
 		while(step < 0.75f)

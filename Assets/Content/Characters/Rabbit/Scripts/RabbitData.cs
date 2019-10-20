@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "RabbitData", menuName = "Scriptable Object/Data/RabbitData", order = 3)]
 public class RabbitData : ScriptableObject

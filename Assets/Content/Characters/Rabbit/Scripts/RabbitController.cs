@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -31,7 +30,7 @@ public abstract class RabbitController : CellableMovementController
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
 	/* --------------------------------------------------------------------------------------------*/
-	public override IEnumerator Wander()
+	public virtual IEnumerator Wander()
 	{
 		// declaration
 		Cell c;
@@ -48,7 +47,7 @@ public abstract class RabbitController : CellableMovementController
 		}
 	}
 
-	public override IEnumerator Rest()
+	public IEnumerator Rest()
 	{
 		float duration;
 

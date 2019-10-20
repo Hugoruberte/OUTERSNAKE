@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class SnakeAutoCharacter : SnakeCharacter
+﻿public class SnakeAutoCharacter : SnakeCharacter
 {
 	private SnakeController ctr;
 

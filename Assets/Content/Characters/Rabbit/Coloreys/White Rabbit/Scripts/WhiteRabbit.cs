@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WhiteRabbit : RabbitEntity
+﻿public class WhiteRabbit : RabbitEntity
 {
 	protected override void Start()
 	{

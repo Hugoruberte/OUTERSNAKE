@@ -1,5 +1,4 @@
 using UnityEngine;
-using My.Events;
 
 [CreateAssetMenu(fileName = "Int", menuName = "Scriptable Object/Variable/Int", order = 3)]
 public class IntVar : Variable

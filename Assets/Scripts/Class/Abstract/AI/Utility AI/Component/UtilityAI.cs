@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utility.AI
 {
-	public static class UtilityAI
+    public static class UtilityAI
 	{
 		private static List<UtilityAction> _selected = new List<UtilityAction>();
 

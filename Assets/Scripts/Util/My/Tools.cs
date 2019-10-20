@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEditor.SceneManagement;
 
 using System.Linq;
 using System.Collections;
-using static System.Array;
 using System.Collections.Generic;
 
 using My.Events;
@@ -18,11 +15,11 @@ using My.Events;
 
 namespace My.Tools
 {
-	public class _Transform
+    public class _Transform
 	{
-		public Vector3 right { get { return this.rotation * Shared.vector3Right; }}
-		public Vector3 up { get { return this.rotation * Shared.vector3Up; }}
-		public Vector3 forward { get { return this.rotation * Shared.vector3Forward; }}
+		public Vector3 right { get { return this.rotation * Vector3.right; }}
+		public Vector3 up { get { return this.rotation * Vector3.up; }}
+		public Vector3 forward { get { return this.rotation * Vector3.forward; }}
 
 		private Vector3 _position;
 		public Vector3 position {
@@ -46,7 +43,7 @@ namespace My.Tools
 		public ActionEvent onRotate;
 
 		public _Transform() {
-			this._position = Shared.vector3Zero;
+			this._position = Vector3.zero;
 			this._rotation = Quaternion.identity;
 		}
 
@@ -103,7 +100,7 @@ namespace My.Tools
 			string name;
 			List<string> output = new List<string>();
 
-			for(int i = 8; i < 32; i++) {
+			for(int i = 8; i < 32; ++i) {
 				name = LayerMask.LayerToName(i);
 				if(name.Length > 0) {
 					output.Add(name);
@@ -170,7 +167,7 @@ namespace My.Tools
 		public static string[] AllLayerNames()
 		{
 			string[] all = new string[32];
-			for(int i = 0; i < 32; i++) {
+			for(int i = 0; i < 32; ++i) {
 				all[i] = LayerMask.LayerToName(i);
 			}
 			return all;
@@ -184,7 +181,7 @@ namespace My.Tools
 			masks = current.MaskToNames(from);
 			result = (LayerMask)0;
 
-			for(int i = 0; i < masks.Length; i++) {
+			for(int i = 0; i < masks.Length; ++i) {
 				result |= (1 << System.Array.IndexOf(to, masks[i]));
 			}
 
@@ -440,12 +437,12 @@ namespace My.Tools
 
 		public static Vector3 TransformPointUnscaled(this Transform pT, Vector3 position)
 		{
-			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Shared.vector3One);
+			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3.one);
 			return localToWorldMatrix.MultiplyPoint3x4(position);
 		}
 		public static Vector3 InverseTransformPointUnscaled(this Transform pT, Vector3 pos)
 		{
-			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Shared.vector3One).inverse;
+			Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(pT.position, pT.rotation, Vector3.one).inverse;
 			return worldToLocalMatrix.MultiplyPoint3x4(pos);
 		}
 
@@ -594,11 +591,11 @@ namespace My.Tools
 		{
 			Vector3 n = v.normalized;
 
-			if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Right)) == 1)
+			if(Mathf.Abs(Vector3.Dot(n, Vector3.right)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Up)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Vector3.up)) == 1)
 				return true;
-			else if(Mathf.Abs(Vector3.Dot(n, Shared.vector3Forward)) == 1)
+			else if(Mathf.Abs(Vector3.Dot(n, Vector3.forward)) == 1)
 				return true;
 
 			return false;
@@ -610,10 +607,10 @@ namespace My.Tools
 			Vector3 n, res;
 			float max, value;
 
-			res = Shared.vector3Zero;
+			res = Vector3.zero;
 			max = 0f;
 			n = v.normalized;
-			test = new Vector3[3] {Shared.vector3Right, Shared.vector3Up, Shared.vector3Forward};
+			test = new Vector3[3] {Vector3.right, Vector3.up, Vector3.forward};
 
 			foreach(Vector3 t in test) {
 				value = Vector3.Dot(n, t);
@@ -642,7 +639,7 @@ namespace My.Tools
 		{
 			int count = ts.Count;
 
-			for(int i = 0; i < count; i++) {
+			for(int i = 0; i < count; ++i) {
 				int r = UnityEngine.Random.Range(i, count);
 				T tmp = ts[i];
 				ts[i] = ts[r];
@@ -667,7 +664,7 @@ namespace My.Tools
 		public static T[] DeepCopy<T>(T[] array)
 		{
 			T[] a = new T[array.Length];
-			for(int i = 0; i < array.Length; i++) {
+			for(int i = 0; i < array.Length; ++i) {
 				a[i] = array[i];
 			}
 			return a;
@@ -924,8 +921,8 @@ namespace My.Tools
 			Gizmos.DrawLine(from, to);
 			Vector3 direction = to - from;
 	 
-			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Shared.vector3Forward;
-			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Shared.vector3Forward;
+			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(180+arrowHeadAngle,0,0) * Vector3.forward;
+			Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(180-arrowHeadAngle,0,0) * Vector3.forward;
 			Gizmos.DrawRay(to, right * arrowHeadLength);
 			Gizmos.DrawRay(to, left * arrowHeadLength);
 		}

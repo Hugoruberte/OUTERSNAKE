@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using Snakes;
-using Utility.AI;
-using My.Tools;
+﻿using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "SnakeAutoAI", menuName = "Scriptable Object/AI/SnakeAutoAI", order = 3)]

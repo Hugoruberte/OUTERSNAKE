@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using My.Tools;
 using My.Events;
 using Lazers;
@@ -34,11 +32,7 @@ public class Turret : TrapEntity
 		this.onHit?.Invoke();
 	}
 
-
-
-
-
-
+#if UNITY_EDITOR
 	private void OnDrawGizmosSelected()
 	{
 		if(this.turretData == null) {
@@ -48,4 +42,5 @@ public class Turret : TrapEntity
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawWireSphere(transform.position, this.turretData.rangeOfView);
 	}
+#endif
 }

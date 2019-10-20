@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -10,10 +9,10 @@ public class TurretController : MovementController
 	public float lastShootTime = 0f;
 	public float aimStartTime = 0f;
 
-	private Transform myTransform;
-	private Transform gun;
-	private Transform muzzle;
-	private HaloEffect halo;
+	private readonly Transform myTransform;
+	private readonly Transform gun;
+	private readonly Transform muzzle;
+	private readonly HaloEffect halo;
 	private IEnumerator onAimCoroutine = null;
 	private TargetEffect targetEffect;
 
@@ -31,7 +30,7 @@ public class TurretController : MovementController
 		this.muzzle = this.gun.DeepFind("Muzzle");
 	}
 
-	public override IEnumerator Wander()
+	public IEnumerator Wander()
 	{
 		float clock, pause;
 		Vector3 axis;
@@ -39,7 +38,7 @@ public class TurretController : MovementController
 		while(true)
 		{
 			axis = this.gun.up * (RandomExtension.randomSign * this.turret.turretData.wanderOmega);
-			clock = this.turret.turretData.wanderRotationDurationInterval[0] + Random.value * (this.turret.turretData.wanderRotationDurationInterval[1] - this.turret.turretData.wanderRotationDurationInterval[0]);
+			clock = this.turret.turretData.wanderRotationDurationInterval[0] + (Random.value * (this.turret.turretData.wanderRotationDurationInterval[1] - this.turret.turretData.wanderRotationDurationInterval[0]));
 
 			while(clock > 0f) {
 				clock -= Time.deltaTime;
@@ -164,16 +163,16 @@ public class TurretController : MovementController
 		// Initialize
 		force = 5f;
 		up = this.myTransform.up;
-		ps = this.target.position + RandomExtension.OnUnitAxisCircle(up) * AIM_TARGET_APPEAR_RADIUS;
+		ps = this.target.position + (RandomExtension.OnUnitAxisCircle(up) * AIM_TARGET_APPEAR_RADIUS);
 
 		// Set effect
-		effect.SetOrientation(ps + up * AIM_TARGET_HEIGHT, up);
+		effect.SetOrientation(ps + (up * AIM_TARGET_HEIGHT), up);
 		effect.Launch(this.turret.turretData.aimTargetSmooth, AIM_TARGET_FADE_SPEED);
 		rb = effect.GetComponent<Rigidbody>();
 
 		while(this.target)
 		{
-			dest = this.target.position + up * AIM_TARGET_HEIGHT;
+			dest = this.target.position + (up * AIM_TARGET_HEIGHT);
 			dir = dest - rb.position;
 			rb.AddForce(dir * force, ForceMode.Acceleration);
 

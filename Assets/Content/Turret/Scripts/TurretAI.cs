@@ -1,9 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Snakes;
-using Utility.AI;
 using My.Tools;
 
 [System.Serializable]
@@ -54,6 +50,7 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 	/* --------------------------------------------------------------------------------------------*/
 	public bool IsThereTargetAround(MovementController ctr)
 	{
+		// Declaration
 		TurretController ltr;
 		float dist, min;
 		int count;
@@ -63,6 +60,7 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 		LayerMask mask;
 		Collider[] colliderResults;
 
+		// Initialization
 		ltr = ctr as TurretController;
 		min = float.MaxValue;
 		up = ltr.turret.transform.up;
@@ -71,8 +69,9 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 		mask = 1 << LayerMask.NameToLayer("Ground");
 		colliderResults = Shared.colliderArray;
 		count = Physics.OverlapSphereNonAlloc(pos, this.turretData.rangeOfView, colliderResults, this.turretData.targetLayerMask);
-		
-		for(int i = 0; i < colliderResults.Length && count > 0; i++)
+
+		// Check
+		for(int i = 0; i < colliderResults.Length && count > 0; ++i)
 		{
 			c = colliderResults[i];
 
@@ -80,10 +79,11 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 				continue;
 			}
 
+			// clean cache
+			colliderResults[i] = null;
+
 			// check if well-axed
-			if(Mathf.Abs(ltr.turret.muzzle.InverseTransformPoint(c.transform.position).y) > 1f) {
-				// clean cache
-				colliderResults[i] = null;
+			if(Mathf.Abs(ltr.turret.muzzle.InverseTransformPointUnscaled(c.transform.position).y) > 1f) {
 				count --;
 				continue;
 			}
@@ -92,8 +92,6 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 			dir = c.transform.position - ltr.turret.muzzle.position;
 			dir = Vector3.ProjectOnPlane(dir, up);
 			if(Physics.Raycast(ltr.turret.muzzle.position, dir, dir.magnitude, mask)) {
-				// clean cache
-				colliderResults[i] = null;
 				count --;
 				continue;
 			}
@@ -105,8 +103,6 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 				tr = c.transform;
 			}
 
-			// clean cache
-			colliderResults[i] = null;
 			count --;
 		}
 
@@ -167,7 +163,9 @@ public class TurretAI : UtilityAIBehaviour<TurretAI>
 	/* --------------------------------------------------------------------------------------------*/
 	public IEnumerator Wander(MovementController ctr)
 	{
-		yield return ctr.Wander();
+		TurretController ltr = ctr as TurretController;
+
+		yield return ltr.Wander();
 	}
 
 	public IEnumerator Aim(MovementController ctr)

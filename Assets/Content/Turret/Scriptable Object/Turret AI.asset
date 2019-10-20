@@ -70,7 +70,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 50
+      _max: -1000
       method: Aim is running
       index: 4
     - isCondition: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: -100
+      _max: 100
       method: CouldShoot
       index: 2
     - isCondition: 1
@@ -94,7 +94,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _max: 2147483647
+      _max: -50
       method: IsTargetInSight
       index: 1
     index: 2
@@ -111,5 +111,5 @@ MonoBehaviour:
   scorerCandidates: []
   scorerConditionCandidates: []
   scorerCurveCandidates: []
-  displayScorers: 010000
-  displayParameters: 000001
+  displayScorers: 010101
+  displayParameters: 000000

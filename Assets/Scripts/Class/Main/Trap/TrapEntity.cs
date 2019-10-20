@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class TrapEntity : LivingEntity
+﻿public abstract class TrapEntity : LivingEntity
 {
 
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using BehaviourTreeAI;
+﻿using System.Collections.Generic;
 using My.Tools;
 
 public abstract class BTRandom : BTComposite
@@ -16,7 +13,7 @@ public abstract class BTRandom : BTComposite
 	protected int InitializeRemaining(int length)
 	{
 		List<int> l = new List<int>();
-		for(int i = 0; i < length; i++) {
+		for(int i = 0; i < length; ++i) {
 			l.Add(i);
 		}
 		l.Shuffle();

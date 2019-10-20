@@ -22,7 +22,6 @@ List<Vector2> path = new Astar(map, start, end, "Manhattan").result;
 */
 
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PathfindingAI;
@@ -257,7 +256,7 @@ public class Astar
 			max = limit;
 			min = 0;
 			
-			for(i = 0; i < length; i++)
+			for(i = 0; i < length; ++i)
 			{
 				if(open[i].f < max)
 				{

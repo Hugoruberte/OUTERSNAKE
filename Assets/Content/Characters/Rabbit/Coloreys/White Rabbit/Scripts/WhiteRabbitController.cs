@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using BehaviourTreeAI;
-using My.Tools;
 
 public class WhiteRabbitController : RabbitController
 {

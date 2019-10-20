@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Interactive.Engine;
 using Snakes;
 
@@ -16,7 +14,7 @@ public class SnakeCharacter : SnakeEntity, IDangerousEntity
 	{
 		base.Awake();
 
-		this.data.snakeObject = gameObject;
+		this.data.snakeObject = this.gameObject;
 		this.data.snakeTransform = this.myTransform;
 		this.data.snakeCollider = this.GetComponent<Collider>();
 	}

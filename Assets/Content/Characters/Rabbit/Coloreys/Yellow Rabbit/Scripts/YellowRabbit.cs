@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using BehaviourTreeAI;
-
-public class YellowRabbit : RabbitEntity
+﻿public class YellowRabbit : RabbitEntity
 {
 	protected override void Awake()
 	{

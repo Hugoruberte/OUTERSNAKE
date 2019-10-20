@@ -1,8 +1,6 @@
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using My.Tools;
 using Lazers;
 
 public class LazerRay : Lazer
@@ -35,7 +33,7 @@ public class LazerRay : Lazer
 		if(this.lazerData.bounce)
 		{
 			// RaycastHit hit;
-			// for(int i = 0; i < this.hitPoints.Count - 1; i++) {
+			// for(int i = 0; i < this.hitPoints.Count - 1; ++i) {
 			// 	Vector3 dir = (this.hitPoints[i+1] - this.hitPoints[i]).normalized;
 
 			// 	if(Physics.Linecast(this.hitPoints[i] + dir, this.hitPoints[i+1] - dir, out hit, this.lazerData.hitLayerMask, QueryTriggerInteraction.Ignore)) {
@@ -72,7 +70,7 @@ public class LazerRay : Lazer
 			return;
 		}
 
-		this.headRigidbody.velocity = Shared.vector3Zero;
+		this.headRigidbody.velocity = Vector3.zero;
 			
 		this.StartAndStopCoroutine(ref this.behaviourCoroutine, this.DeathCoroutine(false));
 	}*/
@@ -97,7 +95,7 @@ public class LazerRay : Lazer
 		// 	return;
 		// }
 
-		// this.headRigidbody.velocity = Shared.vector3Zero;
+		// this.headRigidbody.velocity = Vector3.zero;
 			
 		// this.Death(false);
 	}
@@ -123,7 +121,7 @@ public class LazerRay : Lazer
 		// this.hiting = false;
 
 		// // check bounce recalculation
-		// for(int i = 0; i < pos.Length; i++) {
+		// for(int i = 0; i < pos.Length; ++i) {
 
 		// 	// check still valid hitpoints
 		// 	if(Vector3.Distance(pos[i], hitpoint) <= this.headRenderer.minVertexDistance) {
@@ -150,7 +148,7 @@ public class LazerRay : Lazer
 
 	protected override IEnumerator DeathCoroutine(bool deathOfOldAge)
 	{
-		this.headRigidbody.velocity = Shared.vector3Zero;
+		this.headRigidbody.velocity = Vector3.zero;
 
 		// width point
 		this.InitializeWidthPoint();
@@ -181,7 +179,7 @@ public class LazerRay : Lazer
 		nbOfPoint = Mathf.CeilToInt(instantLength / distancePerPoint) + 1;
 		this.widthPoints = new bool[nbOfPoint];
 
-		for(int i = 0; i < nbOfPoint; i++) {
+		for(int i = 0; i < nbOfPoint; ++i) {
 			time = Mathf.Min(i * distancePerPoint / instantLength, 1f);
 
 			this.widthPoints[i] = (Random.Range(0, 100) < 75);
@@ -199,7 +197,7 @@ public class LazerRay : Lazer
 			step += this.lazerData.widthPointSpeed * Time.deltaTime;
 			value = Mathf.Lerp(1f, 0f, step);
 
-			for(int i = 0; i < length; i++) {
+			for(int i = 0; i < length; ++i) {
 				if(i >= this.widthPoints.Length) {
 					break;
 				}

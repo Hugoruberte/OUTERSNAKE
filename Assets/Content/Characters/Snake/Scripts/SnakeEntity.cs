@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using Interactive.Engine;
+﻿using Interactive.Engine;
 
 namespace Snakes
 {
-	public enum SnakeMoveState
+    public enum SnakeMoveState
 	{
 		Run = 0,
 		Stop,

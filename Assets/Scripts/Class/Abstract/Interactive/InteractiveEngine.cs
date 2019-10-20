@@ -2,14 +2,13 @@
 using System.Text;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 namespace Interactive.Engine
 {
-	[CreateAssetMenu(fileName = "InteractiveEngine", menuName = "Scriptable Object/Other/InteractiveEngine", order = 1)]
+    [CreateAssetMenu(fileName = "InteractiveEngine", menuName = "Scriptable Object/Other/InteractiveEngine", order = 1)]
 	public class InteractiveEngine : ScriptableSingleton<InteractiveEngine>
 	{
 		private static List<InteractiveExtensionEngine> extensions = new List<InteractiveExtensionEngine>();
@@ -260,7 +259,7 @@ namespace Interactive.Engine
 			parameters = new object[] {0f};
 
 			elements = new ChemicalElementEntity[types.Length];
-			for(int i = 0; i < elements.Length; i++) {
+			for(int i = 0; i < elements.Length; ++i) {
 				elements[i] = Activator.CreateInstance(types[i], parameters) as ChemicalElementEntity;
 			}
 
@@ -270,7 +269,7 @@ namespace Interactive.Engine
 			types = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
 
 			materials = new ChemicalMaterialEntity[types.Length];
-			for(int i = 0; i < materials.Length; i++) {
+			for(int i = 0; i < materials.Length; ++i) {
 				materials[i] = t.GetField(types[i].Name.ToLower()).GetValue(null) as ChemicalMaterialEntity;
 			}
 
@@ -279,7 +278,7 @@ namespace Interactive.Engine
 			types = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(t)).ToArray();
 
 			states = new PhysicalStateEntity[types.Length];
-			for(int i = 0; i < states.Length; i++) {
+			for(int i = 0; i < states.Length; ++i) {
 				states[i] = t.GetField(types[i].Name.ToLower()).GetValue(null) as PhysicalStateEntity;
 			}
 
@@ -288,30 +287,30 @@ namespace Interactive.Engine
 			float start = Time.realtimeSinceStartup;
 
 			// ELEMENT * ELEMENT
-			for(int i = 0; i < elements.Length; i++) {
-				for(int j = i; j < elements.Length; j++) {
+			for(int i = 0; i < elements.Length; ++i) {
+				for(int j = i; j < elements.Length; ++j) {
 					element = elements[i] * elements[j];
 				}
 			}
 
 			// ELEMENT * MATERIAL
-			for(int i = 0; i < elements.Length; i++) {
-				for(int j = 0; j < materials.Length; j++) {
+			for(int i = 0; i < elements.Length; ++i) {
+				for(int j = 0; j < materials.Length; ++j) {
 					element = elements[i] * materials[j];
 				}
 			}
 
 			// ELEMENT * STATE
-			for(int i = 0; i < elements.Length; i++) {
-				for(int j = 0; j < states.Length; j++) {
+			for(int i = 0; i < elements.Length; ++i) {
+				for(int j = 0; j < states.Length; ++j) {
 					status = elements[i] * states[j];
 				}
 			}
 
 
 			// STATE * STATE
-			for(int i = 0; i < states.Length; i++) {
-				for(int j = i; j < states.Length; j++) {
+			for(int i = 0; i < states.Length; ++i) {
+				for(int j = i; j < states.Length; ++j) {
 					interaction = states[i] * states[j];
 				}
 			}

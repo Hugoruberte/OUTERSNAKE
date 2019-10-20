@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utility.AI
 {
-	// I am obligated to use an 'isCondition' variable instead of create
-	// two subclass like it was done below because of Unity serialization
-	// which do not manage polymorphism and inheritance...
-	// I am as sad as you.
+    // I am obligated to use an 'isCondition' variable instead of create
+    // two subclass like it was done below because of Unity serialization
+    // which do not manage polymorphism and inheritance...
+    // I am as sad as you.
 
-	[System.Serializable]
+    [System.Serializable]
 	public class UtilityScorer
 	{
 		public bool isCondition = true;

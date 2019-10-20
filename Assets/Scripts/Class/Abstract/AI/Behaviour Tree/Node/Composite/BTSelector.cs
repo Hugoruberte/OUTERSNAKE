@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using BehaviourTreeAI;
+﻿using BehaviourTreeAI;
 
 public class BTSelector : BTComposite
 {

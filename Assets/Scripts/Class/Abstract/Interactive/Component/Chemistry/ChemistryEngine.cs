@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-
-
-namespace Interactive.Engine
+﻿namespace Interactive.Engine
 {
-	public class ChemistryEngine
+    public class ChemistryEngine
 	{
 		public ChemicalElementEntity InteractionBetween(InteractiveEntity main, InteractiveEntity other)
 		{

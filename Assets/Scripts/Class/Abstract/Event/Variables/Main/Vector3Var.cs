@@ -1,5 +1,4 @@
 using UnityEngine;
-using My.Events;
 
 [CreateAssetMenu(fileName = "Vector3", menuName = "Scriptable Object/Variable/Vector3", order = 3)]
 public class Vector3Var : Variable

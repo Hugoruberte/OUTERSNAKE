@@ -1,9 +1,8 @@
-﻿ /*
- * Created by Chenjd
- * http://www.cnblogs.com/murongxiaopifu/
- */ 
+﻿/*
+* Created by Chenjd
+* http://www.cnblogs.com/murongxiaopifu/
+*/
 using UnityEngine;
-using System.Collections;
 
 public class ScannerEffect : MonoBehaviour
 {

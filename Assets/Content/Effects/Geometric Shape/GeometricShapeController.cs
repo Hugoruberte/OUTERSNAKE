@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -66,15 +65,15 @@ public class GeometricShapeController : MonoBehaviour
 		Quaternion rotation;
 
 		angle = 360f / count;
-		rotation = Quaternion.AngleAxis(angle, Shared.vector3Forward);
+		rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		start = ((count % 2 == 0 && this.alignment != ShapeAlignmentEnum.None) || (count % 2 != 0 && this.alignment == ShapeAlignmentEnum.Up)) ? 0f : angle / 2f;
-		direction = (Quaternion.AngleAxis(start, Shared.vector3Forward) * Shared.vector3Down).normalized * (this.size / 2f);
+		direction = (Quaternion.AngleAxis(start, Vector3.forward) * Vector3.down).normalized * (this.size / 2f);
 
 		this.lineRenderer.positionCount = count + 4;
 		positions = Shared.vector3List;
 		positions.Clear();
 		
-		for(int i = 0; i < count + 4; i++) {
+		for(int i = 0; i < count + 4; ++i) {
 			positions.Add(direction);
 			direction = rotation * direction;
 		}

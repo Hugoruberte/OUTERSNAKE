@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using My.Tools;
 
 public class FarAwayManager : MonoSingleton<FarAwayManager>
 {
@@ -20,7 +18,7 @@ public class FarAwayManager : MonoSingleton<FarAwayManager>
 	[SerializeField] private Vector3 basicFarAwayPosition = new Vector3(1000, 1000, 1000);
 	[SerializeField, Range(1f, 100f)] private float basicRadius = 1f;
 
-	private readonly Vector3 direction = Shared.vector3Right;
+	private readonly Vector3 direction = Vector3.right;
 	private List<Client> clients = new List<Client>();
 
 

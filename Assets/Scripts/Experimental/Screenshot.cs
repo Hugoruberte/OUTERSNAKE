@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-using System;
-using System.Drawing;
+﻿using UnityEngine;
 // using System.Drawing.Common;
-using System.IO;
-using System.Runtime.InteropServices;
 
 public class Screenshot : MonoBehaviour
 {

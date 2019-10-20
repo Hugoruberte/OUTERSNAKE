@@ -23,12 +23,12 @@ MonoBehaviour:
     type: 3}
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 1792
   bounceLayerMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 1792
   maxBounceCount: 1
-  lastBounceMode: 2
+  lastBounceMode: 0
   coneAngle: 10
   gravityForceMultiplier: 5
   forwardForceMultiplier: 0.3

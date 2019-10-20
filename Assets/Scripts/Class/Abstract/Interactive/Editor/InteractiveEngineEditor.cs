@@ -44,7 +44,7 @@ namespace Interactive.Engine
 				script.inspector_showDetails = new bool[script.primaries.Count];
 			}
 			
-			for(int i = 0; i < script.primaries.Count; i++)
+			for(int i = 0; i < script.primaries.Count; ++i)
 			{
 				e = script.primaries[i];
 
@@ -82,7 +82,7 @@ namespace Interactive.Engine
 
 					this.builder.Clear();
 					this.builder.Append(e.array[0].ToString());
-					for(int j = 1; j < e.array.Length; j++) {
+					for(int j = 1; j < e.array.Length; ++j) {
 						this.builder.Append(" + ").Append(e.array[j].ToString());
 					}
 

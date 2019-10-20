@@ -69,7 +69,7 @@ public class PoolingDataEditor : Editor
 
 		baserect.y += 18;
 
-		for(int i = 0; i < script.pools.Count; i++)
+		for(int i = 0; i < script.pools.Count; ++i)
 		{
 			pool = script.pools[i];
 

@@ -1,5 +1,4 @@
-﻿using static UnityEngine.Debug;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System;
@@ -7,8 +6,8 @@ using System;
 
 namespace Interactive.Engine
 {
-	// Max 32 elements
-	public enum ChemicalElement
+    // Max 32 elements
+    public enum ChemicalElement
 	{
 		// STANDARD
 		Void = 1,
@@ -413,7 +412,7 @@ namespace Interactive.Engine
 
 			if(candidates.Count > 0) {
 				winner = candidates[0];
-				for(int i = 1; i < candidates.Count; i++) {
+				for(int i = 1; i < candidates.Count; ++i) {
 					winner = GetWinnerBetween(winner, candidates[i]);
 				}
 			}
@@ -514,7 +513,7 @@ namespace Interactive.Engine
 			ts = Assembly.GetAssembly(t).GetTypes().Where(myType => myType.IsSubclassOf(t) && myType.IsClass && !myType.IsAbstract).ToArray();
 			res = new ChemicalElementMixEntity[ts.Length];
 
-			for(int i = 0; i < ts.Length; i++) {
+			for(int i = 0; i < ts.Length; ++i) {
 				res[i] = Activator.CreateInstance(ts[i], ChemicalElementMixEntity.STANDARD_PARAMS) as ChemicalElementMixEntity;
 			}
 

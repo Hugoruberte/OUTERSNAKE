@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using My.Tools;
 
@@ -164,8 +163,8 @@ public class Grill
 		surroundingCells = new List<Cell>();
 		pos = c.position;
 
-		for(int r = 1; r < radius; r++) {
-			for(int w = -r; w <= r; w++) {
+		for(int r = 1; r < radius; ++r) {
+			for(int w = -r; w <= r; ++w) {
 				step = (w == -r || w == r) ? 1 : 2*r;
 				for(int h = -r; h <= r; h+=step) {
 
@@ -226,8 +225,8 @@ public class Grill
 		this.cells = new Cell[width * height];
 		i = 0;
 
-		for(int w = 0; w < width; w++) {
-			for(int h = 0; h < height; h++) {
+		for(int w = 0; w < width; ++w) {
+			for(int h = 0; h < height; ++h) {
 
 				lx = anchorx + w;
 				lz = anchorz - h;

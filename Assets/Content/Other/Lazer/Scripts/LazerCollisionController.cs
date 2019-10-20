@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using My.Tools;
 
 public class LazerCollisionController : MonoBehaviour
@@ -8,6 +6,8 @@ public class LazerCollisionController : MonoBehaviour
 	private Transform myTransform;
 	private Collider[] cache = new Collider[1];
 	private Lazer lazer;
+
+	private float previous = 0f;
 
 	private void Awake()
 	{
@@ -19,6 +19,11 @@ public class LazerCollisionController : MonoBehaviour
 	void OnCollisionEnter(Collision other)
 	{
 		if(this.lazer.lazerData.hitLayerMask.IsInLayerMask(other.gameObject.layer)) {
+
+			if(Time.time - previous < 2f * Time.unscaledDeltaTime) {
+				return;
+			}
+			previous = Time.time;
 
 			this.cache[0] = other.collider;
 			this.lazer.Hit(this.cache, this.myTransform.position);

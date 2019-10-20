@@ -12,7 +12,7 @@ public class DisplayWebcam : MonoBehaviour
 		var devices = WebCamTexture.devices;
 		var backCamName = "";
 		if(devices.Length > 0) backCamName = devices[0].name;
-		for(int i = 0; i < devices.Length; i++)
+		for(int i = 0; i < devices.Length; ++i)
 		{
 			Debug.Log("Device:" + devices[i].name + "IS FRONT FACING:" + devices[i].isFrontFacing);
 			if(!devices[i].isFrontFacing)

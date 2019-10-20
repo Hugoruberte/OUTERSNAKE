@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using My.Tools;
+﻿using UnityEngine;
 
 public class SnakeAutoController : MovementController
 {
 	public SnakeAutoCharacter snakeAuto { get; private set; }
 
-	private Transform myTransform;
+	private readonly Transform myTransform;
 
 
 	public SnakeAutoController(SnakeAutoCharacter s) : base(s)

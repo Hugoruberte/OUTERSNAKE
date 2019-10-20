@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using BehaviourTreeAI;
 
 public abstract class BTComposite : BTNode
@@ -16,7 +14,7 @@ public abstract class BTComposite : BTNode
 	{
 		this.children = new List<BTNode>();
 
-		for(int i = 0; i < cs.Length; i++) {
+		for(int i = 0; i < cs.Length; ++i) {
 			cs[i].parent = this;
 			this.children.Add(cs[i]);
 		}
